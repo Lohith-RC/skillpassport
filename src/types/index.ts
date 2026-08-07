@@ -6,6 +6,7 @@ export type TabType =
   | 'heatmap' 
   | 'repos' 
   | 'leetcode' 
+  | 'challenges'
   | 'recruiter' 
   | 'university' 
   | 'investor';

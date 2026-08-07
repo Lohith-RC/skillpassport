@@ -4,6 +4,7 @@ import { Dashboard } from './components/features/Dashboard';
 import { SkillPassportView } from './components/features/SkillPassportView';
 import { ProjectsView } from './components/features/ProjectsView';
 import { TimeCapsuleView } from './components/features/TimeCapsuleView';
+import { ChallengesView } from './components/features/ChallengesView';
 import { LandingPage } from './components/features/LandingPage';
 import { ContributionMatrix } from './components/features/ContributionMatrix';
 import { LeetCodeDashboard } from './components/features/LeetCodeDashboard';
@@ -59,6 +60,7 @@ export const App: React.FC = () => {
       {activeTab === 'timecapsule' && <TimeCapsuleView />}
       {activeTab === 'heatmap' && <ContributionMatrix />}
       {activeTab === 'repos' && <ProjectsView />}
+      {activeTab === 'challenges' && <ChallengesView />}
       {activeTab === 'leetcode' && <LeetCodeDashboard />}
       {activeTab === 'recruiter' && <RecruiterPipeline />}
       {activeTab === 'university' && <UniversityHub />}

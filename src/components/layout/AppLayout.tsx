@@ -116,9 +116,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
               {/* Challenges */}
               <button
-                onClick={() => setActiveTab('leetcode')}
+                onClick={() => setActiveTab('challenges')}
                 className={`w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl transition ${
-                  activeTab === 'leetcode' ? 'bg-blue-600 text-white font-semibold' : 'text-slate-400 hover:text-white hover:bg-[#13192B]'
+                  activeTab === 'challenges' ? 'bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/25' : 'text-slate-400 hover:text-white hover:bg-[#13192B]'
                 }`}
               >
                 <Trophy className="w-4 h-4" />

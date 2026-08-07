@@ -108,6 +108,9 @@ export const Landing3DCanvas: React.FC = () => {
       torusMat.dispose();
       innerGeo.dispose();
       innerMat.dispose();
+      sphereGeo.dispose();
+      sphereMat.dispose();
+      renderer.dispose();
     };
   }, []);
 

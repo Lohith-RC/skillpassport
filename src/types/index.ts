@@ -9,7 +9,9 @@ export type TabType =
   | 'challenges'
   | 'recruiter' 
   | 'university' 
-  | 'investor';
+  | 'investor'
+  | 'login'
+  | 'signup';
 
 export type UserRole = 'developer' | 'recruiter' | 'university' | 'investor' | 'admin';
 

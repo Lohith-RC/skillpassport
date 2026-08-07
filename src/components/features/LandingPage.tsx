@@ -4,13 +4,46 @@ import { Landing3DCanvas } from '../canvas/Landing3DCanvas';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Sparkles, ArrowRight, ShieldCheck, Zap, Code, Award, CheckCircle2 } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Zap, Code, Award, CheckCircle2, Shield } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { setActiveTab, setSyncModalOpen } = useAppStore();
 
   return (
     <div className="space-y-12 py-4">
+
+      {/* Top Navigation Bar */}
+      <nav className="flex items-center justify-between mb-2">
+        <button
+          onClick={() => setActiveTab('dashboard')}
+          className="flex items-center gap-3 hover:opacity-80 transition"
+        >
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-600/30">
+            <Shield className="w-4 h-4 text-white fill-current" />
+          </div>
+          <div>
+            <span className="font-extrabold text-sm text-white">
+              SkillPassport <span className="text-blue-500">AI</span>
+            </span>
+            <p className="text-[10px] text-slate-400 leading-none">One Identity. Endless Opportunities.</p>
+          </div>
+        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setActiveTab('login')}
+            className="px-4 py-2 text-sm font-semibold text-slate-300 hover:text-white transition"
+          >
+            Sign In
+          </button>
+          <button
+            onClick={() => setActiveTab('signup')}
+            className="px-4 py-2 text-sm font-bold text-slate-900 dark:text-white rounded-xl transition"
+            style={{ background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)' }}
+          >
+            Get Started
+          </button>
+        </div>
+      </nav>
       
       {/* 3D WebGL Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">

@@ -105,7 +105,7 @@ export const ChallengesView: React.FC = () => {
       {/* TITLE BANNER & HOST ACTION */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center">
             Challenge Marketplace <Trophy className="w-6 h-6 ml-2 text-amber-400 fill-current" />
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -127,61 +127,61 @@ export const ChallengesView: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         
         {/* Card 1: Active Challenges */}
-        <div className="p-4 rounded-2xl bg-[#0B0F19] border border-[#161D2F] flex items-center space-x-3.5">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] flex items-center space-x-3.5">
           <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
             <Zap className="w-5 h-5" />
           </div>
           <div>
             <div className="text-[10px] text-slate-400 font-medium">Active Challenges</div>
-            <div className="text-xl font-extrabold font-mono text-white mt-0.5">24</div>
+            <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">24</div>
             <div className="text-[9px] text-emerald-400 font-semibold">Live right now</div>
           </div>
         </div>
 
         {/* Card 2: Total Rewards */}
-        <div className="p-4 rounded-2xl bg-[#0B0F19] border border-[#161D2F] flex items-center space-x-3.5">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] flex items-center space-x-3.5">
           <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
             <DollarSign className="w-5 h-5" />
           </div>
           <div>
             <div className="text-[10px] text-slate-400 font-medium">Total Rewards</div>
-            <div className="text-xl font-extrabold font-mono text-white mt-0.5">$28,450</div>
+            <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">$28,450</div>
             <div className="text-[9px] text-slate-400">Total prize pool</div>
           </div>
         </div>
 
         {/* Card 3: Participants */}
-        <div className="p-4 rounded-2xl bg-[#0B0F19] border border-[#161D2F] flex items-center space-x-3.5">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] flex items-center space-x-3.5">
           <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center shrink-0">
             <Users className="w-5 h-5" />
           </div>
           <div>
             <div className="text-[10px] text-slate-400 font-medium">Participants</div>
-            <div className="text-xl font-extrabold font-mono text-white mt-0.5">3,248</div>
+            <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">3,248</div>
             <div className="text-[9px] text-slate-400">Developers participating</div>
           </div>
         </div>
 
         {/* Card 4: Success Rate */}
-        <div className="p-4 rounded-2xl bg-[#0B0F19] border border-[#161D2F] flex items-center space-x-3.5">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] flex items-center space-x-3.5">
           <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
             <div className="text-[10px] text-slate-400 font-medium">Success Rate</div>
-            <div className="text-xl font-extrabold font-mono text-white mt-0.5">32%</div>
+            <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">32%</div>
             <div className="text-[9px] text-slate-400">Average completion</div>
           </div>
         </div>
 
         {/* Card 5: My Rank */}
-        <div className="p-4 rounded-2xl bg-[#0B0F19] border border-[#161D2F] flex items-center space-x-3.5">
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] flex items-center space-x-3.5">
           <div className="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-400 border border-pink-500/30 flex items-center justify-center shrink-0">
             <Trophy className="w-5 h-5" />
           </div>
           <div>
             <div className="text-[10px] text-slate-400 font-medium">My Rank</div>
-            <div className="text-xl font-extrabold font-mono text-white mt-0.5">#142</div>
+            <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white mt-0.5">#142</div>
             <div className="text-[9px] text-pink-400 font-semibold">Top 5% this month</div>
           </div>
         </div>
@@ -196,7 +196,7 @@ export const ChallengesView: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Filter Bar */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#161D2F] pb-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 dark:border-[#161D2F] pb-4">
             <div className="flex items-center space-x-4 overflow-x-auto">
               {(['All Challenges', 'Recommended', 'Popular', 'New', 'Ending Soon', 'High Rewards'] as const).map((tab) => (
                 <button
@@ -214,10 +214,10 @@ export const ChallengesView: React.FC = () => {
             </div>
 
             <div className="flex items-center space-x-3 text-xs">
-              <div className="p-1 rounded-xl bg-[#0F1626] border border-[#1C263B] text-slate-400">
+              <div className="p-1 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-slate-400">
                 <Grid className="w-4 h-4 text-white" />
               </div>
-              <select className="bg-[#0F1626] border border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans text-xs focus:outline-none focus:border-purple-500">
+              <select className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans text-xs focus:outline-none focus:border-purple-500">
                 <option>Sort by: Ending Soon</option>
                 <option>Sort by: Reward</option>
                 <option>Sort by: Popularity</option>
@@ -230,13 +230,13 @@ export const ChallengesView: React.FC = () => {
             {challenges.map((c) => (
               <div
                 key={c.id}
-                className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-purple-500/40 transition space-y-4 relative overflow-hidden"
+                className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-purple-500/40 transition space-y-4 relative overflow-hidden"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   
                   {/* Company Logo + Title + Details */}
                   <div className="flex items-start space-x-4">
-                    <div className={`w-12 h-12 rounded-xl ${c.logoBg} flex items-center justify-center font-extrabold text-white text-base shadow-lg shrink-0`}>
+                    <div className={`w-12 h-12 rounded-xl ${c.logoBg} flex items-center justify-center font-extrabold text-slate-900 dark:text-white text-base shadow-lg shrink-0`}>
                       {c.logoText}
                     </div>
 
@@ -248,7 +248,7 @@ export const ChallengesView: React.FC = () => {
                       )}
 
                       <div className="flex items-center space-x-2">
-                        <h3 className="font-extrabold text-white text-sm hover:text-purple-400 transition cursor-pointer">
+                        <h3 className="font-extrabold text-slate-900 dark:text-white text-sm hover:text-purple-400 transition cursor-pointer">
                           {c.title}
                         </h3>
                         <span className="text-xs text-slate-400 flex items-center">
@@ -271,9 +271,9 @@ export const ChallengesView: React.FC = () => {
                   </div>
 
                   {/* Right Metrics Column */}
-                  <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-[#161D2F] pt-3 sm:pt-0 shrink-0 text-right space-y-1">
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-gray-200 dark:border-[#161D2F] pt-3 sm:pt-0 shrink-0 text-right space-y-1">
                     <div>
-                      <div className="text-lg font-extrabold font-mono text-white">{c.reward}</div>
+                      <div className="text-lg font-extrabold font-mono text-slate-900 dark:text-white">{c.reward}</div>
                       <div className="text-[10px] text-slate-400">Top Reward</div>
                     </div>
 
@@ -292,7 +292,7 @@ export const ChallengesView: React.FC = () => {
                     <div className="flex items-center space-x-2 pt-2">
                       <button
                         onClick={() => addToast(`Opening challenge breakdown for ${c.title}...`, 'info')}
-                        className="px-3.5 py-1.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-200 text-xs font-semibold transition"
+                        className="px-3.5 py-1.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition"
                       >
                         View Details
                       </button>
@@ -315,7 +315,7 @@ export const ChallengesView: React.FC = () => {
 
           <button
             onClick={() => addToast('Loaded 20 more live challenges.', 'info')}
-            className="w-full py-3 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-200 text-xs font-semibold transition flex items-center justify-center space-x-2"
+            className="w-full py-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition flex items-center justify-center space-x-2"
           >
             <span>View All Challenges</span>
             <ArrowRight className="w-4 h-4" />
@@ -323,38 +323,38 @@ export const ChallengesView: React.FC = () => {
 
 
           {/* HOW CHALLENGES WORK BANNER */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <h3 className="font-extrabold text-white text-xs">How Challenges Work</h3>
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">How Challenges Work</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
               
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="w-6 h-6 rounded-full bg-purple-600 text-white font-mono font-bold text-xs flex items-center justify-center mx-auto">1</div>
-                <div className="font-bold text-white text-xs">Choose Challenge</div>
+                <div className="font-bold text-slate-900 dark:text-white text-xs">Choose Challenge</div>
                 <p className="text-[10px] text-slate-400">Pick a challenge that matches your skills</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-mono font-bold text-xs flex items-center justify-center mx-auto">2</div>
-                <div className="font-bold text-white text-xs">Build Solution</div>
+                <div className="font-bold text-slate-900 dark:text-white text-xs">Build Solution</div>
                 <p className="text-[10px] text-slate-400">Work on your solution and submit your best work</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="w-6 h-6 rounded-full bg-emerald-600 text-white font-mono font-bold text-xs flex items-center justify-center mx-auto">3</div>
-                <div className="font-bold text-white text-xs">Get Evaluated</div>
+                <div className="font-bold text-slate-900 dark:text-white text-xs">Get Evaluated</div>
                 <p className="text-[10px] text-slate-400">Our AI and experts evaluate your submission</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="w-6 h-6 rounded-full bg-amber-600 text-white font-mono font-bold text-xs flex items-center justify-center mx-auto">4</div>
-                <div className="font-bold text-white text-xs">Earn Rewards</div>
+                <div className="font-bold text-slate-900 dark:text-white text-xs">Earn Rewards</div>
                 <p className="text-[10px] text-slate-400">Top performers win cash and get recognition</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="w-6 h-6 rounded-full bg-pink-600 text-white font-mono font-bold text-xs flex items-center justify-center mx-auto">5</div>
-                <div className="font-bold text-white text-xs">Get Discovered</div>
+                <div className="font-bold text-slate-900 dark:text-white text-xs">Get Discovered</div>
                 <p className="text-[10px] text-slate-400">Top talent gets noticed by companies</p>
               </div>
 
@@ -368,14 +368,14 @@ export const ChallengesView: React.FC = () => {
         <div className="space-y-6">
           
           {/* PANEL 1: CATEGORIES */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-              <h3 className="font-extrabold text-white text-xs">Categories</h3>
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Categories</h3>
               <button className="text-[11px] text-purple-400 hover:underline">View All</button>
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Brain className="w-4 h-4 text-purple-400" />
                   <span>AI &amp; Machine Learning</span>
@@ -383,7 +383,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">8</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Code className="w-4 h-4 text-blue-400" />
                   <span>Web Development</span>
@@ -391,7 +391,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">12</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Database className="w-4 h-4 text-emerald-400" />
                   <span>Data Science</span>
@@ -399,7 +399,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">6</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Terminal className="w-4 h-4 text-amber-400" />
                   <span>DevOps</span>
@@ -407,7 +407,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">4</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Smartphone className="w-4 h-4 text-pink-400" />
                   <span>Mobile Development</span>
@@ -415,7 +415,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">5</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Cpu className="w-4 h-4 text-cyan-400" />
                   <span>Blockchain</span>
@@ -423,7 +423,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">3</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Layout className="w-4 h-4 text-indigo-400" />
                   <span>UI/UX Design</span>
@@ -431,7 +431,7 @@ export const ChallengesView: React.FC = () => {
                 <span className="font-mono text-slate-400 text-[11px]">2</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] flex items-center justify-between transition cursor-pointer">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between transition cursor-pointer">
                 <span className="flex items-center space-x-2.5 text-slate-200">
                   <Shield className="w-4 h-4 text-red-400" />
                   <span>Cyber Security</span>
@@ -443,10 +443,10 @@ export const ChallengesView: React.FC = () => {
 
 
           {/* PANEL 2: LEADERBOARD */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-              <h3 className="font-extrabold text-white text-xs">Leaderboard</h3>
-              <select className="bg-[#0F1626] border border-[#1C263B] rounded-lg px-2 py-1 text-[11px] text-slate-300 font-sans">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Leaderboard</h3>
+              <select className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-lg px-2 py-1 text-[11px] text-slate-300 font-sans">
                 <option>This Month</option>
                 <option>All Time</option>
               </select>
@@ -462,7 +462,7 @@ export const ChallengesView: React.FC = () => {
                     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=64&q=80" alt="Arjun Patel" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <div className="font-bold text-white">Arjun Patel</div>
+                    <div className="font-bold text-slate-900 dark:text-white">Arjun Patel</div>
                     <div className="text-[10px] text-slate-400 font-mono">8,450 XP</div>
                   </div>
                 </div>
@@ -477,7 +477,7 @@ export const ChallengesView: React.FC = () => {
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64&q=80" alt="Priya Singh" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <div className="font-bold text-white">Priya Singh</div>
+                    <div className="font-bold text-slate-900 dark:text-white">Priya Singh</div>
                     <div className="text-[10px] text-slate-400 font-mono">7,230 XP</div>
                   </div>
                 </div>
@@ -492,7 +492,7 @@ export const ChallengesView: React.FC = () => {
                     <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=64&q=80" alt="Rohan Verma" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <div className="font-bold text-white">Rohan Verma</div>
+                    <div className="font-bold text-slate-900 dark:text-white">Rohan Verma</div>
                     <div className="text-[10px] text-slate-400 font-mono">6,870 XP</div>
                   </div>
                 </div>
@@ -500,14 +500,14 @@ export const ChallengesView: React.FC = () => {
               </div>
 
               {/* Rank 4 */}
-              <div className="flex items-center justify-between p-2 rounded-xl bg-[#0F1626] border border-[#1C263B]">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B]">
                 <div className="flex items-center space-x-3">
                   <span className="font-mono font-bold text-slate-400 text-xs w-4 text-center">4</span>
                   <div className="w-7 h-7 rounded-full bg-slate-700 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80" alt="Neha Gupta" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <div className="font-bold text-white">Neha Gupta</div>
+                    <div className="font-bold text-slate-900 dark:text-white">Neha Gupta</div>
                     <div className="text-[10px] text-slate-400 font-mono">6,250 XP</div>
                   </div>
                 </div>
@@ -515,14 +515,14 @@ export const ChallengesView: React.FC = () => {
               </div>
 
               {/* Rank 5 */}
-              <div className="flex items-center justify-between p-2 rounded-xl bg-[#0F1626] border border-[#1C263B]">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B]">
                 <div className="flex items-center space-x-3">
                   <span className="font-mono font-bold text-slate-400 text-xs w-4 text-center">5</span>
                   <div className="w-7 h-7 rounded-full bg-slate-700 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=64&q=80" alt="Karan Mehta" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <div className="font-bold text-white">Karan Mehta</div>
+                    <div className="font-bold text-slate-900 dark:text-white">Karan Mehta</div>
                     <div className="text-[10px] text-slate-400 font-mono">5,890 XP</div>
                   </div>
                 </div>
@@ -533,7 +533,7 @@ export const ChallengesView: React.FC = () => {
 
             <button
               onClick={() => addToast('Opening global challenge leaderboard...', 'info')}
-              className="w-full py-2.5 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-300 text-xs font-semibold transition"
+              className="w-full py-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-300 text-xs font-semibold transition"
             >
               View Full Leaderboard →
             </button>
@@ -541,35 +541,35 @@ export const ChallengesView: React.FC = () => {
 
 
           {/* PANEL 3: MY CHALLENGE STATS */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <h3 className="font-extrabold text-white text-xs">My Challenge Stats</h3>
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">My Challenge Stats</h3>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-[10px]">Participated</span>
                   <Code className="w-4 h-4 text-purple-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-white">18</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">18</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-[10px]">Completed</span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-white">7</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">7</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-[10px]">Win Rate</span>
                   <TrendingUp className="w-4 h-4 text-blue-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-white">38%</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">38%</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-[10px]">Rewards Won</span>
                   <DollarSign className="w-4 h-4 text-amber-400" />

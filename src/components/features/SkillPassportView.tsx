@@ -39,7 +39,7 @@ export const SkillPassportView: React.FC = () => {
       {/* PAGE TITLE BANNER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Skill Passport</h1>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Skill Passport</h1>
           <p className="text-xs text-slate-400 mt-1">Your verified professional identity</p>
         </div>
 
@@ -48,7 +48,7 @@ export const SkillPassportView: React.FC = () => {
             navigator.clipboard.writeText(window.location.href);
             addToast('Verified Skill Passport link copied to clipboard!', 'success');
           }}
-          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#0F1626] border border-[#1C263B] hover:border-blue-500/50 text-xs font-semibold text-slate-200 transition shadow-sm"
+          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/50 text-xs font-semibold text-slate-200 transition shadow-sm"
         >
           <Share2 className="w-4 h-4 text-slate-400" />
           <span>Share My Passport</span>
@@ -62,7 +62,7 @@ export const SkillPassportView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* HERO PROFILE CARD (SPAN 2 COLS) */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="lg:col-span-2 p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
           
           {/* Subtle Radial Blue Glow Background */}
           <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -80,7 +80,7 @@ export const SkillPassportView: React.FC = () => {
 
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
-                <h2 className="text-xl font-extrabold text-white tracking-tight">Rahul Sharma</h2>
+                <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Rahul Sharma</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                   Verified
                 </span>
@@ -130,17 +130,17 @@ export const SkillPassportView: React.FC = () => {
                 </defs>
               </svg>
               <div className="absolute text-center">
-                <div className="text-xl font-extrabold font-mono text-white">95%</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">95%</div>
                 <div className="text-[9px] text-slate-400 font-medium leading-tight">Skill Passport<br />Score</div>
               </div>
             </div>
           </div>
 
           {/* Right Metrics Breakdown */}
-          <div className="space-y-2 text-xs border-t md:border-t-0 md:border-l border-[#161D2F] pt-4 md:pt-0 md:pl-6 z-10 w-full md:w-auto">
+          <div className="space-y-2 text-xs border-t md:border-t-0 md:border-l border-gray-200 dark:border-[#161D2F] pt-4 md:pt-0 md:pl-6 z-10 w-full md:w-auto">
             <div className="flex items-center justify-between space-x-6">
               <span className="text-slate-400 flex items-center"><Shield className="w-3.5 h-3.5 mr-1.5 text-blue-500" /> Professional Score</span>
-              <span className="font-extrabold font-mono text-white flex items-center space-x-1.5">
+              <span className="font-extrabold font-mono text-slate-900 dark:text-white flex items-center space-x-1.5">
                 <span>8,650</span>
                 <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-purple-500/20 text-purple-300 border border-purple-500/30">Expert</span>
               </span>
@@ -153,7 +153,7 @@ export const SkillPassportView: React.FC = () => {
 
             <div className="flex items-center justify-between space-x-6">
               <span className="text-slate-400 flex items-center"><Eye className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Profile Views</span>
-              <span className="font-bold text-white font-mono flex items-center">
+              <span className="font-bold text-slate-900 dark:text-white font-mono flex items-center">
                 <span>1,248</span>
                 <span className="ml-1 text-[10px] text-emerald-400 font-semibold">↑ 18.6%</span>
               </span>
@@ -161,21 +161,21 @@ export const SkillPassportView: React.FC = () => {
 
             <div className="flex items-center justify-between space-x-6">
               <span className="text-slate-400 flex items-center"><Users className="w-3.5 h-3.5 mr-1.5 text-blue-400" /> Connections</span>
-              <span className="font-bold text-white font-mono">320</span>
+              <span className="font-bold text-slate-900 dark:text-white font-mono">320</span>
             </div>
 
             <div className="flex items-center justify-between space-x-6">
               <span className="text-slate-400 flex items-center"><ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-blue-500" /> Endorsements</span>
-              <span className="font-bold text-white font-mono">186</span>
+              <span className="font-bold text-slate-900 dark:text-white font-mono">186</span>
             </div>
           </div>
 
         </div>
 
         {/* IDENTITY STRENGTH CARD (SPAN 1 COL) */}
-        <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4 flex flex-col justify-between items-center text-center">
-          <div className="w-full flex items-center justify-between border-b border-[#161D2F] pb-3">
-            <h3 className="font-extrabold text-white text-xs">Identity Strength</h3>
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4 flex flex-col justify-between items-center text-center">
+          <div className="w-full flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Identity Strength</h3>
             <span className="text-xs font-extrabold text-emerald-400 font-mono">Excellent</span>
           </div>
 
@@ -206,7 +206,7 @@ export const SkillPassportView: React.FC = () => {
       {/* ========================================================================= */}
       {/* SUB-TABS NAVIGATION BAR                                                   */}
       {/* ========================================================================= */}
-      <div className="border-b border-[#161D2F] overflow-x-auto">
+      <div className="border-b border-gray-200 dark:border-[#161D2F] overflow-x-auto">
         <div className="flex items-center space-x-6 min-w-max">
           {(['Overview', 'Skills', 'Projects', 'Experience', 'Certifications', 'Achievements', 'Activity', 'Recommendations'] as const).map((tab) => (
             <button
@@ -231,8 +231,8 @@ export const SkillPassportView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* SKILLS & EXPERTISE CARD (SPAN 2 COLS) */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-5">
-          <h3 className="font-extrabold text-white text-sm">Skills &amp; Expertise</h3>
+        <div className="lg:col-span-2 p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-5">
+          <h3 className="font-extrabold text-slate-900 dark:text-white text-sm">Skills &amp; Expertise</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
@@ -242,7 +242,7 @@ export const SkillPassportView: React.FC = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                 
                 {/* Skill 1: React */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
                     ⚛
                   </div>
@@ -250,7 +250,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 2: Next.js */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-xs shrink-0">
                     N
                   </div>
@@ -258,7 +258,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 3: TypeScript */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
                     TS
                   </div>
@@ -266,7 +266,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 4: Node.js */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-emerald-600/20 text-emerald-400 flex items-center justify-center shrink-0">
                     🟢
                   </div>
@@ -274,7 +274,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 5: Python */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
                     🐍
                   </div>
@@ -282,7 +282,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 6: MongoDB */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                     🍃
                   </div>
@@ -290,7 +290,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 7: PostgreSQL */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
                     🐘
                   </div>
@@ -298,7 +298,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 8: AWS */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
                     ☁
                   </div>
@@ -306,7 +306,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 9: Docker */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
                     🐳
                   </div>
@@ -314,7 +314,7 @@ export const SkillPassportView: React.FC = () => {
                 </div>
 
                 {/* Skill 10: Tailwind CSS */}
-                <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2.5 text-white font-medium">
                   <div className="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
                     🌊
                   </div>
@@ -325,7 +325,7 @@ export const SkillPassportView: React.FC = () => {
             </div>
 
             {/* Right Sub-panel: Skills Distribution Donut Chart (Span 1) */}
-            <div className="space-y-3 border-t md:border-t-0 md:border-l border-[#161D2F] pt-4 md:pt-0 md:pl-6">
+            <div className="space-y-3 border-t md:border-t-0 md:border-l border-gray-200 dark:border-[#161D2F] pt-4 md:pt-0 md:pl-6">
               <div className="text-xs text-slate-400 font-semibold">Skills Distribution</div>
               
               <div className="flex items-center space-x-4">
@@ -339,7 +339,7 @@ export const SkillPassportView: React.FC = () => {
                     <circle cx="50" cy="50" r="38" stroke="#F59E0B" strokeWidth="8" strokeDasharray="20 200" strokeDashoffset="-170" fill="transparent" />
                   </svg>
                   <div className="absolute text-center">
-                    <div className="text-base font-extrabold font-mono text-white">28</div>
+                    <div className="text-base font-extrabold font-mono text-slate-900 dark:text-white">28</div>
                     <div className="text-[8px] text-slate-400 font-medium">Total Skills</div>
                   </div>
                 </div>
@@ -375,9 +375,9 @@ export const SkillPassportView: React.FC = () => {
         </div>
 
         {/* VERIFICATION STATUS CARD (SPAN 1 COL) */}
-        <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-            <h3 className="font-extrabold text-white text-xs">Verification Status</h3>
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Verification Status</h3>
             <button onClick={() => setActiveTab('university')} className="text-xs text-blue-400 hover:underline font-medium">
               View all
             </button>
@@ -424,7 +424,7 @@ export const SkillPassportView: React.FC = () => {
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <div className="font-bold text-white">All verifications completed</div>
+              <div className="font-bold text-slate-900 dark:text-white">All verifications completed</div>
               <div className="text-[10px] text-slate-400">Your identity is 100% verified</div>
             </div>
           </div>
@@ -439,9 +439,9 @@ export const SkillPassportView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* EXPERIENCE TIMELINE CARD (SPAN 1 COL) */}
-        <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4 flex flex-col justify-between">
-          <div className="border-b border-[#161D2F] pb-3">
-            <h3 className="font-extrabold text-white text-xs">Experience Timeline</h3>
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4 flex flex-col justify-between">
+          <div className="border-b border-gray-200 dark:border-[#161D2F] pb-3">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Experience Timeline</h3>
           </div>
 
           <div className="relative pl-6 space-y-6 border-l-2 border-blue-500/30 my-2 text-xs">
@@ -451,7 +451,7 @@ export const SkillPassportView: React.FC = () => {
               <span className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full bg-blue-600 border-2 border-[#0B0F19] shadow-md shadow-blue-600/50" />
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-bold text-white">Software Developer Intern</span>
+                  <span className="font-bold text-slate-900 dark:text-white">Software Developer Intern</span>
                   <span className="text-[10px] font-mono text-slate-500">Present</span>
                 </div>
                 <div className="flex items-center space-x-2 text-[11px] text-slate-400">
@@ -469,7 +469,7 @@ export const SkillPassportView: React.FC = () => {
               <span className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full bg-blue-600 border-2 border-[#0B0F19]" />
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-bold text-white">Full Stack Developer Intern</span>
+                  <span className="font-bold text-slate-900 dark:text-white">Full Stack Developer Intern</span>
                   <span className="text-[10px] font-mono text-slate-500">Jul 2023 - Jan 2024</span>
                 </div>
                 <div className="flex items-center space-x-2 text-[11px] text-slate-400">
@@ -487,7 +487,7 @@ export const SkillPassportView: React.FC = () => {
               <span className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full bg-blue-600 border-2 border-[#0B0F19]" />
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-bold text-white">Open Source Contributor</span>
+                  <span className="font-bold text-slate-900 dark:text-white">Open Source Contributor</span>
                   <span className="text-[10px] font-mono text-slate-500">Mar 2023 - Jun 2023</span>
                 </div>
                 <div className="flex items-center space-x-2 text-[11px] text-slate-400">
@@ -504,16 +504,16 @@ export const SkillPassportView: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('timecapsule')}
-            className="w-full py-2 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-200 text-xs font-semibold transition"
+            className="w-full py-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition"
           >
             View Full Timeline
           </button>
         </div>
 
         {/* FEATURED PROJECTS CARD (SPAN 1 COL) */}
-        <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-            <h3 className="font-extrabold text-white text-xs">Featured Projects</h3>
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Featured Projects</h3>
             <button onClick={() => setActiveTab('repos')} className="text-xs text-blue-400 hover:underline font-medium">
               View all
             </button>
@@ -521,13 +521,13 @@ export const SkillPassportView: React.FC = () => {
 
           <div className="space-y-3 text-xs">
             {/* Project 1 */}
-            <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-lg bg-slate-900 border border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
+            <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
+              <div className="w-12 h-12 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
                 <div className="w-full h-1 bg-blue-500 rounded" />
                 <div className="text-[7px] font-mono text-slate-400 truncate">ai.review()</div>
               </div>
               <div className="flex-1 min-w-0 space-y-1">
-                <div className="font-bold text-white truncate">AI Code Reviewer</div>
+                <div className="font-bold text-slate-900 dark:text-white truncate">AI Code Reviewer</div>
                 <div className="text-[10px] text-slate-400 truncate">AI-powered code analysis and review tool.</div>
                 <div className="flex items-center space-x-2 text-[9px] font-mono text-slate-400">
                   <span>Next.js</span>
@@ -539,13 +539,13 @@ export const SkillPassportView: React.FC = () => {
             </div>
 
             {/* Project 2 */}
-            <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-lg bg-slate-900 border border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
+            <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
+              <div className="w-12 h-12 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
                 <div className="w-full h-1 bg-purple-500 rounded" />
                 <div className="text-[7px] font-mono text-slate-400 truncate">dev.connect()</div>
               </div>
               <div className="flex-1 min-w-0 space-y-1">
-                <div className="font-bold text-white truncate">DevConnect</div>
+                <div className="font-bold text-slate-900 dark:text-white truncate">DevConnect</div>
                 <div className="text-[10px] text-slate-400 truncate">Developer social platform for collaboration.</div>
                 <div className="flex items-center space-x-2 text-[9px] font-mono text-slate-400">
                   <span>Node.js</span>
@@ -557,13 +557,13 @@ export const SkillPassportView: React.FC = () => {
             </div>
 
             {/* Project 3 */}
-            <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-lg bg-slate-900 border border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
+            <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
+              <div className="w-12 h-12 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
                 <div className="w-full h-1 bg-amber-500 rounded" />
                 <div className="text-[7px] font-mono text-slate-400 truncate">aws.deploy()</div>
               </div>
               <div className="flex-1 min-w-0 space-y-1">
-                <div className="font-bold text-white truncate">CloudDeploy Pro</div>
+                <div className="font-bold text-slate-900 dark:text-white truncate">CloudDeploy Pro</div>
                 <div className="text-[10px] text-slate-400 truncate">Automated deployment platform.</div>
                 <div className="flex items-center space-x-2 text-[9px] font-mono text-slate-400">
                   <span>AWS</span>
@@ -577,16 +577,16 @@ export const SkillPassportView: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('repos')}
-            className="w-full py-2 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-200 text-xs font-semibold transition"
+            className="w-full py-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition"
           >
             View All Projects
           </button>
         </div>
 
         {/* ACHIEVEMENTS CARD (SPAN 1 COL) */}
-        <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-            <h3 className="font-extrabold text-white text-xs">Achievements</h3>
+        <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Achievements</h3>
             <button onClick={() => addToast('View all achievements clicked.', 'info')} className="text-xs text-blue-400 hover:underline font-medium">
               View all
             </button>
@@ -599,7 +599,7 @@ export const SkillPassportView: React.FC = () => {
                 <Trophy className="w-4 h-4" />
               </div>
               <div>
-                <div className="font-bold text-white">Hackathon Winner</div>
+                <div className="font-bold text-slate-900 dark:text-white">Hackathon Winner</div>
                 <div className="text-[10px] text-slate-400">Smart India Hackathon 2024</div>
               </div>
             </div>
@@ -610,7 +610,7 @@ export const SkillPassportView: React.FC = () => {
                 <Award className="w-4 h-4" />
               </div>
               <div>
-                <div className="font-bold text-white">Top 1% Coder</div>
+                <div className="font-bold text-slate-900 dark:text-white">Top 1% Coder</div>
                 <div className="text-[10px] text-slate-400">LeetCode Global Ranking</div>
               </div>
             </div>
@@ -621,7 +621,7 @@ export const SkillPassportView: React.FC = () => {
                 <Star className="w-4 h-4 fill-current" />
               </div>
               <div>
-                <div className="font-bold text-white">GitHub Star</div>
+                <div className="font-bold text-slate-900 dark:text-white">GitHub Star</div>
                 <div className="text-[10px] text-slate-400">50+ Stars on Repositories</div>
               </div>
             </div>
@@ -632,13 +632,13 @@ export const SkillPassportView: React.FC = () => {
                 <Flame className="w-4 h-4" />
               </div>
               <div>
-                <div className="font-bold text-white">200 Days Streak</div>
+                <div className="font-bold text-slate-900 dark:text-white">200 Days Streak</div>
                 <div className="text-[10px] text-slate-400">Coding Streak Achievement</div>
               </div>
             </div>
           </div>
 
-          <div className="pt-2 text-center border-t border-[#161D2F]">
+          <div className="pt-2 text-center border-t border-gray-200 dark:border-[#161D2F]">
             <span className="text-[10px] font-mono text-slate-500">Verified through cryptographic seals</span>
           </div>
         </div>

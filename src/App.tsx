@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
+import { AuthView } from './components/features/AuthView';
 import { Dashboard } from './components/features/Dashboard';
 import { SkillPassportView } from './components/features/SkillPassportView';
 import { ProjectsView } from './components/features/ProjectsView';
@@ -21,17 +22,13 @@ import { useAppStore } from './stores/useAppStore';
 export const App: React.FC = () => {
   const { activeTab, setSearchOpen, isDarkMode } = useAppStore();
 
-  // Sync dark class on html root element
+  // ─── Sync dark/light class on <html> ───────────────────────────────────────
   useEffect(() => {
     const root = document.documentElement;
-    if (isDarkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    isDarkMode ? root.classList.add('dark') : root.classList.remove('dark');
   }, [isDarkMode]);
 
-  // Global Keyboard Shortcuts (Cmd+K)
+  // ─── Global keyboard shortcuts ────────────────────────────────────────────
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -43,9 +40,10 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [setSearchOpen]);
 
+  // ─── Full-screen unauthenticated views (no AppLayout shell) ───────────────
   if (activeTab === 'landing') {
     return (
-      <div className="min-h-screen bg-[#070A11] text-white">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] text-slate-900 dark:text-white">
         <LandingPage />
         <Modal />
         <ToastContainer />
@@ -53,20 +51,39 @@ export const App: React.FC = () => {
     );
   }
 
+  if (activeTab === 'login') {
+    return (
+      <>
+        <AuthView initialMode="login" />
+        <ToastContainer />
+      </>
+    );
+  }
+
+  if (activeTab === 'signup') {
+    return (
+      <>
+        <AuthView initialMode="signup" />
+        <ToastContainer />
+      </>
+    );
+  }
+
+  // ─── Authenticated views wrapped in AppLayout shell ───────────────────────
   return (
     <AppLayout>
-      {activeTab === 'dashboard' && <Dashboard />}
-      {activeTab === 'profile' && <SkillPassportView />}
+      {activeTab === 'dashboard'   && <Dashboard />}
+      {activeTab === 'profile'     && <SkillPassportView />}
       {activeTab === 'timecapsule' && <TimeCapsuleView />}
-      {activeTab === 'heatmap' && <ContributionMatrix />}
-      {activeTab === 'repos' && <ProjectsView />}
-      {activeTab === 'challenges' && <ChallengesView />}
-      {activeTab === 'leetcode' && <LeetCodeDashboard />}
-      {activeTab === 'recruiter' && <RecruiterPipeline />}
-      {activeTab === 'university' && <UniversityHub />}
-      {activeTab === 'investor' && <InvestorAnalytics />}
+      {activeTab === 'heatmap'     && <ContributionMatrix />}
+      {activeTab === 'repos'       && <ProjectsView />}
+      {activeTab === 'challenges'  && <ChallengesView />}
+      {activeTab === 'leetcode'    && <LeetCodeDashboard />}
+      {activeTab === 'recruiter'   && <RecruiterPipeline />}
+      {activeTab === 'university'  && <UniversityHub />}
+      {activeTab === 'investor'    && <InvestorAnalytics />}
 
-      {/* Global Interactive Modals & Drawers */}
+      {/* Global interactive modals & drawers */}
       <Modal />
       <PlatformSyncModal />
       <ProjectInspectDrawer />

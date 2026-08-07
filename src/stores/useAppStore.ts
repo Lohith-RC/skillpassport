@@ -45,9 +45,9 @@ export const useAppStore = create<AppState>((set) => ({
   toasts: [],
   profile: {
     id: 'dev_8921',
-    name: 'Rahul Dev',
-    avatar: 'RD',
-    headline: 'Senior Software Engineer | Full-Stack Architect & Distributed Systems',
+    name: 'Rahul Sharma',
+    avatar: 'RS',
+    headline: 'Full Stack Developer | Senior Software Engineering Student @ VTU, Bengaluru',
     location: 'Bengaluru, India',
     degree: 'Computer Science & Engineering',
     verified: true,

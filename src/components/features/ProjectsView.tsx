@@ -90,7 +90,7 @@ export const ProjectsView: React.FC = () => {
       {/* TITLE & TOP ACTIONS */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Projects</h1>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Projects</h1>
           <p className="text-xs text-slate-400 mt-1">Showcasing your work, building your identity</p>
         </div>
 
@@ -105,7 +105,7 @@ export const ProjectsView: React.FC = () => {
 
 
       {/* PROJECTS FILTER BAR */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#161D2F] pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 dark:border-[#161D2F] pb-4">
         
         {/* Category Tabs */}
         <div className="flex items-center space-x-2 overflow-x-auto">
@@ -122,14 +122,14 @@ export const ProjectsView: React.FC = () => {
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-2 transition ${
                 activeFilter === tab.label.split(' ')[0]
                   ? 'bg-[#141D30] text-blue-400 border border-blue-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-[#0F1626]'
+                  : 'text-slate-400 hover:text-white hover:bg-gray-50 dark:bg-[#0F1626]'
               }`}
             >
               <span>{tab.label}</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
                 activeFilter === tab.label.split(' ')[0]
                   ? 'bg-blue-600 text-white'
-                  : 'bg-[#172033] text-slate-400'
+                  : 'bg-gray-100 dark:bg-[#172033] text-slate-400'
               }`}>
                 {tab.count}
               </span>
@@ -139,13 +139,13 @@ export const ProjectsView: React.FC = () => {
 
         {/* Right Controls */}
         <div className="flex items-center space-x-3 text-xs">
-          <select className="bg-[#0F1626] border border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans focus:outline-none focus:border-blue-500">
+          <select className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans focus:outline-none focus:border-blue-500">
             <option>Sort by: Recent</option>
             <option>Sort by: Stars</option>
             <option>Sort by: Activity</option>
           </select>
 
-          <div className="flex items-center space-x-1 bg-[#0F1626] border border-[#1C263B] p-1 rounded-xl">
+          <div className="flex items-center space-x-1 bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] p-1 rounded-xl">
             <button className="p-1.5 rounded-lg bg-blue-600 text-white"><Grid className="w-3.5 h-3.5" /></button>
             <button className="p-1.5 rounded-lg text-slate-400 hover:text-white"><List className="w-3.5 h-3.5" /></button>
           </div>
@@ -163,14 +163,14 @@ export const ProjectsView: React.FC = () => {
               <div
                 key={project.id}
                 onClick={() => setSelectedProjectId(project.id)}
-                className={`p-4 rounded-2xl bg-[#0B0F19] border transition cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden ${
+                className={`p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border transition cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden ${
                   isSelected
                     ? 'border-blue-500 shadow-xl shadow-blue-500/10 ring-1 ring-blue-500/50'
-                    : 'border-[#161D2F] hover:border-slate-700'
+                    : 'border-gray-200 dark:border-[#161D2F] hover:border-slate-700'
                 }`}
               >
                 {/* Thumbnail Header */}
-                <div className="relative w-full h-28 rounded-xl bg-slate-900 border border-[#1C263B] overflow-hidden flex flex-col justify-between p-2">
+                <div className="relative w-full h-28 rounded-xl bg-slate-900 border border-gray-300 dark:border-[#1C263B] overflow-hidden flex flex-col justify-between p-2">
                   <div className="flex items-center justify-between z-10">
                     <span className="text-[10px] font-mono text-slate-400">app.preview</span>
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold flex items-center space-x-1 ${
@@ -194,7 +194,7 @@ export const ProjectsView: React.FC = () => {
                 {/* Project Details */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-extrabold text-white text-sm truncate">{project.title}</h3>
+                    <h3 className="font-extrabold text-slate-900 dark:text-white text-sm truncate">{project.title}</h3>
                     <MoreVertical className="w-4 h-4 text-slate-500 shrink-0" />
                   </div>
                   <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
@@ -212,7 +212,7 @@ export const ProjectsView: React.FC = () => {
                 </div>
 
                 {/* Footer Stats */}
-                <div className="pt-2 border-t border-[#161D2F] flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-gray-200 dark:border-[#161D2F] flex items-center justify-between text-[10px] font-mono text-slate-400">
                   <div className="flex items-center space-x-3">
                     <span className="flex items-center"><Star className="w-3 h-3 mr-1 text-amber-400" /> {project.stars}</span>
                     <span className="flex items-center"><GitFork className="w-3 h-3 mr-1 text-slate-400" /> {project.forks}</span>
@@ -229,13 +229,13 @@ export const ProjectsView: React.FC = () => {
       {/* ========================================================================= */}
       {/* SELECTED PROJECT DEEP-DIVE INSPECTION PANEL                               */}
       {/* ========================================================================= */}
-      <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-6">
+      <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-6">
         
         {/* Top Detail Header Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Screenshot / Web Preview Box (Span 1) */}
-          <div className="w-full h-56 rounded-2xl bg-gradient-to-tr from-slate-950 via-[#0F1626] to-slate-900 border border-[#1C263B] p-4 flex flex-col justify-between relative overflow-hidden shadow-inner">
+          <div className="w-full h-56 rounded-2xl bg-gradient-to-tr from-slate-950 via-[#0F1626] to-slate-900 border border-gray-300 dark:border-[#1C263B] p-4 flex flex-col justify-between relative overflow-hidden shadow-inner">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <div className="flex items-center space-x-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
@@ -261,7 +261,7 @@ export const ProjectsView: React.FC = () => {
           <div className="space-y-4 flex flex-col justify-between">
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
-                <h2 className="text-xl font-extrabold text-white tracking-tight">{selectedProject.title}</h2>
+                <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">{selectedProject.title}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                   🟢 {selectedProject.status}
                 </span>
@@ -300,13 +300,13 @@ export const ProjectsView: React.FC = () => {
 
               <button
                 onClick={() => addToast('Opening project editor...', 'info')}
-                className="px-4 py-2 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-200 font-semibold text-xs transition flex items-center space-x-1.5"
+                className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 font-semibold text-xs transition flex items-center space-x-1.5"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 <span>Edit Project</span>
               </button>
 
-              <button className="p-2 rounded-xl bg-[#0F1626] border border-[#1C263B] text-slate-400 hover:text-white">
+              <button className="p-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-slate-400 hover:text-white">
                 <MoreVertical className="w-4 h-4" />
               </button>
             </div>
@@ -314,10 +314,10 @@ export const ProjectsView: React.FC = () => {
           </div>
 
           {/* Project Status Ring & Checklist (Span 1) */}
-          <div className="p-5 rounded-2xl bg-[#0F1626] border border-[#1C263B] flex flex-col justify-between space-y-4">
+          <div className="p-5 rounded-2xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex flex-col justify-between space-y-4">
             
-            <div className="flex items-center justify-between border-b border-[#1C263B] pb-2">
-              <h3 className="font-extrabold text-white text-xs">Project Status</h3>
+            <div className="flex items-center justify-between border-b border-gray-300 dark:border-[#1C263B] pb-2">
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Project Status</h3>
             </div>
 
             <div className="flex items-center space-x-5">
@@ -338,7 +338,7 @@ export const ProjectsView: React.FC = () => {
                   />
                 </svg>
                 <div className="absolute text-center">
-                  <div className="text-sm font-extrabold font-mono text-white">100%</div>
+                  <div className="text-sm font-extrabold font-mono text-slate-900 dark:text-white">100%</div>
                   <div className="text-[8px] text-slate-400">Complete</div>
                 </div>
               </div>
@@ -370,11 +370,11 @@ export const ProjectsView: React.FC = () => {
             </div>
 
             {/* Quick Stats Grid Row */}
-            <div className="grid grid-cols-2 gap-2 border-t border-[#1C263B] pt-3 text-[11px] font-mono text-slate-400">
-              <div><Star className="w-3 h-3 inline mr-1 text-amber-400" /> Star <span className="font-bold text-white ml-1">128</span></div>
-              <div><GitFork className="w-3 h-3 inline mr-1 text-slate-400" /> Forks <span className="font-bold text-white ml-1">24</span></div>
-              <div><Eye className="w-3 h-3 inline mr-1 text-blue-400" /> Watchers <span className="font-bold text-white ml-1">16</span></div>
-              <div><Users className="w-3 h-3 inline mr-1 text-purple-400" /> Contributors <span className="font-bold text-white ml-1">4</span></div>
+            <div className="grid grid-cols-2 gap-2 border-t border-gray-300 dark:border-[#1C263B] pt-3 text-[11px] font-mono text-slate-400">
+              <div><Star className="w-3 h-3 inline mr-1 text-amber-400" /> Star <span className="font-bold text-slate-900 dark:text-white ml-1">128</span></div>
+              <div><GitFork className="w-3 h-3 inline mr-1 text-slate-400" /> Forks <span className="font-bold text-slate-900 dark:text-white ml-1">24</span></div>
+              <div><Eye className="w-3 h-3 inline mr-1 text-blue-400" /> Watchers <span className="font-bold text-slate-900 dark:text-white ml-1">16</span></div>
+              <div><Users className="w-3 h-3 inline mr-1 text-purple-400" /> Contributors <span className="font-bold text-slate-900 dark:text-white ml-1">4</span></div>
             </div>
 
           </div>
@@ -383,7 +383,7 @@ export const ProjectsView: React.FC = () => {
 
 
         {/* SUB-TABS NAVIGATION */}
-        <div className="border-b border-[#161D2F] overflow-x-auto">
+        <div className="border-b border-gray-200 dark:border-[#161D2F] overflow-x-auto">
           <div className="flex items-center space-x-6 min-w-max">
             {(['Overview', 'Features', 'Tech Stack', 'Architecture', 'Screenshots', 'Documentation', 'Activity', 'Analytics'] as const).map((tab) => (
               <button
@@ -407,33 +407,33 @@ export const ProjectsView: React.FC = () => {
           
           {/* Left Panel: Project Overview & Key Highlights */}
           <div className="space-y-4">
-            <h4 className="font-extrabold text-white text-xs">Project Overview</h4>
+            <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Project Overview</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
               AI Code Reviewer is an intelligent code analysis tool that helps developers improve code quality, security, and performance. It uses advanced AI algorithms to provide real-time suggestions and identify potential issues.
             </p>
 
             <div className="grid grid-cols-2 gap-2 text-xs pt-2">
-              <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
                 <Shield className="w-4 h-4 text-purple-400" />
                 <span>AI Code Analysis</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
                 <Zap className="w-4 h-4 text-blue-400" />
                 <span>Real-time Feedback</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
                 <Bug className="w-4 h-4 text-pink-400" />
                 <span>Bug Detection</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
                 <Award className="w-4 h-4 text-amber-400" />
                 <span>Security Scan</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
                 <Zap className="w-4 h-4 text-emerald-400" />
                 <span>Performance Tips</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#0F1626] border border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
                 <CheckCircle2 className="w-4 h-4 text-cyan-400" />
                 <span>Best Practices</span>
               </div>
@@ -442,33 +442,33 @@ export const ProjectsView: React.FC = () => {
 
           {/* Middle Panel: Tech Stack Grid */}
           <div className="space-y-4">
-            <h4 className="font-extrabold text-white text-xs">Tech Stack</h4>
+            <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Tech Stack</h4>
             <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-white">N Next.js</div>
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
+                <div className="font-bold text-slate-900 dark:text-white">N Next.js</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-blue-400">TS TypeScript</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-cyan-400">🌊 Tailwind CSS</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-emerald-400">🟢 Node.js</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-blue-500">🐘 PostgreSQL</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-red-500">🔴 Redis</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-purple-400">🤖 OpenAI API</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-200">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
                 <div className="font-bold text-sky-400">🐳 Docker</div>
               </div>
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] text-center font-medium text-slate-400 flex items-center justify-center">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-400 flex items-center justify-center">
                 +2 more
               </div>
             </div>
@@ -477,7 +477,7 @@ export const ProjectsView: React.FC = () => {
           {/* Right Panel: Activity Timeline Stream */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="font-extrabold text-white text-xs">Activity Timeline</h4>
+              <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Activity Timeline</h4>
               <button className="text-[11px] text-blue-400 hover:underline">View All</button>
             </div>
 
@@ -485,7 +485,7 @@ export const ProjectsView: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1 shrink-0" />
                 <div className="flex-1">
-                  <div className="font-bold text-white">Project deployed successfully</div>
+                  <div className="font-bold text-slate-900 dark:text-white">Project deployed successfully</div>
                   <div className="text-[10px] text-slate-500 font-mono">2 hours ago</div>
                 </div>
               </div>
@@ -493,7 +493,7 @@ export const ProjectsView: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1 shrink-0" />
                 <div className="flex-1">
-                  <div className="font-bold text-white">New commit pushed to main branch</div>
+                  <div className="font-bold text-slate-900 dark:text-white">New commit pushed to main branch</div>
                   <div className="text-[10px] text-slate-500 font-mono">5 hours ago</div>
                 </div>
               </div>
@@ -501,7 +501,7 @@ export const ProjectsView: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-purple-500 mt-1 shrink-0" />
                 <div className="flex-1">
-                  <div className="font-bold text-white">Updated README.md</div>
+                  <div className="font-bold text-slate-900 dark:text-white">Updated README.md</div>
                   <div className="text-[10px] text-slate-500 font-mono">1 day ago</div>
                 </div>
               </div>
@@ -509,7 +509,7 @@ export const ProjectsView: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 mt-1 shrink-0" />
                 <div className="flex-1">
-                  <div className="font-bold text-white">New contributor joined the project</div>
+                  <div className="font-bold text-slate-900 dark:text-white">New contributor joined the project</div>
                   <div className="text-[10px] text-slate-500 font-mono">2 days ago</div>
                 </div>
               </div>
@@ -517,7 +517,7 @@ export const ProjectsView: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0" />
                 <div className="flex-1">
-                  <div className="font-bold text-white">Issue #42 has been resolved</div>
+                  <div className="font-bold text-slate-900 dark:text-white">Issue #42 has been resolved</div>
                   <div className="text-[10px] text-slate-500 font-mono">3 days ago</div>
                 </div>
               </div>

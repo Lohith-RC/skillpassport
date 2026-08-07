@@ -30,7 +30,7 @@ export const TimeCapsuleView: React.FC = () => {
       {/* TITLE & TOP ACTION BUTTON */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center">
             Time Capsule
           </h1>
           <p className="text-xs text-slate-400 mt-1">Visualizing your journey, growth and milestones over time</p>
@@ -38,7 +38,7 @@ export const TimeCapsuleView: React.FC = () => {
 
         <button
           onClick={() => addToast('Opening milestone submission form...', 'info')}
-          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-[#0F1626] border border-[#2B2354] hover:border-purple-500 text-white font-semibold text-xs transition shadow-lg shadow-purple-500/10"
+          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-[#2B2354] hover:border-purple-500 text-white font-semibold text-xs transition shadow-lg shadow-purple-500/10"
         >
           <Plus className="w-4 h-4 text-purple-400" />
           <span>Add Milestone</span>
@@ -47,7 +47,7 @@ export const TimeCapsuleView: React.FC = () => {
 
 
       {/* MILESTONE FILTER BAR */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#161D2F] pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 dark:border-[#161D2F] pb-4">
         
         {/* Category Filter Tabs */}
         <div className="flex items-center space-x-2 overflow-x-auto">
@@ -58,7 +58,7 @@ export const TimeCapsuleView: React.FC = () => {
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
                 activeFilter === tab.replace(' Milestones', '') || (activeFilter === 'All' && tab === 'All Milestones')
                   ? 'bg-blue-600 text-white font-semibold shadow-md'
-                  : 'text-slate-400 hover:text-white hover:bg-[#0F1626]'
+                  : 'text-slate-400 hover:text-white hover:bg-gray-50 dark:bg-[#0F1626]'
               }`}
             >
               {tab}
@@ -67,7 +67,7 @@ export const TimeCapsuleView: React.FC = () => {
         </div>
 
         {/* View Mode Switcher */}
-        <div className="flex items-center space-x-1 bg-[#0F1626] border border-[#1C263B] p-1 rounded-xl text-xs">
+        <div className="flex items-center space-x-1 bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] p-1 rounded-xl text-xs">
           <button
             onClick={() => setViewMode('Timeline')}
             className={`px-3 py-1 rounded-lg transition font-medium ${
@@ -102,15 +102,15 @@ export const TimeCapsuleView: React.FC = () => {
                 <Rocket className="w-4 h-4" />
               </span>
               
-              <div className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-emerald-500/40 transition space-y-3">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-emerald-500/40 transition space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-[10px] font-mono text-slate-500">2024 May</div>
-                    <h3 className="text-sm font-extrabold text-white">Deployed First Project</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Deployed First Project</h3>
                     <p className="text-xs text-slate-400 mt-1">Successfully deployed my portfolio website using Vercel.</p>
                   </div>
                   
-                  <div className="w-24 h-14 rounded-lg bg-slate-900 border border-[#1C263B] overflow-hidden shrink-0 hidden sm:flex flex-col justify-between p-1">
+                  <div className="w-24 h-14 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#1C263B] overflow-hidden shrink-0 hidden sm:flex flex-col justify-between p-1">
                     <div className="w-full h-1 bg-emerald-500 rounded" />
                     <div className="text-[7px] font-mono text-slate-400">vercel.app</div>
                   </div>
@@ -137,15 +137,15 @@ export const TimeCapsuleView: React.FC = () => {
                 <Code className="w-4 h-4" />
               </span>
               
-              <div className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-purple-500/40 transition space-y-3">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-purple-500/40 transition space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-[10px] font-mono text-slate-500">2024 Mar</div>
-                    <h3 className="text-sm font-extrabold text-white">Open Source Contribution</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Open Source Contribution</h3>
                     <p className="text-xs text-slate-400 mt-1">Contributed to an open source project and fixed 12 issues.</p>
                   </div>
                   
-                  <div className="w-10 h-10 rounded-xl bg-slate-900 border border-[#1C263B] flex items-center justify-center text-white shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 border border-gray-300 dark:border-[#1C263B] flex items-center justify-center text-white shrink-0">
                     <Github className="w-5 h-5" />
                   </div>
                 </div>
@@ -167,15 +167,15 @@ export const TimeCapsuleView: React.FC = () => {
                 <Briefcase className="w-4 h-4" />
               </span>
               
-              <div className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-blue-500/40 transition space-y-3">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-blue-500/40 transition space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-[10px] font-mono text-slate-500">2023 Dec</div>
-                    <h3 className="text-sm font-extrabold text-white">Software Developer Intern</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Software Developer Intern</h3>
                     <p className="text-xs text-slate-400 mt-1">Joined TechNova Solutions as a Software Developer Intern.</p>
                   </div>
                   
-                  <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-[#1C263B] text-[10px] font-bold text-white shrink-0">
+                  <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-gray-300 dark:border-[#1C263B] text-[10px] font-bold text-slate-900 dark:text-white shrink-0">
                     TechNova
                   </div>
                 </div>
@@ -201,11 +201,11 @@ export const TimeCapsuleView: React.FC = () => {
                 <Trophy className="w-4 h-4" />
               </span>
               
-              <div className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-amber-500/40 transition space-y-3">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-amber-500/40 transition space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-[10px] font-mono text-slate-500">2023 Sep</div>
-                    <h3 className="text-sm font-extrabold text-white">Hackathon Winner</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Hackathon Winner</h3>
                     <p className="text-xs text-slate-400 mt-1">Won 1st place in Smart India Hackathon 2023.</p>
                   </div>
                   
@@ -235,15 +235,15 @@ export const TimeCapsuleView: React.FC = () => {
                 <GraduationCap className="w-4 h-4" />
               </span>
               
-              <div className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-blue-500/40 transition space-y-3">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-blue-500/40 transition space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-[10px] font-mono text-slate-500">2023 Jun</div>
-                    <h3 className="text-sm font-extrabold text-white">Completed B.Tech 3rd Year</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Completed B.Tech 3rd Year</h3>
                     <p className="text-xs text-slate-400 mt-1">Completed third year of Computer Science Engineering.</p>
                   </div>
                   
-                  <div className="px-3 py-1 rounded-xl bg-slate-900 border border-[#1C263B] text-[10px] font-bold text-white shrink-0">
+                  <div className="px-3 py-1 rounded-xl bg-slate-900 border border-gray-300 dark:border-[#1C263B] text-[10px] font-bold text-slate-900 dark:text-white shrink-0">
                     VTU
                   </div>
                 </div>
@@ -265,11 +265,11 @@ export const TimeCapsuleView: React.FC = () => {
                 <Lightbulb className="w-4 h-4" />
               </span>
               
-              <div className="p-5 rounded-2xl bg-[#0B0F19] border border-[#161D2F] hover:border-emerald-500/40 transition space-y-3">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-emerald-500/40 transition space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-[10px] font-mono text-slate-500">2022 Jan</div>
-                    <h3 className="text-sm font-extrabold text-white">Started My Coding Journey</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Started My Coding Journey</h3>
                     <p className="text-xs text-slate-400 mt-1">Solved my first coding problem on LeetCode.</p>
                   </div>
                   
@@ -294,7 +294,7 @@ export const TimeCapsuleView: React.FC = () => {
           {/* Bottom Button */}
           <button
             onClick={() => addToast('Loaded 10 more past milestones.', 'info')}
-            className="w-full py-3 rounded-xl bg-[#0F1626] hover:bg-[#172033] border border-[#1C263B] text-slate-200 text-xs font-semibold transition flex items-center justify-center space-x-2"
+            className="w-full py-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition flex items-center justify-center space-x-2"
           >
             <span>View More Milestones</span>
             <ChevronDown className="w-4 h-4" />
@@ -305,40 +305,40 @@ export const TimeCapsuleView: React.FC = () => {
         <div className="space-y-6">
           
           {/* CARD 1: JOURNEY OVERVIEW */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-              <h3 className="font-extrabold text-white text-xs">Journey Overview</h3>
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Journey Overview</h3>
               <button className="text-[11px] text-blue-400 hover:underline">View Analytics</button>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
-                  <span className="font-mono text-base font-extrabold text-white">2+</span>
+                  <span className="font-mono text-base font-extrabold text-slate-900 dark:text-white">2+</span>
                   <Calendar className="w-4 h-4 text-blue-400" />
                 </div>
                 <div className="text-[11px] text-slate-400">Years of Journey</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
-                  <span className="font-mono text-base font-extrabold text-white">18</span>
+                  <span className="font-mono text-base font-extrabold text-slate-900 dark:text-white">18</span>
                   <Rocket className="w-4 h-4 text-amber-400" />
                 </div>
                 <div className="text-[11px] text-slate-400">Milestones</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
-                  <span className="font-mono text-base font-extrabold text-white">12</span>
+                  <span className="font-mono text-base font-extrabold text-slate-900 dark:text-white">12</span>
                   <Code className="w-4 h-4 text-purple-400" />
                 </div>
                 <div className="text-[11px] text-slate-400">Projects Built</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0F1626] border border-[#1C263B] space-y-1">
+              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
                 <div className="flex items-center justify-between text-slate-400">
-                  <span className="font-mono text-base font-extrabold text-white">8</span>
+                  <span className="font-mono text-base font-extrabold text-slate-900 dark:text-white">8</span>
                   <Trophy className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div className="text-[11px] text-slate-400">Achievements</div>
@@ -347,9 +347,9 @@ export const TimeCapsuleView: React.FC = () => {
           </div>
 
           {/* CARD 2: GROWTH OVER TIME CHART */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-              <h3 className="font-extrabold text-white text-xs">Growth Over Time</h3>
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Growth Over Time</h3>
               <button className="text-[11px] text-blue-400 hover:underline">View Details</button>
             </div>
 
@@ -368,7 +368,7 @@ export const TimeCapsuleView: React.FC = () => {
                 <circle cx="200" cy="10" r="4" fill="#FFFFFF" />
               </svg>
 
-              <div className="flex justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-[#161D2F]">
+              <div className="flex justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-gray-200 dark:border-[#161D2F]">
                 <span>2022</span>
                 <span>2022</span>
                 <span>2023</span>
@@ -379,9 +379,9 @@ export const TimeCapsuleView: React.FC = () => {
           </div>
 
           {/* CARD 3: TOP SKILLS OVER TIME */}
-          <div className="p-6 rounded-2xl bg-[#0B0F19] border border-[#161D2F] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#161D2F] pb-3">
-              <h3 className="font-extrabold text-white text-xs">Top Skills Over Time</h3>
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Top Skills Over Time</h3>
               <button className="text-[11px] text-blue-400 hover:underline">View All</button>
             </div>
 
@@ -450,7 +450,7 @@ export const TimeCapsuleView: React.FC = () => {
             
             <div className="flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-purple-400" />
-              <h3 className="font-extrabold text-white text-xs">Time Capsule Insights</h3>
+              <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Time Capsule Insights</h3>
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed">

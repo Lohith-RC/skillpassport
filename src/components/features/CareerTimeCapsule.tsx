@@ -83,7 +83,7 @@ export const CareerTimeCapsule: React.FC = () => {
             <Card hoverable className="p-6 space-y-3 border-slate-200 dark:border-border-default">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center space-x-3">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold text-white shadow-sm" style={{ backgroundColor: m.color }}>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold text-slate-900 dark:text-white shadow-sm" style={{ backgroundColor: m.color }}>
                     {m.year}
                   </span>
                   <h3 className="font-extrabold text-slate-900 dark:text-white text-base">{m.title}</h3>

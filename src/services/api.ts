@@ -1,4 +1,58 @@
-import { Repository, LeetCodeStats, PlatformSeededDetail, RecruiterCandidate } from '../types';
+import { Repository, LeetCodeStats, PlatformSeededDetail, RecruiterCandidate, CareerMilestone, UniversityStudent } from '../types';
+
+export const mockCareerMilestones: CareerMilestone[] = [
+  {
+    id: 'm_1',
+    year: '2023',
+    title: 'First Repository & Open Source Commit',
+    category: 'REPO',
+    description: 'Initialized skillpassport-core engine on GitHub with automated Jest test suite.',
+    proofBadge: 'GitHub Verified',
+    shaSeal: 'SHA-256: 8f92a1c4b78912e...e45a901',
+    icon: 'fa-brands fa-github',
+    color: '#10B981',
+  },
+  {
+    id: 'm_2',
+    year: '2024',
+    title: 'First Production Vercel Deployment',
+    category: 'DEPLOYMENT',
+    description: 'Shipped high-throughput payment microservice gateway using Spring Boot 3 & Redis.',
+    proofBadge: 'PASSED 🟢 (38s Build)',
+    shaSeal: 'SHA-256: c412a89b9018f92...a9018f9',
+    icon: 'fa-solid fa-cloud-arrow-up',
+    color: '#2563EB',
+  },
+  {
+    id: 'm_3',
+    year: '2025',
+    title: 'LeetCode 1,942 Knight Rating Achieved',
+    category: 'CONTEST',
+    description: 'Ranked in the top 3.8% globally across 98 algorithmic competition rounds.',
+    proofBadge: 'Knight Badge (Top 3.8%)',
+    shaSeal: 'SHA-256: 78912e45a9018f9...2a1c4b7',
+    icon: 'fa-solid fa-trophy',
+    color: '#F59E0B',
+  },
+  {
+    id: 'm_4',
+    year: '2026',
+    title: 'VTU Academic Registrar CGPA Verification Seal',
+    category: 'ACADEMIC',
+    description: 'Official digital degree transcript seal verified with 9.42 CGPA in Computer Science.',
+    proofBadge: 'VTU Registrar Signed',
+    shaSeal: 'SHA-256: a12e459018f92a1...c4b7891',
+    icon: 'fa-solid fa-graduation-cap',
+    color: '#7C3AED',
+  },
+];
+
+export const mockUniversityStudents: UniversityStudent[] = [
+  { id: 's_1', usn: '1VT22CS084', name: 'Rahul Sharma', cgpa: 9.42, department: 'Computer Science', proofScore: 88, status: 'VERIFIED', commitsCount: 840 },
+  { id: 's_2', usn: '1VT22CS102', name: 'Priya Patel', cgpa: 9.18, department: 'Computer Science', proofScore: 84, status: 'VERIFIED', commitsCount: 620 },
+  { id: 's_3', usn: '1VT22IS042', name: 'Arjun Mehta', cgpa: 8.86, department: 'Information Science', proofScore: 79, status: 'VERIFIED', commitsCount: 450 },
+  { id: 's_4', usn: '1VT22EC018', name: 'Sneha Reddy', cgpa: 9.05, department: 'Electronics', proofScore: 76, status: 'PENDING', commitsCount: 310 },
+];
 
 export const mockRepositories: Repository[] = [
   {

@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { LandingPage } from './components/features/LandingPage';
 import { PassportCard } from './components/features/PassportCard';
+import { CareerTimeCapsule } from './components/features/CareerTimeCapsule';
 import { ContributionMatrix } from './components/features/ContributionMatrix';
 import { ProjectEvidenceCard } from './components/features/ProjectEvidenceCard';
 import { LeetCodeDashboard } from './components/features/LeetCodeDashboard';
 import { RecruiterPipeline } from './components/features/RecruiterPipeline';
+import { UniversityHub } from './components/features/UniversityHub';
+import { InvestorAnalytics } from './components/features/InvestorAnalytics';
 import { PlatformSyncModal } from './components/features/PlatformSyncModal';
 import { ProjectInspectDrawer } from './components/features/ProjectInspectDrawer';
 import { InterviewModal } from './components/features/InterviewModal';
@@ -45,14 +48,17 @@ export const App: React.FC = () => {
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
         {activeTab === 'landing' && <LandingPage />}
         {activeTab === 'profile' && <PassportCard />}
+        {activeTab === 'timecapsule' && <CareerTimeCapsule />}
         {activeTab === 'heatmap' && <ContributionMatrix />}
         {activeTab === 'repos' && <ProjectEvidenceCard />}
         {activeTab === 'leetcode' && <LeetCodeDashboard />}
         {activeTab === 'recruiter' && <RecruiterPipeline />}
+        {activeTab === 'university' && <UniversityHub />}
+        {activeTab === 'investor' && <InvestorAnalytics />}
       </main>
 
       <footer className="py-6 border-t border-slate-200 dark:border-border-subtle text-center text-xs text-slate-500 dark:text-gray-400">
-        &copy; 2026 SkillPassport AI. Execution-Ready Next.js 15 TRD Engine.
+        &copy; 2026 SkillPassport AI. Enterprise 5-Role Digital Identity Ecosystem.
       </footer>
 
       {/* Interactive Modals, Drawers & Toast Stack */}

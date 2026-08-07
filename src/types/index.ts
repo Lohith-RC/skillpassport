@@ -1,4 +1,15 @@
-export type TabType = 'landing' | 'profile' | 'heatmap' | 'repos' | 'leetcode' | 'recruiter';
+export type TabType = 
+  | 'landing' 
+  | 'profile' 
+  | 'timecapsule'
+  | 'heatmap' 
+  | 'repos' 
+  | 'leetcode' 
+  | 'recruiter' 
+  | 'university' 
+  | 'investor';
+
+export type UserRole = 'developer' | 'recruiter' | 'university' | 'investor' | 'admin';
 
 export type PlatformId = 
   | 'github' 
@@ -39,6 +50,18 @@ export interface DeveloperProfile {
   pipelinesPassed: number;
   leetcodeSolved: number;
   platforms: Record<PlatformId, PlatformConnection>;
+}
+
+export interface CareerMilestone {
+  id: string;
+  year: string;
+  title: string;
+  category: 'REPO' | 'DEPLOYMENT' | 'CONTEST' | 'ACADEMIC' | 'SEAL';
+  description: string;
+  proofBadge: string;
+  shaSeal: string;
+  icon: string;
+  color: string;
 }
 
 export interface Repository {
@@ -109,4 +132,15 @@ export interface RecruiterCandidate {
   availability: string;
   location: string;
   shaSeal: string;
+}
+
+export interface UniversityStudent {
+  id: string;
+  usn: string;
+  name: string;
+  cgpa: number;
+  department: string;
+  proofScore: number;
+  status: 'VERIFIED' | 'PENDING';
+  commitsCount: number;
 }

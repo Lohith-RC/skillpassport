@@ -1,18 +1,21 @@
 import React from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { TabType } from '../../types';
-import { UserCheck, BarChart3, GitBranch, Code, ShieldCheck, Search, Bell, Sun, Moon, Sparkles } from 'lucide-react';
+import { UserCheck, BarChart3, GitBranch, Code, ShieldCheck, Search, Bell, Sun, Moon, Sparkles, Clock, GraduationCap, TrendingUp } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { activeTab, setActiveTab, setSearchOpen, isDarkMode, toggleTheme, setSyncModalOpen, profile } = useAppStore();
 
   const navItems: { id: TabType; label: string; icon: React.ReactNode }[] = [
-    { id: 'landing', label: '3D Landing', icon: <Sparkles className="w-4 h-4 mr-2" /> },
-    { id: 'profile', label: 'Unified Profile', icon: <UserCheck className="w-4 h-4 mr-2" /> },
-    { id: 'heatmap', label: 'Contribution Matrix', icon: <BarChart3 className="w-4 h-4 mr-2" /> },
-    { id: 'repos', label: 'Repos & CI/CD', icon: <GitBranch className="w-4 h-4 mr-2" /> },
-    { id: 'leetcode', label: 'LeetCode Dashboard', icon: <Code className="w-4 h-4 mr-2" /> },
-    { id: 'recruiter', label: 'Recruiter Portal', icon: <ShieldCheck className="w-4 h-4 mr-2" /> },
+    { id: 'landing', label: '3D Landing', icon: <Sparkles className="w-4 h-4 mr-1.5" /> },
+    { id: 'profile', label: 'Passport', icon: <UserCheck className="w-4 h-4 mr-1.5" /> },
+    { id: 'timecapsule', label: 'Time Capsule', icon: <Clock className="w-4 h-4 mr-1.5" /> },
+    { id: 'heatmap', label: 'Matrix', icon: <BarChart3 className="w-4 h-4 mr-1.5" /> },
+    { id: 'repos', label: 'Repos', icon: <GitBranch className="w-4 h-4 mr-1.5" /> },
+    { id: 'leetcode', label: 'LeetCode', icon: <Code className="w-4 h-4 mr-1.5" /> },
+    { id: 'recruiter', label: 'Recruiter', icon: <ShieldCheck className="w-4 h-4 mr-1.5" /> },
+    { id: 'university', label: 'University', icon: <GraduationCap className="w-4 h-4 mr-1.5" /> },
+    { id: 'investor', label: 'Investor', icon: <TrendingUp className="w-4 h-4 mr-1.5" /> },
   ];
 
   return (
@@ -27,20 +30,20 @@ export const Navbar: React.FC = () => {
             SkillPassport <span className="text-purple-600 dark:text-purple-400">AI</span>
           </span>
           <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40">
-            Next.js 15 TRD Engine
+            5 Ecosystem Roles
           </span>
         </div>
       </div>
 
-      {/* Navigation Tabs with Purple Accent */}
-      <nav className="hidden lg:flex items-center space-x-1 bg-slate-100 dark:bg-bg-base/60 p-1 rounded-xl border border-slate-200 dark:border-border-subtle text-xs font-medium">
+      {/* Navigation Tabs with Easing */}
+      <nav className="hidden xl:flex items-center space-x-1 bg-slate-100 dark:bg-bg-base/60 p-1 rounded-xl border border-slate-200 dark:border-border-subtle text-xs font-medium overflow-x-auto">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex items-center px-3.5 py-2 rounded-lg transition-all ${
+              className={`flex items-center px-3 py-1.5 rounded-lg transition-all ${
                 isActive
                   ? 'bg-purple-600 text-white font-semibold shadow-md shadow-purple-600/20'
                   : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-bg-hover'

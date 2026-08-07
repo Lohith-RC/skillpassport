@@ -34,9 +34,9 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  activeTab: 'profile',
+  activeTab: 'dashboard',
   isSearchOpen: false,
-  isDarkMode: false,
+  isDarkMode: true,
   isSyncModalOpen: false,
   isInterviewModalOpen: false,
   inspectingRepo: null,
@@ -45,9 +45,9 @@ export const useAppStore = create<AppState>((set) => ({
   toasts: [],
   profile: {
     id: 'dev_8921',
-    name: 'Rahul Sharma',
-    avatar: 'RS',
-    headline: 'Senior Software Engineering Student @ VTU | Full-Stack Architect & Distributed Systems',
+    name: 'Rahul Dev',
+    avatar: 'RD',
+    headline: 'Senior Software Engineer | Full-Stack Architect & Distributed Systems',
     location: 'Bengaluru, India',
     degree: 'Computer Science & Engineering',
     verified: true,

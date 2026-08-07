@@ -1,4 +1,5 @@
 export type TabType = 
+  | 'dashboard'
   | 'landing' 
   | 'profile' 
   | 'timecapsule'
@@ -75,6 +76,8 @@ export interface Repository {
   commitsCount: number;
   mrsCount?: number;
   buildTime?: string;
+  coverage?: number;
+  language?: string;
   status: 'LIVE' | 'PASSED' | 'BUILDING';
   tags: string[];
   liveUrl?: string;

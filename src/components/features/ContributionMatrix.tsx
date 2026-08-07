@@ -50,23 +50,25 @@ export const ContributionMatrix: React.FC = () => {
   const daysPerWeek = 7;
 
   // Render a specific platform heat matrix grid with custom level colors
-  const renderGrid = (levelClasses: PlatformMatrixConfig['levelClasses'], seedOffset: number) => (
+  const renderGrid = (levelClasses: PlatformMatrixConfig['levelClasses'], seedOffset: number, platformName: string) => (
     <div className="flex space-x-1.5 min-w-[850px]">
       {weeks.map((_, wIndex) => (
         <div key={wIndex} className="flex flex-col space-y-1.5">
           {Array.from({ length: daysPerWeek }).map((_, dIndex) => {
             const seed = (wIndex * 7 + dIndex + seedOffset) % 13;
             let lvl = levelClasses.lvl0;
-            if (seed === 2 || seed === 3) lvl = levelClasses.lvl1;
-            if (seed === 5 || seed === 7) lvl = levelClasses.lvl2;
-            if (seed === 8 || seed === 11) lvl = levelClasses.lvl3;
-            if (seed === 12) lvl = levelClasses.lvl4;
+            let count = 0;
+            if (seed === 2 || seed === 3) { lvl = levelClasses.lvl1; count = 2; }
+            if (seed === 5 || seed === 7) { lvl = levelClasses.lvl2; count = 5; }
+            if (seed === 8 || seed === 11) { lvl = levelClasses.lvl3; count = 9; }
+            if (seed === 12) { lvl = levelClasses.lvl4; count = 14; }
 
             return (
               <div
                 key={dIndex}
-                className={`w-3 h-3 rounded-[3px] transition-transform duration-150 hover:scale-125 cursor-pointer ${lvl}`}
-                title={`Week ${wIndex + 1}, Day ${dIndex + 1}`}
+                onClick={() => addToast(`${platformName}: Verified ${count} contributions on Week ${wIndex + 1}, Day ${dIndex + 1}!`, count > 0 ? 'success' : 'info')}
+                className={`w-3 h-3 rounded-[3px] transition-all duration-150 hover:scale-150 hover:z-10 cursor-pointer ${lvl}`}
+                title={`${platformName}: ${count} activity items on Week ${wIndex + 1}, Day ${dIndex + 1}`}
               />
             );
           })}
@@ -236,7 +238,8 @@ export const ContributionMatrix: React.FC = () => {
                 lvl3: 'bg-emerald-500 dark:bg-emerald-500',
                 lvl4: 'bg-emerald-700 dark:bg-emerald-300',
               },
-              1
+              1,
+              'GitHub'
             )}
 
             <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
@@ -321,7 +324,8 @@ export const ContributionMatrix: React.FC = () => {
               lvl3: 'bg-orange-500 dark:bg-orange-500',
               lvl4: 'bg-orange-700 dark:bg-orange-300',
             },
-            3
+            3,
+            'GitLab'
           )}
 
           <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
@@ -385,7 +389,8 @@ export const ContributionMatrix: React.FC = () => {
               lvl3: 'bg-amber-500 dark:bg-amber-500',
               lvl4: 'bg-amber-700 dark:bg-amber-300',
             },
-            7
+            7,
+            'LeetCode'
           )}
 
           <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
@@ -428,7 +433,8 @@ export const ContributionMatrix: React.FC = () => {
               lvl3: 'bg-purple-500 dark:bg-purple-500',
               lvl4: 'bg-purple-700 dark:bg-purple-300',
             },
-            9
+            9,
+            'HackerRank & Codeforces'
           )}
 
           <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">

@@ -7,6 +7,7 @@ export const Navbar: React.FC = () => {
   const { activeTab, setActiveTab, setSearchOpen, isDarkMode, toggleTheme, setSyncModalOpen, profile } = useAppStore();
 
   const navItems: { id: TabType; label: string; icon: React.ReactNode }[] = [
+    { id: 'dashboard', label: 'Dashboard', icon: <Sparkles className="w-4 h-4 mr-1.5" /> },
     { id: 'landing', label: '3D Landing', icon: <Sparkles className="w-4 h-4 mr-1.5" /> },
     { id: 'profile', label: 'Passport', icon: <UserCheck className="w-4 h-4 mr-1.5" /> },
     { id: 'timecapsule', label: 'Time Capsule', icon: <Clock className="w-4 h-4 mr-1.5" /> },

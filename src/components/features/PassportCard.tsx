@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { ProgressBar } from '../ui/ProgressBar';
 import { Button } from '../ui/Button';
-import { CheckCircle2, MapPin, GraduationCap, RefreshCw, Sparkles, Share2, Award } from 'lucide-react';
+import { CheckCircle2, MapPin, GraduationCap, RefreshCw, Sparkles, Share2, Award, ShieldCheck, FileCheck, X, Key, Activity } from 'lucide-react';
 
 export const PassportCard: React.FC = () => {
   const { profile, setActiveTab, setSyncModalOpen, addToast } = useAppStore();
+  const [showAuditModal, setShowAuditModal] = useState(false);
+  const [showSealModal, setShowSealModal] = useState(false);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -31,16 +33,18 @@ export const PassportCard: React.FC = () => {
                   {profile.avatar}
                 </div>
               </div>
-              <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white dark:border-bg-card flex items-center justify-center text-[10px] text-white">
+              <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-white dark:border-bg-card flex items-center justify-center text-[10px] text-white" title="Cryptographically Verified">
                 <CheckCircle2 className="w-4 h-4" />
               </span>
             </div>
 
             <div className="space-y-1">
-              <div className="flex items-center space-x-3">
+              <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{profile.name}</h1>
                 <Badge variant="emerald">Verified Engineer</Badge>
-                <Badge variant="purple">Gold Tier {profile.proofScore}%</Badge>
+                <button onClick={() => setShowAuditModal(true)} className="cursor-pointer">
+                  <Badge variant="purple">Gold Tier {profile.proofScore}% Audit &rarr;</Badge>
+                </button>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-300 font-medium">{profile.headline}</p>
               <p className="text-xs text-slate-500 dark:text-gray-400 flex items-center space-x-3 pt-1">
@@ -53,6 +57,10 @@ export const PassportCard: React.FC = () => {
 
           {/* Action Toolbar */}
           <div className="flex flex-wrap items-center gap-2">
+            <Button variant="secondary" size="sm" onClick={() => setShowSealModal(true)}>
+              <ShieldCheck className="w-4 h-4 mr-1.5 text-emerald-500" />
+              Verify SHA-256 Seal
+            </Button>
             <Button variant="secondary" size="sm" onClick={handleShare}>
               <Share2 className="w-4 h-4 mr-1.5" />
               Share Passport
@@ -108,12 +116,12 @@ export const PassportCard: React.FC = () => {
           </div>
 
           <div
-            onClick={() => setActiveTab('recruiter')}
+            onClick={() => setShowAuditModal(true)}
             className="cursor-pointer p-4 rounded-xl bg-slate-50 dark:bg-bg-base/60 border border-slate-200 dark:border-border-subtle hover:border-emerald-500 transition"
           >
             <div className="text-xs text-slate-500 dark:text-gray-400 font-medium">Proof of Skill Score</div>
             <div className="text-2xl font-bold font-mono text-purple-600 dark:text-purple-400 mt-1">{profile.proofScore}%</div>
-            <div className="text-[10px] text-emerald-600 font-semibold mt-0.5">Recruiter Audit Vault &rarr;</div>
+            <div className="text-[10px] text-emerald-600 font-semibold mt-0.5">Audit Breakdown &rarr;</div>
           </div>
         </div>
       </Card>
@@ -165,6 +173,102 @@ export const PassportCard: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      {/* Proof Score Audit Breakdown Modal */}
+      {showAuditModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card max-w-lg w-full rounded-2xl border border-slate-200 dark:border-border-default p-6 space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-border-subtle pb-3">
+              <div className="flex items-center space-x-2">
+                <Activity className="w-5 h-5 text-purple-600" />
+                <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Proof of Skill Score Audit (88/100)</h3>
+              </div>
+              <button onClick={() => setShowAuditModal(false)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3 rounded-xl bg-slate-100 dark:bg-bg-base border border-slate-200 dark:border-border-subtle space-y-1">
+                <div className="flex justify-between font-bold text-slate-900 dark:text-white">
+                  <span>1. Production CI/CD Telemetry (35 pts)</span>
+                  <span className="text-emerald-600 font-mono">31/35 pts</span>
+                </div>
+                <p className="text-slate-500">312 green runner pipelines passed across GitHub Actions &amp; GitLab CI.</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-100 dark:bg-bg-base border border-slate-200 dark:border-border-subtle space-y-1">
+                <div className="flex justify-between font-bold text-slate-900 dark:text-white">
+                  <span>2. Algorithmic Mastery (25 pts)</span>
+                  <span className="text-amber-600 font-mono">22/25 pts</span>
+                </div>
+                <p className="text-slate-500">264 LeetCode solved (1,942 Knight Rating, top 3.8%).</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-100 dark:bg-bg-base border border-slate-200 dark:border-border-subtle space-y-1">
+                <div className="flex justify-between font-bold text-slate-900 dark:text-white">
+                  <span>3. Multi-Platform Sync Stream (25 pts)</span>
+                  <span className="text-purple-600 font-mono">23/25 pts</span>
+                </div>
+                <p className="text-slate-500">9 active platform integrations verified (GitHub, GitLab, LeetCode, etc.).</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-100 dark:bg-bg-base border border-slate-200 dark:border-border-subtle space-y-1">
+                <div className="flex justify-between font-bold text-slate-900 dark:text-white">
+                  <span>4. Registrar Academic Verification (15 pts)</span>
+                  <span className="text-blue-600 font-mono">12/15 pts</span>
+                </div>
+                <p className="text-slate-500">VTU 9.42 CGPA official university digital transcript seal.</p>
+              </div>
+            </div>
+
+            <Button variant="purple" className="w-full" onClick={() => setShowAuditModal(false)}>
+              Close Audit Report
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* SHA-256 Seal Verification Modal */}
+      {showSealModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-card max-w-md w-full rounded-2xl border border-slate-200 dark:border-border-default p-6 space-y-4 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-border-subtle pb-3">
+              <div className="flex items-center space-x-2">
+                <Key className="w-5 h-5 text-emerald-500" />
+                <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Cryptographic Proof Seal</h3>
+              </div>
+              <button onClick={() => setShowSealModal(false)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs font-mono">
+              <div className="p-3 bg-slate-100 dark:bg-bg-base rounded-xl border border-slate-200 dark:border-border-subtle space-y-1">
+                <div className="text-slate-500 text-[10px]">ISSUER ASSIGNED ID</div>
+                <div className="text-slate-900 dark:text-white font-bold">{profile.id}</div>
+              </div>
+
+              <div className="p-3 bg-slate-100 dark:bg-bg-base rounded-xl border border-slate-200 dark:border-border-subtle space-y-1">
+                <div className="text-slate-500 text-[10px]">SHA-256 MERKLE PROOF ROOT</div>
+                <div className="text-emerald-600 dark:text-emerald-400 font-bold break-all">
+                  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2 text-emerald-600 dark:text-emerald-400 font-sans text-xs pt-1">
+                <FileCheck className="w-4 h-4" />
+                <span>Zero-Knowledge Proof verified against 10 platform webhooks.</span>
+              </div>
+            </div>
+
+            <Button variant="purple" className="w-full" onClick={() => setShowSealModal(false)}>
+              Dismiss Verification
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+

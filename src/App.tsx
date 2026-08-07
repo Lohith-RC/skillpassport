@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Navbar } from './components/layout/Navbar';
+import { AppLayout } from './components/layout/AppLayout';
+import { Dashboard } from './components/features/Dashboard';
+import { SkillPassportView } from './components/features/SkillPassportView';
+import { ProjectsView } from './components/features/ProjectsView';
+import { TimeCapsuleView } from './components/features/TimeCapsuleView';
 import { LandingPage } from './components/features/LandingPage';
-import { PassportCard } from './components/features/PassportCard';
-import { CareerTimeCapsule } from './components/features/CareerTimeCapsule';
 import { ContributionMatrix } from './components/features/ContributionMatrix';
-import { ProjectEvidenceCard } from './components/features/ProjectEvidenceCard';
 import { LeetCodeDashboard } from './components/features/LeetCodeDashboard';
 import { RecruiterPipeline } from './components/features/RecruiterPipeline';
 import { UniversityHub } from './components/features/UniversityHub';
@@ -41,33 +42,35 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [setSearchOpen]);
 
+  if (activeTab === 'landing') {
+    return (
+      <div className="min-h-screen bg-[#070A11] text-white">
+        <LandingPage />
+        <Modal />
+        <ToastContainer />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-bg-base text-slate-900 dark:text-white flex flex-col transition-colors duration-300 selection:bg-purple-600 selection:text-white">
-      <Navbar />
+    <AppLayout>
+      {activeTab === 'dashboard' && <Dashboard />}
+      {activeTab === 'profile' && <SkillPassportView />}
+      {activeTab === 'timecapsule' && <TimeCapsuleView />}
+      {activeTab === 'heatmap' && <ContributionMatrix />}
+      {activeTab === 'repos' && <ProjectsView />}
+      {activeTab === 'leetcode' && <LeetCodeDashboard />}
+      {activeTab === 'recruiter' && <RecruiterPipeline />}
+      {activeTab === 'university' && <UniversityHub />}
+      {activeTab === 'investor' && <InvestorAnalytics />}
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8">
-        {activeTab === 'landing' && <LandingPage />}
-        {activeTab === 'profile' && <PassportCard />}
-        {activeTab === 'timecapsule' && <CareerTimeCapsule />}
-        {activeTab === 'heatmap' && <ContributionMatrix />}
-        {activeTab === 'repos' && <ProjectEvidenceCard />}
-        {activeTab === 'leetcode' && <LeetCodeDashboard />}
-        {activeTab === 'recruiter' && <RecruiterPipeline />}
-        {activeTab === 'university' && <UniversityHub />}
-        {activeTab === 'investor' && <InvestorAnalytics />}
-      </main>
-
-      <footer className="py-6 border-t border-slate-200 dark:border-border-subtle text-center text-xs text-slate-500 dark:text-gray-400">
-        &copy; 2026 SkillPassport AI. Enterprise 5-Role Digital Identity Ecosystem.
-      </footer>
-
-      {/* Interactive Modals, Drawers & Toast Stack */}
+      {/* Global Interactive Modals & Drawers */}
       <Modal />
       <PlatformSyncModal />
       <ProjectInspectDrawer />
       <InterviewModal />
       <ToastContainer />
-    </div>
+    </AppLayout>
   );
 };
 

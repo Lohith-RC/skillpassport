@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Portfolio Evidence - SkillPassport AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#630ed4", "on-error-container": "#93000a", "tertiary-fixed-dim": "#ffb95f", background: "#faf8ff", "secondary-fixed-dim": "#4edea3", "primary-fixed-dim": "#d2bbff", "on-error": "#ffffff", "on-primary-fixed-variant": "#5a00c6", "error-container": "#ffdad6", tertiary: "#704500", outline: "#7b7487", surface: "#faf8ff", "on-secondary-fixed-variant": "#005236", "surface-container-low": "#f2f3ff", "on-surface": "#131b2e", "inverse-on-surface": "#eef0ff", error: "#ba1a1a", "surface-dim": "#d2d9f4", "surface-variant": "#dae2fd", "surface-tint": "#732ee4", "on-tertiary-fixed": "#2a1700", "on-tertiary-fixed-variant": "#653e00", "surface-container-high": "#e2e7ff", "tertiary-fixed": "#ffddb8", "surface-container-highest": "#dae2fd", "inverse-surface": "#283044", "on-tertiary-container": "#ffe1c0", "on-secondary-container": "#00714d", "outline-variant": "#ccc3d8", "on-background": "#131b2e", "on-secondary-fixed": "#002113", "on-primary": "#ffffff", secondary: "#006c49", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "secondary-fixed": "#6ffbbe", "surface-container": "#eaedff", "on-primary-container": "#ede0ff", "primary-container": "#7c3aed", "on-surface-variant": "#4a4455", "inverse-primary": "#d2bbff", "primary-fixed": "#eaddff", "surface-container-lowest": "#ffffff", "tertiary-container": "#905b00", "on-primary-fixed": "#25005a", "secondary-container": "#6cf8bb", "surface-bright": "#faf8ff"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {unit: "4px", gutter: "16px", "container-max": "1440px", "margin-desktop": "32px", "margin-mobile": "16px", lg: "24px", sm: "8px", "2xl": "48px", md: "16px", xl: "32px", base: "8px", xs: "4px"}, fontFamily: {"body-sm": ["Inter"], "title-md": ["Inter"], "mono-label": ["Courier Prime"], "headline-lg": ["Inter"], "display-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "label-caps": ["Inter"], "body-lg": ["Inter"], caption: ["Inter"], body: ["Inter"], "body-bold": ["Inter"], h1: ["Plus Jakarta Sans"], h3: ["Plus Jakarta Sans"], h2: ["Plus Jakarta Sans"], display: ["Plus Jakarta Sans"], mono: ["JetBrains Mono"]}, fontSize: {"body-sm": ["14px", {lineHeight: "20px", fontWeight: "400"}], "title-md": ["20px", {lineHeight: "28px", fontWeight: "600"}], "mono-label": ["13px", {lineHeight: "18px", fontWeight: "400"}], "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600"}], "display-lg": ["48px", {lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700"}], "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "600"}], "label-caps": ["12px", {lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600"}], "body-lg": ["16px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "400"}], caption: ["12px", {lineHeight: "1.4", letterSpacing: "0.01em", fontWeight: "500"}], body: ["14px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "400"}], "body-bold": ["14px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "600"}], h1: ["32px", {lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700"}], h3: ["18px", {lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600"}], h2: ["24px", {lineHeight: "1.25", letterSpacing: "-0.015em", fontWeight: "600"}], display: ["40px", {lineHeight: "1.15", letterSpacing: "-0.025em", fontWeight: "800"}], mono: ["13px", {lineHeight: "1.4", letterSpacing: "0", fontWeight: "500"}]}}}};</script>
+<style>
+          .glass-panel {
+              background: rgba(46, 53, 68, 0.4);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+          }
+          
+          .glass-chip-verified {
+              background: rgba(78, 222, 163, 0.1);
+              color: #4edea3;
+              border: 1px solid rgba(78, 222, 163, 0.2);
+          }
+
+          .grid-bg {
+              background-image: 
+                  linear-gradient(to right, rgba(67, 70, 85, 0.1) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(67, 70, 85, 0.1) 1px, transparent 1px);
+              background-size: 32px 32px;
+          }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body-sm min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col h-full py-gutter px-4 bg-surface-container-low dark:bg-surface-container-low fixed left-0 top-0 w-[240px] z-40 border-r border-outline-variant dark:border-outline-variant shadow-none">
+<!-- Brand Header -->
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="terminal">terminal</span>
+</div>
+<div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-black text-primary">SkillPassport</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Verified Talent</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-2 w-full">
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="dashboard">dashboard</span>
+<span class="text-label-caps font-label-caps tracking-widest">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary-container text-on-primary-container border-l-2 border-secondary font-bold hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-label-caps font-label-caps tracking-widest">Evidence</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="group">group</span>
+<span class="text-label-caps font-label-caps tracking-widest">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="history">history</span>
+<span class="text-label-caps font-label-caps tracking-widest">Timeline</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps tracking-widest">Settings</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="mt-auto flex flex-col gap-2 w-full pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="help">help</span>
+<span class="text-label-caps font-label-caps tracking-widest">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="logout">logout</span>
+<span class="text-label-caps font-label-caps tracking-widest">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 md:ml-[240px] relative grid-bg">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant dark:border-outline-variant shadow-none">
+<!-- Mobile Brand Logo / Search (Left) -->
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<div class="text-title-md font-title-md font-bold text-on-surface dark:text-on-surface tracking-tight hidden md:block text-primary">SkillPassport AI</div>
+</div>
+<!-- Web Navigation Links (Center-ish) -->
+<div class="hidden md:flex items-center gap-8 h-full">
+<a class="h-full flex items-center text-on-surface-variant dark:text-on-surface-variant text-label-caps font-label-caps hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Protocol</a>
+<a class="h-full flex items-center text-on-surface-variant dark:text-on-surface-variant text-label-caps font-label-caps hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Ecosystem</a>
+<a class="h-full flex items-center text-on-surface-variant dark:text-on-surface-variant text-label-caps font-label-caps hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Docs</a>
+</div>
+<!-- Actions (Right) -->
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a developer's digital avatar, sleek cyber-punk aesthetic, neon blue accents against dark slate background, professional yet futuristic lighting, deep blacks and vibrant primary colors, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIemvRmTC6HH6Oqhv63Im75SOqiVGwzg_ef1M5giSu4G3JriXQEwTW92R9uSQMaTvIGGg8q_V_1QCVBSjipQcNi5gVTrsGMUKAOLIfKLCMimo9oV25-oB6XEnNpmG18KmKg5V1HPfrXLEFO1rrDqtkTbXU5UGxRSymG0o1wWQOkn7IxaRHydazJg0OfLO-I0u1YY-nfkFxH60CbCmVBBOY1eVQ0Tm0m0LZ3ELa1-nHMZrLXq2-BDjqPA"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="p-margin-mobile md:p-margin-desktop flex-1 w-full max-w-container-max mx-auto space-y-8 pb-32">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-outline-variant">
+<div class="space-y-2">
+<h2 class="text-display-lg font-display-lg text-on-surface tracking-tight">Portfolio Evidence</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">A cryptographically verified ledger of your technical contributions, deployments, and certified skills.</p>
+</div>
+<button class="shrink-0 bg-primary-container text-on-primary-container px-6 py-3 rounded-lg text-title-md font-title-md font-bold hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                    Mint Proof
+                </button>
+</div>
+<!-- Filters & Search -->
+<div class="flex flex-col sm:flex-row gap-4 items-center justify-between glass-panel p-2 rounded-xl">
+<div class="flex overflow-x-auto hide-scrollbar w-full sm:w-auto gap-2 px-2">
+<button class="px-4 py-2 rounded-lg bg-surface-variant text-on-surface text-label-caps font-label-caps whitespace-nowrap border border-outline-variant">All</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high text-label-caps font-label-caps whitespace-nowrap transition-colors">Projects</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high text-label-caps font-label-caps whitespace-nowrap transition-colors">Deployments</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high text-label-caps font-label-caps whitespace-nowrap transition-colors">Certifications</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high text-label-caps font-label-caps whitespace-nowrap transition-colors">Open Source</button>
+</div>
+<div class="relative w-full sm:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-mono-label font-mono-label text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search evidence hash..." type="text"/>
+</div>
+</div>
+<!-- Evidence Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1: Deployment -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden flex flex-col hover:border-primary/50 transition-colors group">
+<div class="h-40 bg-surface-container-high relative border-b border-outline-variant overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="A highly detailed, technical visualization of a cloud deployment architecture, featuring glowing data nodes connected by luminous blue lines against a dark cyberspace background, modern glassmorphism UI elements floating, high-tech mood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuWPZAdiI__GEjC48zGq2I-NH97IBUtLxQx3sKo3ZTLN0xJr6Q_V7x5d-GgvTJSSF2Vdc8Enwzo-inYBS08tXsiGUwBCrx8isgY6tao1PGloLrQVjCUlHw70sfi_4UenWsO4T2fllmB-QmtkdvkTqfhr5atBjnkNBC5MefAigvY3XESmg7gLhQ_fyGAcW9MlBY4TMg-jbOAqLRcVfyT0idFAzBBEM2ZRmHDvJg0kKyNps8TvN_Vtri3A')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+<div class="absolute top-4 right-4 glass-chip-verified px-2 py-1 rounded-full flex items-center gap-1 text-label-caps font-label-caps backdrop-blur-md">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" data-weight="fill">check_circle</span> Verified
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="rocket_launch">rocket_launch</span>
+<span class="text-mono-label font-mono-label text-tertiary">DEPLOYMENT</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mb-2 line-clamp-1">Decentralized Auth Node V2</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6 line-clamp-2">Successfully deployed and scaled the primary authentication microservice handling 50k+ daily active verifications across the network.</p>
+<div class="mt-auto">
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Rust</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Docker</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">AWS EC2</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="text-mono-label font-mono-label text-on-surface-variant/70 truncate w-32">0x8f...4a2c</div>
+<a class="text-primary hover:text-primary-fixed font-title-md text-[14px] flex items-center gap-1" href="#">
+                                     View Details <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Certification -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden flex flex-col hover:border-primary/50 transition-colors group">
+<div class="h-40 bg-surface-container-high relative border-b border-outline-variant overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="A highly detailed, elegant digital certification badge design, metallic gold and deep blue accents on a dark slate background, sharp geometric borders, intricate guilloche patterns, professional and authoritative aesthetic, high contrast." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9247lbBPRhnttaXogM2HpuDK3hEm6OKwQbWyFgp7vgKfea-s-q6jTVbVXOom7XmG5oSZ0qBTJF9c42a35gdKufPTcKF_UbrlkpHIhNshXsQTMBIJnrlg8QByob7Wb78Kk1yEIU7bUNsGrGbCQphsBS5bGaXrP_Khcs9CCDtm6aBdEnaX_gXe6EQ8ciocCy34jU9xR_txd0d5Ikq0ZVvn3EQne-CM_nWZ5UeJFwux-ILvXwZBgOKq73Q')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low to-transparent"></div>
+<div class="absolute top-4 right-4 glass-chip-verified px-2 py-1 rounded-full flex items-center gap-1 text-label-caps font-label-caps backdrop-blur-md">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" data-weight="fill">check_circle</span> Verified
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="military_tech">military_tech</span>
+<span class="text-mono-label font-mono-label text-primary">CERTIFICATION</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mb-2 line-clamp-1">Advanced Smart Contract Auditing</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6 line-clamp-2">Completed rigorous 12-week program on formal verification, symbolic execution, and identifying edge-case vulnerabilities in EVM logic.</p>
+<div class="mt-auto">
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Solidity</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Foundry</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Security</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="text-mono-label font-mono-label text-on-surface-variant/70 truncate w-32">0x4b...9e11</div>
+<a class="text-primary hover:text-primary-fixed font-title-md text-[14px] flex items-center gap-1" href="#">
+                                     View Details <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Open Source -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden flex flex-col hover:border-primary/50 transition-colors group">
+<div class="h-40 bg-surface-container-high relative border-b border-outline-variant overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-surface-variant opacity-20"></div>
+<span class="material-symbols-outlined text-6xl text-on-surface-variant/50 group-hover:scale-110 transition-transform duration-500" data-icon="code_blocks">code_blocks</span>
+<div class="absolute top-4 right-4 glass-chip-verified px-2 py-1 rounded-full flex items-center gap-1 text-label-caps font-label-caps backdrop-blur-md">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" data-weight="fill">check_circle</span> Merged
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="merge_type">merge_type</span>
+<span class="text-mono-label font-mono-label text-secondary">OPEN SOURCE</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mb-2 line-clamp-1">Core Protocol Contribution #442</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6 line-clamp-2">Optimized the state trie serialization mechanism, reducing node memory footprint by ~15% during peak synchronization loads.</p>
+<div class="mt-auto">
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Go</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-mono-label font-mono-label border border-outline-variant/50">Performance</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="text-mono-label font-mono-label text-on-surface-variant/70 truncate w-32">PR #442</div>
+<a class="text-primary hover:text-primary-fixed font-title-md text-[14px] flex items-center gap-1" href="#">
+                                     View Details <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

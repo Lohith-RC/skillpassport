@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SkillPassport AI - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#630ed4", "on-error-container": "#93000a", "tertiary-fixed-dim": "#ffb95f", background: "#faf8ff", "secondary-fixed-dim": "#4edea3", "primary-fixed-dim": "#d2bbff", "on-error": "#ffffff", "on-primary-fixed-variant": "#5a00c6", "error-container": "#ffdad6", tertiary: "#704500", outline: "#7b7487", surface: "#faf8ff", "on-secondary-fixed-variant": "#005236", "surface-container-low": "#f2f3ff", "on-surface": "#131b2e", "inverse-on-surface": "#eef0ff", error: "#ba1a1a", "surface-dim": "#d2d9f4", "surface-variant": "#dae2fd", "surface-tint": "#732ee4", "on-tertiary-fixed": "#2a1700", "on-tertiary-fixed-variant": "#653e00", "surface-container-high": "#e2e7ff", "tertiary-fixed": "#ffddb8", "surface-container-highest": "#dae2fd", "inverse-surface": "#283044", "on-tertiary-container": "#ffe1c0", "on-secondary-container": "#00714d", "outline-variant": "#ccc3d8", "on-background": "#131b2e", "on-secondary-fixed": "#002113", "on-primary": "#ffffff", secondary: "#006c49", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "secondary-fixed": "#6ffbbe", "surface-container": "#eaedff", "on-primary-container": "#ede0ff", "primary-container": "#7c3aed", "on-surface-variant": "#4a4455", "inverse-primary": "#d2bbff", "primary-fixed": "#eaddff", "surface-container-lowest": "#ffffff", "tertiary-container": "#905b00", "on-primary-fixed": "#25005a", "secondary-container": "#6cf8bb", "surface-bright": "#faf8ff"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {unit: "4px", gutter: "16px", "container-max": "1440px", "margin-desktop": "32px", "margin-mobile": "16px", lg: "24px", sm: "8px", "2xl": "48px", md: "16px", xl: "32px", base: "8px", xs: "4px"}, fontFamily: {"body-sm": ["Inter"], "title-md": ["Inter"], "mono-label": ["Courier Prime"], "headline-lg": ["Inter"], "display-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "label-caps": ["Inter"], "body-lg": ["Inter"], caption: ["Inter"], body: ["Inter"], "body-bold": ["Inter"], h1: ["Plus Jakarta Sans"], h3: ["Plus Jakarta Sans"], h2: ["Plus Jakarta Sans"], display: ["Plus Jakarta Sans"], mono: ["JetBrains Mono"]}, fontSize: {"body-sm": ["14px", {lineHeight: "20px", fontWeight: "400"}], "title-md": ["20px", {lineHeight: "28px", fontWeight: "600"}], "mono-label": ["13px", {lineHeight: "18px", fontWeight: "400"}], "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600"}], "display-lg": ["48px", {lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700"}], "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "600"}], "label-caps": ["12px", {lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600"}], "body-lg": ["16px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "400"}], caption: ["12px", {lineHeight: "1.4", letterSpacing: "0.01em", fontWeight: "500"}], body: ["14px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "400"}], "body-bold": ["14px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "600"}], h1: ["32px", {lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700"}], h3: ["18px", {lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600"}], h2: ["24px", {lineHeight: "1.25", letterSpacing: "-0.015em", fontWeight: "600"}], display: ["40px", {lineHeight: "1.15", letterSpacing: "-0.025em", fontWeight: "800"}], mono: ["13px", {lineHeight: "1.4", letterSpacing: "0", fontWeight: "500"}]}}}};</script>
+<style>
+        body { background-color: #0c1321; color: #dce2f6; }
+        .glass-panel {
+            background: rgba(46, 53, 68, 0.3); /* surface-variant at 30% */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .border-base { border-color: #1e293b; } /* Custom based on prompt guidance */
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-surface-container-low text-primary dark:text-primary-fixed-dim fixed left-0 top-0 h-full w-[240px] z-40 border-r border-outline-variant dark:border-outline-variant flex flex-col py-gutter px-4 hidden md:flex">
+<div class="mb-8 flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small, stylized avatar image representing a highly technical developer identity. The image should feature a neon-glowing geometric icon on a dark, slate background, giving a premium, futuristic, dark-mode workspace vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz-qtGArwqdZQ1Mg4d049j530FjnDhZWn1rVJCQy9nRhStszPlGS1m_vP6GWvYCzLK-VP4EOylB6BdHcMGdVN0Vp2lgrfs2hCckGTz3n-YWPbm1A9syc0L_cxR7e-2lVUMZ8GpiPjUUzJSIAVLR4J8g-UsV8gvpq_G3d0AkeRRvw9Irgz0UDW4NCynWazEG0nHqvCaxVbOdzTGnDKcRK0aEHQSAn2A4P48rBdOBErrhM2RS84rb3bZ6g"/>
+<div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-black text-primary">SkillPassport</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Verified Talent</p>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container py-2 px-4 rounded-md font-bold mb-6 hover:opacity-90 transition-opacity">
+            Mint Proof
+        </button>
+<ul class="flex-1 space-y-2">
+<!-- Active Tab: Dashboard -->
+<li>
+<a class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container border-l-2 border-secondary font-bold rounded-r-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-caps font-label-caps">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+<span class="text-label-caps font-label-caps">Evidence</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-label-caps font-label-caps">Pipeline</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-label-caps font-label-caps">Timeline</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-caps font-label-caps">Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant pt-4 space-y-2">
+<a class="flex items-center gap-3 p-3 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-label-caps font-label-caps">Support</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-md active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-label-caps font-label-caps">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-[240px] flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl docked full-width top-0 z-50 flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 border-b border-outline-variant dark:border-outline-variant">
+<div class="flex items-center gap-6">
+<!-- Mobile Menu Button (visible on small screens) -->
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-title-md font-title-md font-bold text-on-surface dark:text-on-surface tracking-tight hidden md:block">SkillPassport AI</span>
+<!-- Navigation Links -->
+<nav class="hidden lg:flex gap-6">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors text-label-caps font-label-caps py-5" href="#">Protocol</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors text-label-caps font-label-caps py-5" href="#">Ecosystem</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors text-label-caps font-label-caps py-5" href="#">Docs</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="User profile avatar. A headshot of a professional developer in a dark, moody environment with subtle neon rim lighting, consistent with a modern, high-tech dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEIdvgHLgsdopxqsNY1mMctmSS3Woz1Racve4oF8EhDddp5LZm8thhYOlB79exjpC4XwQqbvYeO9QykLBKs0NL--fAp-_H-ltZY4Oc_6Ay71dw9pXqTMfjVVdX6g96q9o0obeTzUrPUA7D2NRlkQgCV8XpwpMHkQhD93zd8w04cCvHyo_qb79iiGq18N_fL5YlM_vZu1eDxBbMTpns-5eMoF7A_eBlw00STxtITyGgjgGJoG9xmkTR9A"/>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop overflow-y-auto">
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter max-w-container-max mx-auto">
+<!-- Proof Score Engine (Center-Top, spans 12 cols or 8 on large) -->
+<section class="lg:col-span-8 glass-panel rounded-xl p-6 border border-base flex flex-col items-center justify-center relative overflow-hidden h-[400px]">
+<div class="absolute inset-0 bg-surface-container-lowest opacity-50"></div>
+<div class="z-10 text-center">
+<h2 class="text-title-md font-title-md text-on-surface mb-2">Proof Score</h2>
+<!-- Simulated Radial Engine Visualization -->
+<div class="relative w-64 h-64 mx-auto flex items-center justify-center rounded-full border-4 border-surface-variant shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+<div class="absolute inset-0 rounded-full border-4 border-t-primary-container border-r-primary-container border-b-transparent border-l-transparent animate-spin" style="animation-duration: 3s;"></div>
+<div class="absolute inset-2 rounded-full border-2 border-t-transparent border-r-secondary border-b-secondary border-l-transparent animate-spin-reverse" style="animation-duration: 5s;"></div>
+<div class="flex flex-col items-center">
+<span class="text-display-lg font-display-lg text-primary font-bold">850</span>
+<span class="text-label-caps font-label-caps text-secondary mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">trending_up</span> Top 5%</span>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-4 max-w-md mx-auto">Score calculated based on verified commits, merged PRs, and cryptographic evidence.</p>
+</div>
+</section>
+<!-- Verified Skills (Side Panel) -->
+<section class="lg:col-span-4 glass-panel rounded-xl p-0 border border-base flex flex-col">
+<div class="bg-surface-container-lowest p-4 border-b border-base rounded-t-xl">
+<h3 class="text-title-md font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">workspace_premium</span>
+                            Verified Skills
+                        </h3>
+</div>
+<div class="p-4 flex-1 space-y-4">
+<!-- Skill Badge: Platinum -->
+<div class="bg-surface-container border border-base rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-variant flex items-center justify-center border border-primary">
+<span class="material-symbols-outlined text-primary">architecture</span>
+</div>
+<div>
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">System Design</div>
+<div class="text-mono-label font-mono-label text-on-surface-variant">Lvl. 4 Expert</div>
+</div>
+</div>
+<span class="px-2 py-1 bg-surface-variant text-on-surface rounded text-label-caps font-label-caps border border-outline-variant">Platinum</span>
+</div>
+<!-- Skill Badge: Gold -->
+<div class="bg-surface-container border border-base rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-variant flex items-center justify-center border border-tertiary">
+<span class="material-symbols-outlined text-tertiary">code_blocks</span>
+</div>
+<div>
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">TypeScript</div>
+<div class="text-mono-label font-mono-label text-on-surface-variant">Lvl. 3 Advanced</div>
+</div>
+</div>
+<span class="px-2 py-1 bg-tertiary/20 text-tertiary rounded text-label-caps font-label-caps border border-tertiary/30">Gold</span>
+</div>
+<!-- Skill Badge: Silver -->
+<div class="bg-surface-container border border-base rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-variant flex items-center justify-center border border-outline">
+<span class="material-symbols-outlined text-outline">data_object</span>
+</div>
+<div>
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">React</div>
+<div class="text-mono-label font-mono-label text-on-surface-variant">Lvl. 2 Intermediate</div>
+</div>
+</div>
+<span class="px-2 py-1 bg-surface-variant text-outline rounded text-label-caps font-label-caps border border-outline-variant">Silver</span>
+</div>
+</div>
+</section>
+<!-- Career Trajectory (Timeline) -->
+<section class="lg:col-span-6 glass-panel rounded-xl p-0 border border-base flex flex-col mt-4">
+<div class="bg-surface-container-lowest p-4 border-b border-base rounded-t-xl">
+<h3 class="text-title-md font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">timeline</span>
+                            Career Trajectory
+                        </h3>
+</div>
+<div class="p-6">
+<div class="relative border-l border-base ml-3 space-y-6">
+<!-- Milestone 1 -->
+<div class="relative pl-6">
+<div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(78,222,163,0.6)]"></div>
+<div class="text-mono-label font-mono-label text-secondary mb-1">Present</div>
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">Senior Engineer</div>
+<div class="text-body-sm font-body-sm text-on-surface">Leading distributed systems architecture.</div>
+</div>
+<!-- Milestone 2 -->
+<div class="relative pl-6">
+<div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-surface-variant border border-primary"></div>
+<div class="text-mono-label font-mono-label mb-1 text-primary">2022 - 2023</div>
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">Open Source Contributor</div>
+<div class="text-body-sm font-body-sm text-on-surface">Core maintainer for highly-starred React ecosystem tooling.</div>
+</div>
+<!-- Milestone 3 -->
+<div class="relative pl-6">
+<div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-surface-variant border border-outline-variant"></div>
+<div class="text-mono-label font-mono-label mb-1 text-primary">2022 - 2023</div>
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">Junior Dev at Meta</div>
+<div class="text-body-sm font-body-sm text-on-surface">Frontend infrastructure and internal tools.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Evidence Feed -->
+<section class="lg:col-span-6 glass-panel rounded-xl p-0 border border-base flex flex-col mt-4">
+<div class="bg-surface-container-lowest p-4 border-b border-base rounded-t-xl flex justify-between items-center">
+<h3 class="text-title-md font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">feed</span>
+                            Recent Evidence
+                        </h3>
+<button class="text-label-caps font-label-caps text-primary hover:underline">View All</button>
+</div>
+<div class="flex-1 overflow-hidden">
+<!-- Evidence Item 1 -->
+<div class="border-b border-base p-4 hover:bg-surface-container transition-colors cursor-pointer group flex gap-4">
+<div class="w-1 bg-secondary rounded-full shrink-0 group-hover:bg-primary-container transition-colors"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">Merged PR: #1042</div>
+<div class="text-mono-label font-mono-label text-on-surface-variant">2h ago</div>
+</div>
+<p class="text-body-sm font-body-sm mb-2 text-on-surface">Optimized rendering cycle in core data-grid component.</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary rounded text-[10px] uppercase font-bold border border-secondary/20">Verified Commits</span>
+<span class="px-2 py-0.5 bg-surface-variant text-on-surface-variant rounded text-[10px] uppercase font-bold border border-outline-variant">React</span>
+</div>
+</div>
+</div>
+<!-- Evidence Item 2 -->
+<div class="border-b border-base p-4 hover:bg-surface-container transition-colors cursor-pointer group flex gap-4">
+<div class="w-1 bg-primary rounded-full shrink-0 group-hover:bg-primary-container transition-colors"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<div class="text-body-lg font-body-lg text-on-surface font-semibold">AWS Certified Solutions Architect</div>
+<div class="text-mono-label font-mono-label text-on-surface-variant">1d ago</div>
+</div>
+<p class="text-body-sm font-body-sm mb-2 text-on-surface">Cryptographic proof of certification completion.</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-primary/10 text-primary rounded text-[10px] uppercase font-bold border border-primary/20">Credential</span>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-base bg-surface-container-low/50"><div class="flex justify-between items-center mb-3"><div class="text-label-caps font-label-caps text-on-surface">Contribution Streak</div><div class="text-body-sm font-bold text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">local_fire_department</span> Current Streak: 42 Days</div></div><div class="flex gap-1 mb-2"><div class="grid grid-cols-12 gap-1 flex-1"><div class="h-3 rounded-sm bg-secondary/20"></div><div class="h-3 rounded-sm bg-secondary/40"></div><div class="h-3 rounded-sm bg-secondary/10"></div><div class="h-3 rounded-sm bg-secondary"></div><div class="h-3 rounded-sm bg-secondary/60"></div><div class="h-3 rounded-sm bg-secondary/20"></div><div class="h-3 rounded-sm bg-secondary/80"></div><div class="h-3 rounded-sm bg-secondary/10"></div><div class="h-3 rounded-sm bg-secondary/40"></div><div class="h-3 rounded-sm bg-secondary"></div><div class="h-3 rounded-sm bg-secondary/20"></div><div class="h-3 rounded-sm bg-secondary/10"></div></div></div><div class="flex justify-end items-center gap-2 text-[10px] text-on-surface-variant uppercase font-bold"><span>Less</span><div class="flex gap-1"><div class="w-2 h-2 rounded-sm bg-secondary/10"></div><div class="w-2 h-2 rounded-sm bg-secondary/40"></div><div class="w-2 h-2 rounded-sm bg-secondary/70"></div><div class="w-2 h-2 rounded-sm bg-secondary"></div></div><span>More</span></div></div></div>
+</section>
+</div>
+</main>
+</div>
+<style>
+        @keyframes spin-reverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        .animate-spin-reverse {
+            animation: spin-reverse linear infinite;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SkillPassport AI - Trust Infrastructure</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&amp;family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#630ed4", "on-error-container": "#93000a", "tertiary-fixed-dim": "#ffb95f", background: "#faf8ff", "secondary-fixed-dim": "#4edea3", "primary-fixed-dim": "#d2bbff", "on-error": "#ffffff", "on-primary-fixed-variant": "#5a00c6", "error-container": "#ffdad6", tertiary: "#704500", outline: "#7b7487", surface: "#faf8ff", "on-secondary-fixed-variant": "#005236", "surface-container-low": "#f2f3ff", "on-surface": "#131b2e", "inverse-on-surface": "#eef0ff", error: "#ba1a1a", "surface-dim": "#d2d9f4", "surface-variant": "#dae2fd", "surface-tint": "#732ee4", "on-tertiary-fixed": "#2a1700", "on-tertiary-fixed-variant": "#653e00", "surface-container-high": "#e2e7ff", "tertiary-fixed": "#ffddb8", "surface-container-highest": "#dae2fd", "inverse-surface": "#283044", "on-tertiary-container": "#ffe1c0", "on-secondary-container": "#00714d", "outline-variant": "#ccc3d8", "on-background": "#131b2e", "on-secondary-fixed": "#002113", "on-primary": "#ffffff", secondary: "#006c49", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "secondary-fixed": "#6ffbbe", "surface-container": "#eaedff", "on-primary-container": "#ede0ff", "primary-container": "#7c3aed", "on-surface-variant": "#4a4455", "inverse-primary": "#d2bbff", "primary-fixed": "#eaddff", "surface-container-lowest": "#ffffff", "tertiary-container": "#905b00", "on-primary-fixed": "#25005a", "secondary-container": "#6cf8bb", "surface-bright": "#faf8ff"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {unit: "4px", gutter: "16px", "container-max": "1440px", "margin-desktop": "32px", "margin-mobile": "16px", lg: "24px", sm: "8px", "2xl": "48px", md: "16px", xl: "32px", base: "8px", xs: "4px"}, fontFamily: {"body-sm": ["Inter"], "title-md": ["Inter"], "mono-label": ["Courier Prime"], "headline-lg": ["Inter"], "display-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "label-caps": ["Inter"], "body-lg": ["Inter"], caption: ["Inter"], body: ["Inter"], "body-bold": ["Inter"], h1: ["Plus Jakarta Sans"], h3: ["Plus Jakarta Sans"], h2: ["Plus Jakarta Sans"], display: ["Plus Jakarta Sans"], mono: ["JetBrains Mono"]}, fontSize: {"body-sm": ["14px", {lineHeight: "20px", fontWeight: "400"}], "title-md": ["20px", {lineHeight: "28px", fontWeight: "600"}], "mono-label": ["13px", {lineHeight: "18px", fontWeight: "400"}], "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600"}], "display-lg": ["48px", {lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700"}], "headline-lg-mobile": ["24px", {lineHeight: "32px", fontWeight: "600"}], "label-caps": ["12px", {lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600"}], "body-lg": ["16px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "400"}], caption: ["12px", {lineHeight: "1.4", letterSpacing: "0.01em", fontWeight: "500"}], body: ["14px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "400"}], "body-bold": ["14px", {lineHeight: "1.5", letterSpacing: "0", fontWeight: "600"}], h1: ["32px", {lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700"}], h3: ["18px", {lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600"}], h2: ["24px", {lineHeight: "1.25", letterSpacing: "-0.015em", fontWeight: "600"}], display: ["40px", {lineHeight: "1.15", letterSpacing: "-0.025em", fontWeight: "800"}], mono: ["13px", {lineHeight: "1.4", letterSpacing: "0", fontWeight: "500"}]}}}};</script>
+<style>
+        body {
+            background-color: #0c1321;
+            color: #dce2f6;
+        }
+        .glass-panel {
+            background: rgba(46, 53, 68, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #b4c5ff 0%, #4edea3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-body-sm bg-background text-on-background antialiased relative min-h-screen overflow-x-hidden">
+<!-- Background Shader -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen">
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+varying vec2 v_texCoord;
+
+// Simple noise function
+float hash(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 p = (uv - 0.5) * 2.0;
+    p.x *= u_resolution.x / u_resolution.y;
+
+    float time = u_time * 0.2;
+    
+    // Abstract flowing "data" streams
+    float color = 0.0;
+    for(float i = 1.0; i < 4.0; i++) {
+        p.x += 0.3 / i * sin(i * 3.0 * p.y + time + hash(vec2(i)) * 6.28);
+        p.y += 0.3 / i * cos(i * 3.0 * p.x + time + hash(vec2(i+1.0)) * 6.28);
+        color += 0.01 / length(vec2(p.x, p.y));
+    }
+
+    vec3 baseColor = vec3(0.043, 0.071, 0.125); // #0B1220
+    vec3 accentColor = vec3(0.145, 0.388, 0.922); // #2563EB
+    
+    vec3 finalColor = mix(baseColor, accentColor, color * 0.5);
+    finalColor += pow(color, 2.0) * accentColor * 0.2; // Add glow
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+</div>
+<!-- Top Navigation (Shell structure) -->
+<nav class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant dark:border-outline-variant flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50 transition-transform">
+<div class="flex items-center gap-4">
+<span class="text-title-md font-title-md font-bold text-on-surface dark:text-on-surface tracking-tight">SkillPassport AI</span>
+</div>
+<div class="hidden md:flex gap-8">
+<!-- Active state conceptually omitted as this is a landing page, falling back to inactive for all generic links -->
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors text-label-caps font-label-caps" href="#">Protocol</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors text-label-caps font-label-caps" href="#">Ecosystem</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors text-label-caps font-label-caps" href="#">Docs</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A sleek, modern, low-poly 3D avatar headshot of a generic professional developer set against a dark blue background. The lighting is dramatic and moody, fitting a highly technical, dark mode UI environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfPaFw9Miw0HMJDu9xqWhj6FWt_C0WpPFY-1dlagkz2rb8bPzLix9bzak7vbx6Dv54KLW-HEcpmqLLcIkDmgbvVHOCaY3EFHq9tp7poAOblzct3NNb61-Sltwm9rLkkosgooH-9IFk32FYsvTUrIUso0DHZsVdUkXhbFB_tgJR8ppARFtmQV3HVR9RmvvUa1XeFnb9tWH4GS_bf9162DRcdiCCqb-jWlFvLKLvkwuPHOwM6OcAoJV6Og"/>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="relative z-10 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pb-24">
+<!-- Hero Section -->
+<section class="min-h-[819px] flex flex-col md:flex-row items-center justify-center gap-12 py-20 relative">
+<div class="w-full md:w-1/2 flex flex-col gap-6 z-20">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant w-fit mb-4">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-mono-label font-mono-label text-secondary">System Online v2.4</span>
+</div>
+<h1 class="text-display-lg font-display-lg text-on-surface mb-2">
+                    Building the Trust Infrastructure for the <span class="gradient-text">Global Developer Economy</span>
+</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mb-8">
+                    The trusted gateway connecting developers, companies, and investors through verified technical identity.
+                </p>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-lg font-title-md text-title-md hover:bg-primary-fixed-dim transition-colors shadow-[0_4px_20px_rgba(37,99,235,0.3)]">
+                        Get Started
+                    </button>
+<button class="bg-transparent border border-outline-variant text-on-surface px-6 py-3 rounded-lg font-title-md text-title-md hover:bg-surface-container-high transition-colors">
+                        View Documentation
+                    </button>
+</div>
+</div>
+<div class="w-full md:w-1/2 h-[500px] relative z-10 glass-panel rounded-xl overflow-hidden flex items-center justify-center border-t border-b-0 border-l border-r-0 border-outline-variant shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<!-- 3D Scene embedded here -->
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+container.appendChild(renderer.domElement);
+
+// Create a "Passport" card object
+const geometry = new THREE.BoxGeometry(3, 4.5, 0.1);
+const material = new THREE.MeshPhongMaterial({ 
+    color: 0x2563EB, 
+    specular: 0x555555, 
+    shininess: 30,
+    transparent: true,
+    opacity: 0.9
+});
+const passportCard = new THREE.Mesh(geometry, material);
+scene.add(passportCard);
+
+// Add wireframe overlay for technical look
+const wireframe = new THREE.WireframeGeometry(geometry);
+const line = new THREE.LineSegments(wireframe);
+line.material.color.setHex(0x10B981);
+line.material.opacity = 0.5;
+line.material.transparent = true;
+passportCard.add(line);
+
+const light = new THREE.PointLight(0xffffff, 1, 100);
+light.position.set(5, 5, 5);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0x404040));
+
+camera.position.z = 8;
+
+function animate() {
+    requestAnimationFrame(animate);
+    passportCard.rotation.y += 0.005;
+    passportCard.rotation.x = Math.sin(Date.now() * 0.001) * 0.1;
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+<!-- Overlay details for 'Verified Passport' feel -->
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end pointer-events-none">
+<div class="bg-surface-container-highest/80 backdrop-blur-md p-3 rounded-lg border border-outline-variant">
+<p class="text-mono-label font-mono-label text-on-surface-variant">ID: 0x9f...4b2</p>
+<p class="text-label-caps font-label-caps text-secondary mt-1">VERIFIED</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Grid (Bento Style) -->
+<section class="py-20 mt-10">
+<h2 class="text-headline-lg font-headline-lg text-on-surface mb-12 text-center">Core Infrastructure</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Proof of Skill Protocol -->
+<div class="glass-panel p-8 rounded-xl border border-outline-variant hover:border-primary-fixed-dim transition-colors group relative overflow-hidden h-full flex flex-col">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/10 rounded-full blur-3xl group-hover:bg-primary-container/20 transition-all"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center border border-outline-variant mb-6">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">verified_user</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mb-3">Proof of Skill Protocol</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant flex-grow">
+                        Cryptographically verifiable claims of technical competence, derived from actual codebase contributions and architectural decisions.
+                    </p>
+<div class="mt-6 pt-4 border-t border-surface-bright">
+<a class="text-label-caps font-label-caps text-primary hover:text-primary-fixed-dim flex items-center gap-1 w-fit" href="#">
+                            LEARN MORE <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Unified Identity -->
+<div class="glass-panel p-8 rounded-xl border border-outline-variant hover:border-primary-fixed-dim transition-colors group relative overflow-hidden h-full flex flex-col">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container/10 rounded-full blur-3xl group-hover:bg-secondary-container/20 transition-all"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center border border-outline-variant mb-6">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">badge</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mb-3">Unified Identity</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant flex-grow">
+                        A single, interoperable passport that aggregates fragmented technical reputation across platforms, repositories, and ecosystems.
+                    </p>
+<div class="mt-6 pt-4 border-t border-surface-bright">
+<a class="text-label-caps font-label-caps text-secondary hover:text-secondary-fixed-dim flex items-center gap-1 w-fit" href="#">
+                            VIEW SPECS <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Talent Infrastructure -->
+<div class="glass-panel p-8 rounded-xl border border-outline-variant hover:border-primary-fixed-dim transition-colors group relative overflow-hidden h-full flex flex-col">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary-container/10 rounded-full blur-3xl group-hover:bg-tertiary-container/20 transition-all"></div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center border border-outline-variant mb-6">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 0;">hub</span>
+</div>
+<h3 class="text-title-md font-title-md text-on-surface mb-3">Talent Infrastructure</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant flex-grow">
+                        API-first routing and verification layers enabling programmatic matching of verified skillsets to complex technical requirements.
+                    </p>
+<div class="mt-6 pt-4 border-t border-surface-bright">
+<a class="text-label-caps font-label-caps text-tertiary hover:text-tertiary-fixed-dim flex items-center gap-1 w-fit" href="#">
+                            API DOCS <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Spec Preview Section (Decorative Data Grid) -->
+<section class="py-20">
+<div class="glass-panel rounded-xl border border-outline-variant overflow-hidden">
+<div class="bg-base-slate border-b border-outline-variant p-4 flex justify-between items-center bg-[#0B1220]">
+<span class="text-title-md font-title-md text-on-surface">Network Activity</span>
+<span class="text-mono-label font-mono-label text-secondary flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                        Live Sync
+                    </span>
+</div>
+<div class="flex flex-col">
+<!-- Grid Row -->
+<div class="grid grid-cols-12 gap-4 p-4 border-b border-surface-bright hover:bg-surface-container-low transition-colors relative">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary"></div>
+<div class="col-span-3 text-mono-label font-mono-label text-on-surface-variant">0x7A...92C</div>
+<div class="col-span-3 text-body-sm font-body-sm text-on-surface">Smart Contract Deploy</div>
+<div class="col-span-4 text-body-sm font-body-sm text-on-surface-variant">Solidity / Ethereum</div>
+<div class="col-span-2 text-right">
+<span class="bg-secondary/10 text-secondary text-label-caps font-label-caps px-2 py-1 rounded">VERIFIED</span>
+</div>
+</div>
+<!-- Grid Row -->
+<div class="grid grid-cols-12 gap-4 p-4 border-b border-surface-bright hover:bg-surface-container-low transition-colors">
+<div class="col-span-3 text-mono-label font-mono-label text-on-surface-variant">0x3B...14F</div>
+<div class="col-span-3 text-body-sm font-body-sm text-on-surface">Core Infrastructure Commit</div>
+<div class="col-span-4 text-body-sm font-body-sm text-on-surface-variant">Rust / Polkadot</div>
+<div class="col-span-2 text-right">
+<span class="bg-secondary/10 text-secondary text-label-caps font-label-caps px-2 py-1 rounded">VERIFIED</span>
+</div>
+</div>
+<!-- Grid Row -->
+<div class="grid grid-cols-12 gap-4 p-4 hover:bg-surface-container-low transition-colors">
+<div class="col-span-3 text-mono-label font-mono-label text-on-surface-variant">0x1F...88E</div>
+<div class="col-span-3 text-body-sm font-body-sm text-on-surface">ZK Proof Implementation</div>
+<div class="col-span-4 text-body-sm font-body-sm text-on-surface-variant">C++ / Mina</div>
+<div class="col-span-2 text-right">
+<span class="bg-surface-bright text-on-surface-variant text-label-caps font-label-caps px-2 py-1 rounded">PENDING</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

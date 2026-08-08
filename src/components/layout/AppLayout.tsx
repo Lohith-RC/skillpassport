@@ -1,6 +1,8 @@
 import React from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { TabType } from '../../types';
+import { SettingsModal } from '../features/SettingsModal';
+import { NotificationsDropdown } from '../features/NotificationsDropdown';
 import {
   LayoutDashboard,
   UserCheck,
@@ -50,7 +52,19 @@ interface AppLayoutProps {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  const { activeTab, setActiveTab, setSearchOpen, isDarkMode, toggleTheme, addToast } = useAppStore();
+  const {
+    activeTab,
+    setActiveTab,
+    setSearchOpen,
+    isDarkMode,
+    toggleTheme,
+    addToast,
+    setSettingsOpen,
+    isNotificationsOpen,
+    setNotificationsOpen,
+    notifications,
+    profile,
+  } = useAppStore();
 
   const avatarUrl =
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80';
@@ -93,7 +107,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       id: 'action',
       label: 'Settings',
       Icon: Settings,
-      onClick: () => addToast('Opening profile settings…', 'info'),
+      onClick: () => setSettingsOpen(true),
     },
   ];
 
@@ -166,11 +180,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             {/* Brand Logo */}
             <button
               onClick={() => setActiveTab('dashboard')}
-              className="flex items-center space-x-3 px-2 py-3 mb-2 w-full text-left hover:opacity-90 transition"
+              className="flex items-center space-x-3 px-2 py-3 mb-2 w-full text-left hover:opacity-90 transition group"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-600/30 shrink-0">
-                <Shield className="w-4 h-4 text-white fill-current" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="SkillPassport AI"
+                className="w-10 h-10 rounded-xl object-cover shadow-md shadow-blue-600/30 shrink-0 border border-blue-500/30 group-hover:scale-105 transition-transform duration-200"
+              />
               <div>
                 <h1 className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white leading-tight">
                   SkillPassport <span className="text-blue-600 dark:text-blue-500">AI</span>
@@ -265,16 +281,22 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               </button>
 
               {/* Notifications */}
-              <button
-                onClick={() => addToast('You have 12 unread notifications.', 'info')}
-                className="relative p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#13192B] border border-gray-200 dark:border-[#1C263B] transition"
-                aria-label="View notifications"
-              >
-                <Bell className="w-4 h-4" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-600 text-white font-mono text-[9px] font-bold flex items-center justify-center border-2 border-white dark:border-[#070A11]">
-                  12
-                </span>
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setNotificationsOpen(!isNotificationsOpen)}
+                  className="relative p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#13192B] border border-gray-200 dark:border-[#1C263B] transition"
+                  aria-label="View notifications"
+                >
+                  <Bell className="w-4 h-4" />
+                  {notifications.filter(n => !n.read).length > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-600 text-white font-mono text-[9px] font-bold flex items-center justify-center border-2 border-white dark:border-[#070A11]">
+                      {notifications.filter(n => !n.read).length}
+                    </span>
+                  )}
+                </button>
+
+                <NotificationsDropdown />
+              </div>
 
               {/* Messages */}
               <button
@@ -292,12 +314,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               >
                 <div className="relative">
                   <div className="w-8 h-8 rounded-full overflow-hidden border border-blue-500/50">
-                    <img src={avatarUrl} alt="Rahul Sharma" className="w-full h-full object-cover" />
+                    <img src={avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
                   </div>
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#070A11]" />
                 </div>
                 <div className="hidden sm:block text-left">
-                  <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Rahul Sharma</div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{profile.name}</div>
                   <div className="text-[10px] text-slate-500 dark:text-slate-400">Full Stack Developer</div>
                 </div>
               </button>
@@ -310,6 +332,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </main>
         </div>
       </div>
+
+      <SettingsModal />
     </div>
   );
 };

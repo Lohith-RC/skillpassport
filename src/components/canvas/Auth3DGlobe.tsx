@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 /**
- * Auth3DGlobe — Interactive wireframe globe with orbiting nodes.
- * Renders behind auth forms with mouse-follow rotation.
+ * Auth3DGlobe — Interactive 3D Wireframe Globe offset to the left of the viewport
+ * to match the reference design. Features mouse-reactive rotation, constellation nodes,
+ * and orbiting purple/blue/emerald satellites.
  */
 export const Auth3DGlobe: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,61 +27,78 @@ export const Auth3DGlobe: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     // ── Lighting ─────────────────────────────────────────────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
 
-    const blueLight = new THREE.PointLight(0x2563eb, 3, 20);
-    blueLight.position.set(3, 3, 5);
+    const blueLight = new THREE.PointLight(0x3b82f6, 4, 30);
+    blueLight.position.set(-2, 3, 5);
     scene.add(blueLight);
 
-    const purpleLight = new THREE.PointLight(0x7c3aed, 2.5, 20);
-    purpleLight.position.set(-4, -2, 4);
+    const purpleLight = new THREE.PointLight(0x8b5cf6, 3.5, 30);
+    purpleLight.position.set(-5, -2, 4);
     scene.add(purpleLight);
 
     // ── Globe group ──────────────────────────────────────────────────────────
     const globe = new THREE.Group();
+    // Offset globe to left side on desktop screens
+    const isDesktop = w >= 768;
+    globe.position.set(isDesktop ? -2.2 : 0, 0, 0);
     scene.add(globe);
 
-    // Wireframe sphere shell
-    const sphereGeo = new THREE.SphereGeometry(2.2, 24, 24);
+    // Outer Wireframe Sphere Shell
+    const sphereGeo = new THREE.SphereGeometry(2.4, 32, 32);
     const sphereMat = new THREE.MeshBasicMaterial({
-      color: 0x2563eb,
+      color: 0x4f46e5,
       wireframe: true,
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.22,
     });
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     globe.add(sphereMesh);
 
-    // Latitude rings
-    const ringMat = new THREE.MeshBasicMaterial({
+    // Inner Glowing Core Icosahedron
+    const coreGeo = new THREE.IcosahedronGeometry(1.3, 1);
+    const coreMat = new THREE.MeshStandardMaterial({
       color: 0x7c3aed,
       wireframe: true,
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.28,
+      emissive: 0x6d28d9,
+      emissiveIntensity: 0.4,
+    });
+    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+    globe.add(coreMesh);
+
+    // Latitude rings
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x818cf8,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.18,
     });
     for (let i = -2; i <= 2; i++) {
-      const ringR = Math.sqrt(2.2 * 2.2 - (i * 0.8) * (i * 0.8));
+      const ringR = Math.sqrt(2.4 * 2.4 - (i * 0.9) * (i * 0.9));
       if (ringR <= 0) continue;
       const ringGeo = new THREE.RingGeometry(ringR - 0.02, ringR + 0.02, 64);
       const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.y = i * 0.8;
+      ring.position.y = i * 0.9;
       ring.rotation.x = Math.PI / 2;
       globe.add(ring);
     }
 
-    // Glowing dot nodes on globe surface
-    const dotGeo = new THREE.SphereGeometry(0.06, 12, 12);
+    // Glowing constellation dot nodes on globe surface
+    const dotGeo = new THREE.SphereGeometry(0.08, 12, 12);
     const dotMat = new THREE.MeshStandardMaterial({
-      color: 0x2563eb,
-      emissive: 0x2563eb,
-      emissiveIntensity: 0.8,
+      color: 0x3b82f6,
+      emissive: 0x60a5fa,
+      emissiveIntensity: 1,
     });
 
     const dotPositions = [
-      [1.5, 1.0, 1.2], [-0.8, 1.6, 1.0], [1.8, -0.5, 0.8],
-      [-1.2, -1.3, 1.3], [0.3, 1.9, 0.5], [-1.8, 0.4, 0.9],
-      [0.9, -1.6, 1.0], [-0.5, 0.2, 2.1], [1.4, 0.6, -1.4],
-      [-1.0, -0.8, -1.6], [0.6, 1.2, -1.6], [-1.5, 1.1, -0.9],
+      [1.6, 1.1, 1.3], [-0.9, 1.7, 1.1], [1.9, -0.6, 0.9],
+      [-1.3, -1.4, 1.4], [0.4, 2.0, 0.6], [-1.9, 0.5, 1.0],
+      [1.0, -1.7, 1.1], [-0.6, 0.3, 2.2], [1.5, 0.7, -1.5],
+      [-1.1, -0.9, -1.7], [0.7, 1.3, -1.7], [-1.6, 1.2, -1.0],
     ];
 
     const dots: THREE.Mesh[] = [];
@@ -91,37 +109,41 @@ export const Auth3DGlobe: React.FC = () => {
       dots.push(dot);
     });
 
-    // Orbiting satellite nodes (5 platform roles)
-    const satGeo = new THREE.OctahedronGeometry(0.12, 0);
-    const satColors = [0x2563eb, 0x10b981, 0xf59e0b, 0x8b5cf6, 0xef4444];
+    // Orbiting satellite nodes
+    const satGeo = new THREE.OctahedronGeometry(0.15, 0);
+    const satColors = [0x3b82f6, 0x10b981, 0xf59e0b, 0x8b5cf6, 0xef4444];
     const satellites: THREE.Mesh[] = [];
 
     satColors.forEach((color, i) => {
       const mat = new THREE.MeshStandardMaterial({
         color,
         emissive: color,
-        emissiveIntensity: 0.6,
-        metalness: 0.8,
-        roughness: 0.2,
+        emissiveIntensity: 0.8,
+        metalness: 0.9,
+        roughness: 0.1,
       });
       const sat = new THREE.Mesh(satGeo, mat);
       const angle = (i / satColors.length) * Math.PI * 2;
-      const radius = 3.2;
+      const radius = 3.4;
       sat.position.set(
         Math.cos(angle) * radius,
-        Math.sin(angle) * radius * 0.6,
-        Math.sin(angle) * radius * 0.4
+        Math.sin(angle) * radius * 0.65,
+        Math.sin(angle) * radius * 0.45
       );
       globe.add(sat);
       satellites.push(sat);
     });
 
-    // ── Mouse interaction ────────────────────────────────────────────────────
-    const mouse = { x: 0, y: 0 };
+    // ── Mouse & Cursor Reactivity ─────────────────────────────────────────────
+    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouse.y = (e.clientY / window.innerHeight - 0.5) * 2;
+      const rect = container.getBoundingClientRect();
+      const relX = e.clientX - rect.left;
+      const relY = e.clientY - rect.top;
+      mouse.targetX = (relX / rect.width - 0.5) * 2;
+      mouse.targetY = (relY / rect.height - 0.5) * 2;
     };
+
     window.addEventListener('mousemove', handleMouseMove);
 
     // ── Animation loop ───────────────────────────────────────────────────────
@@ -132,29 +154,38 @@ export const Auth3DGlobe: React.FC = () => {
       frameId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
-      // Slow rotation + mouse follow
-      globe.rotation.y += 0.003;
-      globe.rotation.x += 0.001;
-      globe.rotation.y += (mouse.x * 0.3 - globe.rotation.y) * 0.01;
-      globe.rotation.x += (-mouse.y * 0.2 - globe.rotation.x) * 0.01;
+      // Smooth inertia interpolation towards mouse target
+      mouse.x += (mouse.targetX - mouse.x) * 0.05;
+      mouse.y += (mouse.targetY - mouse.y) * 0.05;
+
+      // Globe rotation + dynamic cursor tilt
+      globe.rotation.y += 0.004 + mouse.x * 0.006;
+      globe.rotation.x = Math.sin(elapsed * 0.4) * 0.12 + mouse.y * 0.35;
+      globe.rotation.z = mouse.x * 0.12;
+
+      coreMesh.rotation.y -= 0.007;
+      coreMesh.rotation.z += 0.005;
+
+      blueLight.position.x = -2 + mouse.x * 2;
+      blueLight.position.y = 3 - mouse.y * 2;
 
       // Pulse dots
       dots.forEach((dot, i) => {
-        const scale = 1 + 0.3 * Math.sin(elapsed * 2 + i * 0.7);
+        const scale = 1 + 0.35 * Math.sin(elapsed * 2.5 + i * 0.7);
         dot.scale.setScalar(scale);
       });
 
-      // Orbit satellites
+      // Orbit satellites around globe
       satellites.forEach((sat, i) => {
-        const angle = elapsed * 0.4 + (i / satellites.length) * Math.PI * 2;
-        const radius = 3.2;
+        const angle = elapsed * 0.45 + (i / satellites.length) * Math.PI * 2;
+        const radius = 3.4 + Math.sin(elapsed + i) * 0.2;
         sat.position.set(
           Math.cos(angle) * radius,
-          Math.sin(angle) * radius * 0.6,
-          Math.sin(angle) * radius * 0.4
+          Math.sin(angle) * radius * 0.65 + mouse.y * 0.3,
+          Math.sin(angle) * radius * 0.45 + mouse.x * 0.3
         );
-        sat.rotation.x += 0.02;
-        sat.rotation.z += 0.01;
+        sat.rotation.x += 0.025;
+        sat.rotation.z += 0.015;
       });
 
       renderer.render(scene, camera);
@@ -169,6 +200,9 @@ export const Auth3DGlobe: React.FC = () => {
       camera.aspect = nw / nh;
       camera.updateProjectionMatrix();
       renderer.setSize(nw, nh);
+
+      const desktop = nw >= 768;
+      globe.position.set(desktop ? -2.2 : 0, 0, 0);
     };
     window.addEventListener('resize', handleResize);
 
@@ -178,9 +212,11 @@ export const Auth3DGlobe: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
 
-      // Dispose geometries & materials
       sphereGeo.dispose();
       sphereMat.dispose();
+      coreGeo.dispose();
+      coreMat.dispose();
+      ringMat.dispose();
       dotGeo.dispose();
       dotMat.dispose();
       satGeo.dispose();
@@ -193,5 +229,5 @@ export const Auth3DGlobe: React.FC = () => {
     };
   }, []);
 
-  return <div ref={containerRef} className="w-full h-full absolute inset-0 no-transition" />;
+  return <div ref={containerRef} className="w-full h-full absolute inset-0 no-transition pointer-events-none" />;
 };

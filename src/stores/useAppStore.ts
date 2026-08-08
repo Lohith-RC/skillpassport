@@ -7,16 +7,28 @@ interface Toast {
   type: 'success' | 'info' | 'warning';
 }
 
+interface NotificationItem {
+  id: string;
+  title: string;
+  time: string;
+  read: boolean;
+  type: 'security' | 'interview' | 'deployment' | 'badge';
+}
+
 interface AppState {
   activeTab: TabType;
   isSearchOpen: boolean;
   isDarkMode: boolean;
   isSyncModalOpen: boolean;
   isInterviewModalOpen: boolean;
+  isSettingsOpen: boolean;
+  isNotificationsOpen: boolean;
+  isTelemetryActive: boolean;
   inspectingRepo: Repository | null;
   selectedCandidate: RecruiterCandidate | null;
   heatmapFilter: 'all' | 'github' | 'gitlab' | 'leetcode' | 'hackerrank' | 'codeforces';
   toasts: Toast[];
+  notifications: NotificationItem[];
   profile: DeveloperProfile;
 
   // Actions
@@ -25,10 +37,16 @@ interface AppState {
   toggleTheme: () => void;
   setSyncModalOpen: (open: boolean) => void;
   setInterviewModalOpen: (open: boolean, candidate?: RecruiterCandidate | null) => void;
+  setSettingsOpen: (open: boolean) => void;
+  setNotificationsOpen: (open: boolean) => void;
+  toggleTelemetry: () => void;
   setInspectingRepo: (repo: Repository | null) => void;
   setSelectedCandidate: (candidate: RecruiterCandidate | null) => void;
   setHeatmapFilter: (filter: 'all' | 'github' | 'gitlab' | 'leetcode' | 'hackerrank' | 'codeforces') => void;
   togglePlatformConnection: (platformId: PlatformId) => void;
+  updateProfile: (partial: Partial<DeveloperProfile>) => void;
+  markNotificationRead: (id: string) => void;
+  clearNotifications: () => void;
   addToast: (message: string, type?: 'success' | 'info' | 'warning') => void;
   removeToast: (id: string) => void;
 }
@@ -39,10 +57,19 @@ export const useAppStore = create<AppState>((set) => ({
   isDarkMode: true,
   isSyncModalOpen: false,
   isInterviewModalOpen: false,
+  isSettingsOpen: false,
+  isNotificationsOpen: false,
+  isTelemetryActive: true,
   inspectingRepo: null,
   selectedCandidate: null,
   heatmapFilter: 'all',
   toasts: [],
+  notifications: [
+    { id: 'n1', title: 'SHA-256 Verified Seal generated for AI Code Reviewer', time: '10m ago', read: false, type: 'security' },
+    { id: 'n2', title: 'TechNova requested interview slot for Senior Fullstack Role', time: '1h ago', read: false, type: 'interview' },
+    { id: 'n3', title: 'Live Telemetry Runner #482 deployed to AWS ap-south-1', time: '3h ago', read: false, type: 'deployment' },
+    { id: 'n4', title: 'Earned Knight Tier Badge on LeetCode Contest #392', time: '1d ago', read: true, type: 'badge' },
+  ],
   profile: {
     id: 'dev_8921',
     name: 'Rahul Sharma',
@@ -75,6 +102,9 @@ export const useAppStore = create<AppState>((set) => ({
   toggleTheme: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
   setSyncModalOpen: (open) => set({ isSyncModalOpen: open }),
   setInterviewModalOpen: (open, candidate = null) => set({ isInterviewModalOpen: open, selectedCandidate: candidate }),
+  setSettingsOpen: (open) => set({ isSettingsOpen: open }),
+  setNotificationsOpen: (open) => set({ isNotificationsOpen: open }),
+  toggleTelemetry: () => set((state) => ({ isTelemetryActive: !state.isTelemetryActive })),
   setInspectingRepo: (repo) => set({ inspectingRepo: repo }),
   setSelectedCandidate: (candidate) => set({ selectedCandidate: candidate }),
   setHeatmapFilter: (filter) => set({ heatmapFilter: filter }),
@@ -97,6 +127,16 @@ export const useAppStore = create<AppState>((set) => ({
       },
     };
   }),
+
+  updateProfile: (partial) => set((state) => ({
+    profile: { ...state.profile, ...partial },
+  })),
+
+  markNotificationRead: (id) => set((state) => ({
+    notifications: state.notifications.map(n => n.id === id ? { ...n, read: true } : n)
+  })),
+
+  clearNotifications: () => set({ notifications: [] }),
 
   addToast: (message, type = 'success') => set((state) => ({
     toasts: [...state.toasts, { id: Math.random().toString(), message, type }],

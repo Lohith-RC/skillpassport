@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
-  const { setActiveTab, setSearchOpen, addToast } = useAppStore();
+  const { setActiveTab, setSearchOpen, addToast, setSettingsOpen, profile } = useAppStore();
   const [activeGrowthTab, setActiveGrowthTab] = useState<'Score' | 'Projects' | 'Contributions'>('Score');
 
   // Avatar URL (developer portrait matching screenshot)
@@ -47,16 +47,16 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center">
-                  Welcome back, Rahul! <span className="ml-2 text-2xl">👋</span>
+                  Welcome back, {profile.name.split(' ')[0]}! <span className="ml-2 text-2xl">👋</span>
                 </h1>
-                <p className="text-xs md:text-sm text-slate-400 mt-1">
+                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">
                   Your journey continues. Keep building, keep growing.
                 </p>
               </div>
 
               <button 
-                onClick={() => addToast('Dashboard layout customized!', 'success')}
-                className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/50 text-xs font-medium text-slate-200 transition shadow-sm"
+                onClick={() => setSettingsOpen(true)}
+                className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/50 text-xs font-bold text-slate-800 dark:text-slate-200 transition shadow-sm"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
                 <span>Customize Dashboard</span>

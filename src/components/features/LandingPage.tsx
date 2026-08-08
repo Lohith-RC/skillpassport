@@ -16,16 +16,18 @@ export const LandingPage: React.FC = () => {
       <nav className="flex items-center justify-between mb-2">
         <button
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center gap-3 hover:opacity-80 transition"
+          className="flex items-center gap-3 hover:opacity-80 transition group"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-600/30">
-            <Shield className="w-4 h-4 text-white fill-current" />
-          </div>
+          <img
+            src="/logo.png"
+            alt="SkillPassport AI Logo"
+            className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-blue-600/30 border border-blue-500/30 group-hover:scale-105 transition-transform duration-200"
+          />
           <div>
-            <span className="font-extrabold text-sm text-white">
-              SkillPassport <span className="text-blue-500">AI</span>
+            <span className="font-extrabold text-sm text-slate-900 dark:text-white">
+              SkillPassport <span className="text-blue-600 dark:text-blue-500">AI</span>
             </span>
-            <p className="text-[10px] text-slate-400 leading-none">One Identity. Endless Opportunities.</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">One Identity. Endless Opportunities.</p>
           </div>
         </button>
         <div className="flex items-center gap-3">

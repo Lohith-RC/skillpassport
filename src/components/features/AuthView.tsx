@@ -169,6 +169,9 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
       localStorage.setItem('user', JSON.stringify(data));
       // Load the authenticated user profile into the store
       useAppStore.getState().initializeUserSession(data);
+      if (data.isDemo) {
+        addToast('Backend offline — signed in with demo mode (local mock data).', 'info');
+      }
       addToast(`Signed in successfully! Welcome back, ${data.name.split(' ')[0]}.`, 'success');
     } catch (err: any) {
       addToast(err.message || 'Login failed. Please check your credentials.', 'warning');
@@ -354,6 +357,9 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       // Initialize unique isolated data space for the new session
       useAppStore.getState().initializeUserSession({ ...data, usn });
 
+      if (data.isDemo) {
+        addToast('Backend offline — account created in demo mode (local mock data).', 'info');
+      }
       addToast(`Account created! Welcome aboard, ${data.name}.`, 'success');
     } catch (err: any) {
       addToast(`Registration notice: ${err.message}`, 'warning');

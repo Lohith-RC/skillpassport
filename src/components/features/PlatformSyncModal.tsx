@@ -10,6 +10,16 @@ export const PlatformSyncModal: React.FC = () => {
   const { isSyncModalOpen, setSyncModalOpen, profile, togglePlatformConnection, addToast } = useAppStore();
   const [selectedPlatformId, setSelectedPlatformId] = useState<PlatformId>('github');
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isSyncModalOpen) {
+        setSyncModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSyncModalOpen, setSyncModalOpen]);
+
   if (!isSyncModalOpen) return null;
 
   const platformsList = Object.values(profile.platforms);
@@ -20,13 +30,19 @@ export const PlatformSyncModal: React.FC = () => {
     if (isConnected) {
       addToast(`Disconnected ${name} profile.`, 'warning');
     } else {
-      addToast(`Successfully synced and connected ${name} profile!`, 'success');
+      addToast(`Connected ${name} (simulated sync — OAuth ships with the backend integration).`, 'success');
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="glass-card max-w-4xl w-full rounded-2xl border border-slate-200 dark:border-border-default overflow-hidden shadow-2xl p-6 space-y-6 max-h-[90vh] overflow-y-auto">
+    <div 
+      onClick={() => setSyncModalOpen(false)}
+      className="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="glass-card max-w-4xl w-full rounded-2xl border border-slate-200 dark:border-border-default overflow-hidden shadow-2xl p-6 space-y-6 max-h-[90vh] overflow-y-auto"
+      >
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-border-subtle pb-4">
@@ -139,7 +155,17 @@ export const PlatformSyncModal: React.FC = () => {
             variant="purple"
             size="sm"
             onClick={() => {
-              addToast('All 10 platform streams resynced with live seeded telemetry!', 'success');
+              const disconnected = Object.values(profile.platforms).filter((p) => !p.connected);
+              if (disconnected.length === 0) {
+                addToast('All 10 platforms are already connected.', 'info');
+                setSyncModalOpen(false);
+                return;
+              }
+              disconnected.forEach((p) => togglePlatformConnection(p.id));
+              addToast(
+                `Connected ${disconnected.length} platform${disconnected.length > 1 ? 's' : ''} (simulated sync).`,
+                'success'
+              );
               setSyncModalOpen(false);
             }}
           >

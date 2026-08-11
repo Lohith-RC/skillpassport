@@ -39,6 +39,28 @@ export const App: React.FC = () => {
     isDarkMode ? root.classList.add('dark') : root.classList.remove('dark');
   }, [isDarkMode]);
 
+  // ─── Sync activeTab with URL Hash for Browser Back/Forward navigation ──────
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && hash !== activeTab) {
+        useAppStore.getState().setActiveTab(hash as any);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab) {
+      const currentHash = window.location.hash.replace('#', '');
+      if (currentHash !== activeTab) {
+        window.history.replaceState(null, '', `#${activeTab}`);
+      }
+    }
+  }, [activeTab]);
+
   // ─── Global keyboard shortcuts ────────────────────────────────────────────
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

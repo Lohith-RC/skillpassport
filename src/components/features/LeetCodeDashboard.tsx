@@ -10,7 +10,9 @@ export const LeetCodeDashboard: React.FC = () => {
   const [stats, setStats] = useState<LeetCodeStats | null>(null);
 
   useEffect(() => {
-    fetchLeetCodeStats().then(setStats);
+    fetchLeetCodeStats()
+      .then(setStats)
+      .catch(() => setStats(null));
   }, []);
 
   if (!stats) return <div className="text-sm text-slate-500 dark:text-gray-400">Loading LeetCode Telemetry...</div>;

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { TabType, DeveloperProfile, PlatformId, RecruiterCandidate, Repository } from '../types';
-import { DEFAULT_PREDEFINED_PROFILE, createIsolatedUserSpace, purgeSessionData } from '../utils/sessionManager';
+import { DEFAULT_PREDEFINED_PROFILE, createIsolatedUserSpace, purgeSessionData, saveSessionProfile } from '../utils/sessionManager';
 
 interface Toast {
   id: string;
@@ -31,6 +31,7 @@ interface AppState {
   toasts: Toast[];
   notifications: NotificationItem[];
   profile: DeveloperProfile;
+  isDemoMode: boolean;
 
   // Actions
   purgeAndResetSession: () => void;
@@ -96,6 +97,7 @@ export const useAppStore = create<AppState>((set) => ({
   isSettingsOpen: false,
   isNotificationsOpen: false,
   isTelemetryActive: true,
+  isDemoMode: false,
   inspectingRepo: null,
   selectedCandidate: null,
   heatmapFilter: 'all',
@@ -151,16 +153,26 @@ export const useAppStore = create<AppState>((set) => ({
       activeTab: 'landing',
       profile: DEFAULT_PREDEFINED_PROFILE,
       notifications: [],
+      isDemoMode: false,
       toasts: [{ id: Math.random().toString(), message: 'Session data wiped clean. Reset to default environment.', type: 'info' }],
     });
   },
 
   initializeUserSession: (userData: any) => {
-    const isolatedProfile = createIsolatedUserSpace(userData);
+    // New users get an isolated, zeroed-out identity space; returning/demo
+    // users resume the seeded demo persona (Rahul Sharma) with their own name.
+    const isolatedProfile = userData.isNewUser
+      ? createIsolatedUserSpace(userData)
+      : {
+          ...DEFAULT_PREDEFINED_PROFILE,
+          name: userData?.name || DEFAULT_PREDEFINED_PROFILE.name,
+        };
+    saveSessionProfile(isolatedProfile);
     set({
       profile: isolatedProfile,
       notifications: [],
       activeTab: 'dashboard',
+      isDemoMode: Boolean(userData?.isDemo),
     });
   },
 
@@ -187,17 +199,19 @@ export const useAppStore = create<AppState>((set) => ({
         lastSynced: isNowConnected ? 'Just now' : 'Never',
       },
     };
-    return {
-      profile: {
-        ...state.profile,
-        platforms: updated,
-      },
+    const nextProfile = {
+      ...state.profile,
+      platforms: updated,
     };
+    saveSessionProfile(nextProfile);
+    return { profile: nextProfile };
   }),
 
-  updateProfile: (partial) => set((state) => ({
-    profile: { ...state.profile, ...partial },
-  })),
+  updateProfile: (partial) => set((state) => {
+    const nextProfile = { ...state.profile, ...partial };
+    saveSessionProfile(nextProfile);
+    return { profile: nextProfile };
+  }),
 
   markNotificationRead: (id) => set((state) => ({
     notifications: state.notifications.map(n => n.id === id ? { ...n, read: true } : n)

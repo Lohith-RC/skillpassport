@@ -108,7 +108,7 @@ export const InvestorAnalytics: React.FC = () => {
                   <Button
                     variant="purple"
                     size="sm"
-                    onClick={() => addToast(`Initiated VC Intro meeting request with ${vp.founder}!`, 'success')}
+                    onClick={() => addToast(`Demo mode: an intro meeting request to ${vp.founder} would be sent through the backend integration.`, 'info')}
                   >
                     <Rocket className="w-4 h-4 mr-1.5" />
                     Connect with Founder

@@ -28,8 +28,16 @@ import {
 } from 'lucide-react';
 
 export const ChallengesView: React.FC = () => {
-  const { addToast } = useAppStore();
+  const { addToast, profile } = useAppStore();
   const [activeTab, setActiveTab] = useState<'All' | 'Recommended' | 'Popular' | 'New' | 'Ending Soon' | 'High Rewards'>('All');
+  const [sortKey, setSortKey] = useState<'Ending Soon' | 'Reward' | 'Popularity'>('Ending Soon');
+  const [enrolledIds, setEnrolledIds] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('sp_challenge_enrollments') ?? '[]') as string[];
+    } catch {
+      return [];
+    }
+  });
 
   // Challenge list matching screenshot
   const challenges = [
@@ -99,15 +107,47 @@ export const ChallengesView: React.FC = () => {
     },
   ];
 
-  // Filtered challenges list based on active tab
-  const filteredChallenges = challenges.filter((c) => {
-    if (activeTab === 'Recommended') return c.featured;
-    if (activeTab === 'Popular') return c.participants > 400;
-    if (activeTab === 'New') return c.id.includes('docs') || c.id.includes('aws');
-    if (activeTab === 'Ending Soon') return c.timeLeft.includes('3d') || c.timeLeft.includes('5d');
-    if (activeTab === 'High Rewards') return c.reward.includes('5,000') || c.reward.includes('4,000');
-    return true;
-  });
+  // Filtered challenges list based on active tab + sort
+  const filteredChallenges = challenges
+    .filter((c) => {
+      if (activeTab === 'Recommended') return c.featured;
+      if (activeTab === 'Popular') return c.participants > 400;
+      if (activeTab === 'New') return c.id.includes('docs') || c.id.includes('aws');
+      if (activeTab === 'Ending Soon') return c.timeLeft.includes('3d') || c.timeLeft.includes('5d');
+      if (activeTab === 'High Rewards') return c.reward.includes('5,000') || c.reward.includes('4,000');
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortKey === 'Reward') return parseInt(b.reward.replace(/[^0-9]/g, ''), 10) - parseInt(a.reward.replace(/[^0-9]/g, ''), 10);
+      if (sortKey === 'Popularity') return b.participants - a.participants;
+      return parseInt(a.timeLeft, 10) - parseInt(b.timeLeft, 10);
+    });
+
+  const toggleEnrollment = (c: (typeof challenges)[number]) => {
+    const isEnrolled = enrolledIds.includes(c.id);
+    const next = isEnrolled ? enrolledIds.filter((id) => id !== c.id) : [...enrolledIds, c.id];
+    setEnrolledIds(next);
+    try {
+      localStorage.setItem('sp_challenge_enrollments', JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+    addToast(
+      isEnrolled
+        ? `Withdrawn from "${c.title}".`
+        : `Enrolled in "${c.title}". Track progress in your challenge dashboard.`,
+      isEnrolled ? 'info' : 'success'
+    );
+  };
+
+  // Derived personal stats (honest: zero for brand-new profiles)
+  const hasHistory = profile.totalContributions > 0;
+  const myStats = {
+    participated: hasHistory ? 18 : 0,
+    completed: profile.pipelinesPassed || 0,
+    winRate: hasHistory ? '38%' : '—',
+    rewards: hasHistory ? `$${(profile.pipelinesPassed * 6.9).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '$0',
+  };
 
   return (
     <div className="space-y-6">
@@ -223,10 +263,14 @@ export const ChallengesView: React.FC = () => {
               <div className="p-1 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-slate-400">
                 <Grid className="w-4 h-4 text-white" />
               </div>
-              <select className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans text-xs focus:outline-none focus:border-purple-500">
-                <option>Sort by: Ending Soon</option>
-                <option>Sort by: Reward</option>
-                <option>Sort by: Popularity</option>
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as typeof sortKey)}
+                className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans text-xs focus:outline-none focus:border-purple-500"
+              >
+                <option value="Ending Soon">Sort by: Ending Soon</option>
+                <option value="Reward">Sort by: Reward</option>
+                <option value="Popularity">Sort by: Popularity</option>
               </select>
             </div>
           </div>
@@ -302,18 +346,22 @@ export const ChallengesView: React.FC = () => {
                     {/* Action Buttons Row */}
                     <div className="flex items-center space-x-2 pt-2">
                       <button
-                        onClick={() => addToast(`Opening challenge breakdown for ${c.title}...`, 'info')}
+                        onClick={() => addToast(`Challenge spec, rubric and evaluation criteria for "${c.title}" — full breakdown ships with the backend integration.`, 'info')}
                         className="px-3.5 py-1.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition"
                       >
                         View Details
                       </button>
 
                       <button
-                        onClick={() => addToast(`Enrolled in ${c.title}! Good luck!`, 'success')}
-                        className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs font-semibold transition shadow-md flex items-center space-x-1"
+                        onClick={() => toggleEnrollment(c)}
+                        className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition shadow-md flex items-center space-x-1 ${
+                          enrolledIds.includes(c.id)
+                            ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/25'
+                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white'
+                        }`}
                       >
-                        <span>Participate</span>
-                        <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                        {enrolledIds.includes(c.id) ? <Check className="w-3.5 h-3.5" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                        <span>{enrolledIds.includes(c.id) ? 'Enrolled' : 'Participate'}</span>
                       </button>
                     </div>
 
@@ -325,10 +373,10 @@ export const ChallengesView: React.FC = () => {
           </div>
 
           <button
-            onClick={() => addToast('Loaded 20 more live challenges.', 'info')}
+            onClick={() => addToast(`All ${challenges.length} challenges shown (demo dataset). The full marketplace ships with the backend integration.`, 'info')}
             className="w-full py-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 text-xs font-semibold transition flex items-center justify-center space-x-2"
           >
-            <span>View All Challenges</span>
+            <span>View All Challenges ({challenges.length} in demo)</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
@@ -382,7 +430,7 @@ export const ChallengesView: React.FC = () => {
           <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
             <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
               <h3 className="font-extrabold text-slate-900 dark:text-white text-xs">Categories</h3>
-              <button className="text-[11px] text-purple-400 hover:underline">View All</button>
+              <button onClick={() => addToast('All categories filter is active by default — category counts ship with the full marketplace.', 'info')} className="text-[11px] text-purple-400 hover:underline">View All</button>
             </div>
 
             <div className="space-y-2 text-xs">
@@ -543,7 +591,7 @@ export const ChallengesView: React.FC = () => {
             </div>
 
             <button
-              onClick={() => addToast('Opening global challenge leaderboard...', 'info')}
+              onClick={() => addToast('The full global leaderboard ships with the backend integration — demo shows the current top 5.', 'info')}
               className="w-full py-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-300 text-xs font-semibold transition"
             >
               View Full Leaderboard →
@@ -561,7 +609,7 @@ export const ChallengesView: React.FC = () => {
                   <span className="text-[10px]">Participated</span>
                   <Code className="w-4 h-4 text-purple-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">18</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">{myStats.participated}</div>
               </div>
 
               <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
@@ -569,7 +617,7 @@ export const ChallengesView: React.FC = () => {
                   <span className="text-[10px]">Completed</span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">7</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">{myStats.completed}</div>
               </div>
 
               <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
@@ -577,7 +625,7 @@ export const ChallengesView: React.FC = () => {
                   <span className="text-[10px]">Win Rate</span>
                   <TrendingUp className="w-4 h-4 text-blue-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">38%</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">{myStats.winRate}</div>
               </div>
 
               <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-1">
@@ -585,12 +633,12 @@ export const ChallengesView: React.FC = () => {
                   <span className="text-[10px]">Rewards Won</span>
                   <DollarSign className="w-4 h-4 text-amber-400" />
                 </div>
-                <div className="text-xl font-extrabold font-mono text-emerald-400">$2,150</div>
+                <div className="text-xl font-extrabold font-mono text-emerald-400">{myStats.rewards}</div>
               </div>
             </div>
 
             <button
-              onClick={() => addToast('Opening your challenge submission history...', 'info')}
+              onClick={() => addToast('Submission history is stored per-user once the backend integration lands. In demo mode your enrollments are saved in this browser.', 'info')}
               className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs transition shadow-lg shadow-purple-600/25 flex items-center justify-center space-x-1.5"
             >
               <span>View My Submissions</span>

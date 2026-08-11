@@ -9,10 +9,36 @@ import { useAppStore } from '../../stores/useAppStore';
 export const UniversityHub: React.FC = () => {
   const { addToast } = useAppStore();
   const [students, setStudents] = useState(mockUniversityStudents);
+  const [sealHashes, setSealHashes] = useState<Record<string, string>>({});
 
-  const signTranscript = (id: string, name: string) => {
+  const deriveSealHash = (usn: string, name: string) => {
+    let h = 2166136261;
+    const input = `${usn}|${name}`;
+    for (let i = 0; i < input.length; i++) {
+      h ^= input.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return 'SHA-256-' + (h >>> 0).toString(16).toUpperCase().padStart(8, '0');
+  };
+
+  const signTranscript = (id: string, name: string, usn: string) => {
+    const hash = deriveSealHash(usn, name);
     setStudents(students.map(s => s.id === id ? { ...s, status: 'VERIFIED' } : s));
-    addToast(`Signed official university transcript seal for ${name}!`, 'success');
+    setSealHashes(prev => ({ ...prev, [id]: hash }));
+    addToast(`Signed official university transcript seal for ${name}: ${hash}`, 'success');
+  };
+
+  const handleBatchSign = () => {
+    const pending = students.filter(s => s.status !== 'VERIFIED');
+    if (pending.length === 0) {
+      addToast('All student transcripts are already signed.', 'info');
+      return;
+    }
+    const nextHashes: Record<string, string> = { ...sealHashes };
+    pending.forEach(s => { nextHashes[s.id] = deriveSealHash(s.usn, s.name); });
+    setSealHashes(nextHashes);
+    setStudents(students.map(s => ({ ...s, status: 'VERIFIED' })));
+    addToast(`Batch signed ${pending.length} student institutional transcript seals (simulated registrar action).`, 'success');
   };
 
   return (
@@ -36,7 +62,7 @@ export const UniversityHub: React.FC = () => {
           <Button
             variant="purple"
             size="sm"
-            onClick={() => addToast('Batch signed 4 student institutional transcript seals!', 'success')}
+            onClick={handleBatchSign}
           >
             <ShieldCheck className="w-4 h-4 mr-1.5" />
             Batch Sign Student Seals
@@ -111,13 +137,13 @@ export const UniversityHub: React.FC = () => {
                   <td className="py-3 text-right">
                     {s.status === 'VERIFIED' ? (
                       <button
-                        onClick={() => addToast(`Transcript seal hash for ${s.name}: SHA-256-VTU-942`, 'info')}
+                        onClick={() => addToast(`Transcript seal hash for ${s.name}: ${sealHashes[s.id] || deriveSealHash(s.usn, s.name)}`, 'info')}
                         className="text-purple-600 hover:underline text-[11px]"
                       >
                         View Seal Hash
                       </button>
                     ) : (
-                      <Button variant="purple" size="sm" onClick={() => signTranscript(s.id, s.name)}>
+                      <Button variant="purple" size="sm" onClick={() => signTranscript(s.id, s.name, s.usn)}>
                         Sign Seal
                       </Button>
                     )}

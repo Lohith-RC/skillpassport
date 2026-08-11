@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
+import { UserRole } from '../../types';
 import { X, User, Sliders, Shield, Bell, Zap, Save, Check } from 'lucide-react';
+
+const ROLE_OPTIONS: { id: UserRole; label: string }[] = [
+  { id: 'developer', label: 'Developer' },
+  { id: 'recruiter', label: 'Recruiter' },
+  { id: 'university', label: 'University' },
+  { id: 'investor', label: 'Investor' },
+];
 
 export const SettingsModal: React.FC = () => {
   const {
@@ -18,11 +26,33 @@ export const SettingsModal: React.FC = () => {
   const [headline, setHeadline] = useState(profile.headline);
   const [location, setLocation] = useState(profile.location);
   const [degree, setDegree] = useState(profile.degree);
+  const [role, setRole] = useState<UserRole>(profile.role ?? 'developer');
+  const [notificationPrefs, setNotificationPrefs] = useState(() => {
+    try {
+      const stored = localStorage.getItem('sp_notification_prefs');
+      return stored
+        ? JSON.parse(stored)
+        : { recruiterAlerts: true, contestVelocity: true, pipelineReports: true };
+    } catch {
+      return { recruiterAlerts: true, contestVelocity: true, pipelineReports: true };
+    }
+  });
 
   if (!isSettingsOpen) return null;
 
+  const toggleNotificationPref = (key: keyof typeof notificationPrefs) => {
+    const next = { ...notificationPrefs, [key]: !notificationPrefs[key] };
+    setNotificationPrefs(next);
+    try {
+      localStorage.setItem('sp_notification_prefs', JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+    addToast(`Notification preference updated.`, 'success');
+  };
+
   const handleSaveProfile = () => {
-    updateProfile({ name, headline, location, degree });
+    updateProfile({ name, headline, location, degree, role });
     addToast('Developer Profile settings saved successfully!', 'success');
     setSettingsOpen(false);
   };
@@ -131,6 +161,27 @@ export const SettingsModal: React.FC = () => {
                   />
                 </div>
               </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">Primary Role</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {ROLE_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setRole(opt.id)}
+                      className={`px-3 py-2 rounded-xl border text-xs font-semibold transition ${
+                        role === opt.id
+                          ? 'border-blue-600 bg-blue-600/10 text-blue-600 dark:text-blue-400'
+                          : 'border-gray-300 dark:border-[#1C263B] text-slate-500 dark:text-slate-400 hover:border-blue-500/50'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] text-slate-400">Tailors the sidebar and landing experience to your workflow.</p>
+              </div>
             </div>
           )}
 
@@ -170,14 +221,42 @@ export const SettingsModal: React.FC = () => {
                   <div className="text-xs font-bold text-slate-900 dark:text-white">Instant Recruiter Alerts</div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400">Get notified when top companies request interview slots</div>
                 </div>
-                <input type="checkbox" defaultChecked className="w-4 h-4 accent-blue-600" />
+                <button
+                  onClick={() => toggleNotificationPref('recruiterAlerts')}
+                  role="switch"
+                  aria-checked={notificationPrefs.recruiterAlerts}
+                  className={`relative w-11 h-6 rounded-full transition ${notificationPrefs.recruiterAlerts ? 'bg-blue-600' : 'bg-gray-300 dark:bg-[#1C263B]'}`}
+                >
+                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${notificationPrefs.recruiterAlerts ? 'left-[22px]' : 'left-0.5'}`} />
+                </button>
               </div>
               <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#0F1626] border border-gray-200 dark:border-[#1C263B] flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-slate-900 dark:text-white">Contest Velocity Summary</div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400">Weekly report on rating velocity across LeetCode & Codeforces</div>
                 </div>
-                <input type="checkbox" defaultChecked className="w-4 h-4 accent-blue-600" />
+                <button
+                  onClick={() => toggleNotificationPref('contestVelocity')}
+                  role="switch"
+                  aria-checked={notificationPrefs.contestVelocity}
+                  className={`relative w-11 h-6 rounded-full transition ${notificationPrefs.contestVelocity ? 'bg-blue-600' : 'bg-gray-300 dark:bg-[#1C263B]'}`}
+                >
+                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${notificationPrefs.contestVelocity ? 'left-[22px]' : 'left-0.5'}`} />
+                </button>
+              </div>
+              <div className="p-4 rounded-2xl bg-gray-50 dark:bg-[#0F1626] border border-gray-200 dark:border-[#1C263B] flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">Pipeline & Deployment Reports</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">Alerts when production pipelines pass or fail on your repos</div>
+                </div>
+                <button
+                  onClick={() => toggleNotificationPref('pipelineReports')}
+                  role="switch"
+                  aria-checked={notificationPrefs.pipelineReports}
+                  className={`relative w-11 h-6 rounded-full transition ${notificationPrefs.pipelineReports ? 'bg-blue-600' : 'bg-gray-300 dark:bg-[#1C263B]'}`}
+                >
+                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${notificationPrefs.pipelineReports ? 'left-[22px]' : 'left-0.5'}`} />
+                </button>
               </div>
             </div>
           )}

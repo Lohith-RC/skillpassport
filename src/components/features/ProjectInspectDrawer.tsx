@@ -10,6 +10,16 @@ export const ProjectInspectDrawer: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'logs' | 'security'>('overview');
   const [isExecuting, setIsExecuting] = useState(false);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && inspectingRepo) {
+        setInspectingRepo(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [inspectingRepo, setInspectingRepo]);
+
   if (!inspectingRepo) return null;
 
   const handleRunPipeline = () => {
@@ -22,8 +32,14 @@ export const ProjectInspectDrawer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex justify-end animate-in fade-in duration-200">
-      <div className="glass-card max-w-xl w-full h-full border-l border-slate-200 dark:border-border-default shadow-2xl p-6 space-y-6 overflow-y-auto rounded-none flex flex-col justify-between">
+    <div 
+      onClick={() => setInspectingRepo(null)}
+      className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex justify-end animate-in fade-in duration-200"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="glass-card max-w-xl w-full h-full border-l border-slate-200 dark:border-border-default shadow-2xl p-6 space-y-6 overflow-y-auto rounded-none flex flex-col justify-between"
+      >
         
         <div className="space-y-6">
           {/* Drawer Header */}

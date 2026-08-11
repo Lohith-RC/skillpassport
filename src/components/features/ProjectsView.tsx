@@ -33,6 +33,8 @@ export const ProjectsView: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'All' | 'Personal' | 'Team' | 'Collaborations' | 'Archived'>('All');
   const [selectedProjectId, setSelectedProjectId] = useState<string>('ai-code-reviewer');
   const [activeSubTab, setActiveSubTab] = useState<'Overview' | 'Features' | 'Tech Stack' | 'Architecture' | 'Screenshots' | 'Documentation' | 'Activity' | 'Analytics'>('Overview');
+  const [sortKey, setSortKey] = useState<'Recent' | 'Stars' | 'Activity'>('Recent');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Projects list
   const projects = [
@@ -42,10 +44,15 @@ export const ProjectsView: React.FC = () => {
       description: 'AI-powered code analysis and review tool that helps developers write better code.',
       tech: ['Next.js', 'TypeScript', 'Tailwind'],
       status: 'Live',
+      category: 'Personal' as const,
       stars: 128,
       forks: 24,
       updated: '2h ago',
+      updatedOrder: 2,
+      activityCount: 14,
       isPrivate: false,
+      liveUrl: 'https://ai-code-reviewer.dev',
+      repoUrl: 'https://github.com/rahul/ai-code-reviewer',
     },
     {
       id: 'devconnect',
@@ -53,10 +60,15 @@ export const ProjectsView: React.FC = () => {
       description: 'Developer social platform to connect, collaborate and share knowledge.',
       tech: ['Next.js', 'Node.js', 'MongoDB'],
       status: 'Live',
+      category: 'Personal' as const,
       stars: 96,
       forks: 18,
       updated: '1d ago',
+      updatedOrder: 1,
+      activityCount: 9,
       isPrivate: false,
+      liveUrl: 'https://devconnect.dev',
+      repoUrl: 'https://github.com/rahul/devconnect',
     },
     {
       id: 'clouddeploy-pro',
@@ -64,10 +76,15 @@ export const ProjectsView: React.FC = () => {
       description: 'Automated deployment platform for modern applications.',
       tech: ['Docker', 'AWS', 'TypeScript'],
       status: 'Live',
+      category: 'Team' as const,
       stars: 78,
       forks: 15,
       updated: '3d ago',
+      updatedOrder: 3,
+      activityCount: 5,
       isPrivate: false,
+      liveUrl: 'https://clouddeploy.pro',
+      repoUrl: 'https://github.com/rahul/clouddeploy-pro',
     },
     {
       id: 'codequest',
@@ -75,14 +92,38 @@ export const ProjectsView: React.FC = () => {
       description: 'Gamified coding challenges platform with real-time leaderboards.',
       tech: ['React', 'Firebase', 'Chakra UI'],
       status: 'Private',
+      category: 'Collaborations' as const,
       stars: 64,
       forks: 12,
       updated: '5d ago',
+      updatedOrder: 5,
+      activityCount: 2,
       isPrivate: true,
+      liveUrl: 'https://codequest.dev',
+      repoUrl: 'https://github.com/rahul/codequest',
     },
   ];
 
   const selectedProject = projects.find(p => p.id === selectedProjectId) || projects[0];
+
+  const filteredProjects =
+    activeFilter === 'All'
+      ? projects
+      : activeFilter === 'Archived'
+        ? []
+        : projects.filter(p => p.category === activeFilter);
+
+  const sortedProjects = [...filteredProjects].sort((a, b) => {
+    if (sortKey === 'Stars') return b.stars - a.stars;
+    if (sortKey === 'Activity') return b.activityCount - a.activityCount;
+    return a.updatedOrder - b.updatedOrder;
+  });
+
+  const filterCount = (label: string) => {
+    if (label === 'All Projects') return projects.length;
+    if (label === 'Archived') return 0;
+    return projects.filter(p => p.category === label).length;
+  };
 
   if (profile.proofScore === 0) {
     return (
@@ -134,7 +175,7 @@ export const ProjectsView: React.FC = () => {
         </div>
 
         <button
-          onClick={() => addToast('Opening project creation wizard...', 'info')}
+          onClick={() => addToast('Project creation wizard is disabled in demo mode — sync a repository to add verified projects.', 'info')}
           className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-xs transition shadow-lg shadow-blue-600/25"
         >
           <Plus className="w-4 h-4" />
@@ -148,45 +189,56 @@ export const ProjectsView: React.FC = () => {
         
         {/* Category Tabs */}
         <div className="flex items-center space-x-2 overflow-x-auto">
-          {[
-            { label: 'All Projects', count: 12 },
-            { label: 'Personal', count: 8 },
-            { label: 'Team', count: 3 },
-            { label: 'Collaborations', count: 1 },
-            { label: 'Archived', count: 0 },
-          ].map((tab) => (
-            <button
-              key={tab.label}
-              onClick={() => setActiveFilter(tab.label.split(' ')[0] as any)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-2 transition ${
-                activeFilter === tab.label.split(' ')[0]
-                  ? 'bg-[#141D30] text-blue-400 border border-blue-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-gray-50 dark:bg-[#0F1626]'
-              }`}
-            >
-              <span>{tab.label}</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                activeFilter === tab.label.split(' ')[0]
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-[#172033] text-slate-400'
-              }`}>
-                {tab.count}
-              </span>
-            </button>
-          ))}
+          {(['All Projects', 'Personal', 'Team', 'Collaborations', 'Archived'] as const).map((label) => {
+            const filterId = label === 'All Projects' ? 'All' : label;
+            return (
+              <button
+                key={label}
+                onClick={() => setActiveFilter(filterId as typeof activeFilter)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-2 transition ${
+                  activeFilter === filterId
+                    ? 'bg-[#141D30] text-blue-400 border border-blue-500/30'
+                    : 'text-slate-400 hover:text-white hover:bg-gray-50 dark:bg-[#0F1626]'
+                }`}
+              >
+                <span>{label}</span>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                  activeFilter === filterId
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 dark:bg-[#172033] text-slate-400'
+                }`}>
+                  {filterCount(label)}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Right Controls */}
         <div className="flex items-center space-x-3 text-xs">
-          <select className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans focus:outline-none focus:border-blue-500">
-            <option>Sort by: Recent</option>
-            <option>Sort by: Stars</option>
-            <option>Sort by: Activity</option>
+          <select
+            value={sortKey}
+            onChange={(e) => setSortKey(e.target.value as 'Recent' | 'Stars' | 'Activity')}
+            className="bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl px-3 py-1.5 text-slate-300 font-sans focus:outline-none focus:border-blue-500"
+          >
+            <option value="Recent">Sort by: Recent</option>
+            <option value="Stars">Sort by: Stars</option>
+            <option value="Activity">Sort by: Activity</option>
           </select>
 
           <div className="flex items-center space-x-1 bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] p-1 rounded-xl">
-            <button className="p-1.5 rounded-lg bg-blue-600 text-white"><Grid className="w-3.5 h-3.5" /></button>
-            <button className="p-1.5 rounded-lg text-slate-400 hover:text-white"><List className="w-3.5 h-3.5" /></button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-1.5 rounded-lg ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Grid className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-1.5 rounded-lg ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            >
+              <List className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
 
@@ -195,21 +247,23 @@ export const ProjectsView: React.FC = () => {
 
       {/* TOP HORIZONTAL PROJECTS CAROUSEL (4 CARDS) */}
       <div className="relative">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {projects.map((project) => {
+        <div className={`grid gap-4 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1'}`}>
+          {sortedProjects.map((project) => {
             const isSelected = project.id === selectedProjectId;
             return (
               <div
                 key={project.id}
                 onClick={() => setSelectedProjectId(project.id)}
                 className={`p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border transition cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden ${
+                  viewMode === 'list' ? 'md:flex-row md:space-y-0 md:space-x-4 md:items-center' : ''
+                } ${
                   isSelected
                     ? 'border-blue-500 shadow-xl shadow-blue-500/10 ring-1 ring-blue-500/50'
                     : 'border-gray-200 dark:border-[#161D2F] hover:border-slate-700'
                 }`}
               >
                 {/* Thumbnail Header */}
-                <div className="relative w-full h-28 rounded-xl bg-slate-900 border border-gray-300 dark:border-[#1C263B] overflow-hidden flex flex-col justify-between p-2">
+                <div className={`relative w-full h-28 rounded-xl bg-slate-900 border border-gray-300 dark:border-[#1C263B] overflow-hidden flex flex-col justify-between p-2 ${viewMode === 'list' ? 'md:w-44 md:h-20 shrink-0' : ''}`}>
                   <div className="flex items-center justify-between z-10">
                     <span className="text-[10px] font-mono text-slate-400">app.preview</span>
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold flex items-center space-x-1 ${
@@ -231,7 +285,7 @@ export const ProjectsView: React.FC = () => {
                 </div>
 
                 {/* Project Details */}
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 flex-1">
                   <div className="flex items-center justify-between">
                     <h3 className="font-extrabold text-slate-900 dark:text-white text-sm truncate">{project.title}</h3>
                     <MoreVertical className="w-4 h-4 text-slate-500 shrink-0" />
@@ -262,6 +316,13 @@ export const ProjectsView: React.FC = () => {
             );
           })}
         </div>
+
+        {sortedProjects.length === 0 && (
+          <div className="p-10 text-center bg-white dark:bg-[#0B0F19] rounded-2xl border border-gray-200 dark:border-[#161D2F]">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">No projects in this category</h3>
+            <p className="text-xs text-slate-400 mt-1">Try another filter, or sync a repository to add verified projects.</p>
+          </div>
+        )}
       </div>
 
 
@@ -281,7 +342,7 @@ export const ProjectsView: React.FC = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
               </div>
-              <span className="text-[10px] font-mono text-slate-500">ai-code-reviewer.dev</span>
+              <span className="text-[10px] font-mono text-slate-500">{selectedProject.liveUrl.replace('https://', '')}</span>
             </div>
 
             <div className="space-y-2 py-4 font-mono text-xs text-slate-400">
@@ -313,15 +374,25 @@ export const ProjectsView: React.FC = () => {
                 <div className="flex items-center space-x-2 text-slate-300">
                   <Github className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   <span className="text-slate-400">GitHub Repository</span>
-                  <a href="#" className="text-blue-400 hover:underline text-[11px] truncate">
-                    https://github.com/rahul/ai-code-reviewer ↗
+                  <a
+                    href={selectedProject.repoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-400 hover:underline text-[11px] truncate"
+                  >
+                    {selectedProject.repoUrl} ↗
                   </a>
                 </div>
                 <div className="flex items-center space-x-2 text-slate-300">
                   <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span className="text-slate-400">Live Demo</span>
-                  <a href="#" className="text-emerald-400 hover:underline text-[11px] truncate">
-                    https://ai-code-reviewer.dev ↗
+                  <a
+                    href={selectedProject.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-emerald-400 hover:underline text-[11px] truncate"
+                  >
+                    {selectedProject.liveUrl} ↗
                   </a>
                 </div>
               </div>
@@ -329,23 +400,28 @@ export const ProjectsView: React.FC = () => {
 
             {/* Buttons Row */}
             <div className="flex flex-wrap gap-2 pt-2">
-              <button
-                onClick={() => addToast('Launching live demo preview tab...', 'info')}
+              <a
+                href={selectedProject.liveUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition shadow-lg shadow-blue-600/25 flex items-center space-x-1.5"
               >
                 <span>View Live Project</span>
                 <ExternalLink className="w-3.5 h-3.5" />
-              </button>
+              </a>
 
               <button
-                onClick={() => addToast('Opening project editor...', 'info')}
+                onClick={() => addToast('Editing is disabled in demo mode — manage this project from your synced repository.', 'info')}
                 className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] hover:bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#1C263B] text-slate-200 font-semibold text-xs transition flex items-center space-x-1.5"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 <span>Edit Project</span>
               </button>
 
-              <button className="p-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-slate-400 hover:text-white">
+              <button
+                onClick={() => addToast(`Opening ${selectedProject.title} repository menu...`, 'info')}
+                className="p-2 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-slate-400 hover:text-white"
+              >
                 <MoreVertical className="w-4 h-4" />
               </button>
             </div>

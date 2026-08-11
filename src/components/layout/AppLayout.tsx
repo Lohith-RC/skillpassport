@@ -9,19 +9,13 @@ import {
   Clock,
   FolderGit2,
   Rocket,
-  Briefcase,
   Trophy,
-  Building2,
-  GraduationCap,
-  BookOpen,
   Award,
   Users,
   Search,
   Bell,
   MessageSquare,
-  Shield,
   Settings,
-  Sparkles,
   LogOut,
   TrendingUp,
   Code2,
@@ -64,35 +58,28 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     setNotificationsOpen,
     notifications,
     profile,
+    isDemoMode,
   } = useAppStore();
-
-  const avatarUrl =
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80';
 
   // ── Navigation definitions ─────────────────────────────────────────────────
 
   const primaryNavItems: NavItem[] = [
-    { key: 'ws-dashboard',    id: 'dashboard',  label: 'Dashboard',     Icon: LayoutDashboard },
-    { key: 'ws-passport',     id: 'profile',    label: 'Skill Passport', Icon: UserCheck, badge: '95%', badgeVariant: 'blue' },
-    { key: 'ws-projects',     id: 'repos',      label: 'Projects',      Icon: FolderGit2 },
-    { key: 'ws-deployments',  id: 'leetcode',   label: 'Deployments',   Icon: Rocket },
-    { key: 'ws-challenges',   id: 'challenges', label: 'Challenges',    Icon: Trophy },
-    { key: 'ws-contribution', id: 'heatmap',    label: 'Contribution',  Icon: Code2 },
+    { key: 'ws-dashboard',    id: 'dashboard',  label: 'Dashboard',      Icon: LayoutDashboard },
+    { key: 'ws-passport',     id: 'profile',    label: 'Skill Passport', Icon: UserCheck, badge: `${profile.proofScore}%`, badgeVariant: 'blue' },
+    { key: 'ws-projects',     id: 'repos',      label: 'Projects',       Icon: FolderGit2 },
+    { key: 'ws-contribution', id: 'heatmap',    label: 'Contribution',   Icon: Code2 },
+    { key: 'ws-challenges',   id: 'challenges', label: 'Challenges',     Icon: Trophy },
   ];
 
   const identityNavItems: NavItem[] = [
-    { key: 'id-portfolio',     id: 'profile',     label: 'Portfolio',      Icon: Briefcase },
-    { key: 'id-experience',    id: 'timecapsule', label: 'Experience',     Icon: Clock },
+    { key: 'id-leetcode',     id: 'leetcode',   label: 'LeetCode',        Icon: Rocket, badge: profile.leetcodeSolved || undefined, badgeVariant: 'amber' },
+    { key: 'id-experience',   id: 'timecapsule', label: 'Time Capsule',   Icon: Clock },
     { key: 'id-certifications', id: 'university', label: 'Certifications', Icon: Award },
-    { key: 'id-achievements',  id: 'profile',     label: 'Achievements',   Icon: Sparkles },
-    { key: 'id-timecapsule',   id: 'timecapsule', label: 'Time Capsule',   Icon: Clock, badge: 'NEW', badgeVariant: 'emerald' },
   ];
 
   const networkNavItems: NavItem[] = [
-    { key: 'net-connections',   id: 'recruiter',  label: 'Connections',   Icon: Users },
-    { key: 'net-opportunities', id: 'recruiter',  label: 'Opportunities', Icon: Building2 },
-    { key: 'net-learning',      id: 'university', label: 'Learning',      Icon: BookOpen },
-    { key: 'net-investor',      id: 'investor',   label: 'Investor Hub',  Icon: TrendingUp },
+    { key: 'net-connections', id: 'recruiter',  label: 'Recruiter Portal', Icon: Users },
+    { key: 'net-investor',    id: 'investor',   label: 'Investor Hub',    Icon: TrendingUp },
     {
       key: 'net-messages',
       id: 'action',
@@ -213,12 +200,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             <div className="p-4 bg-gray-50 dark:bg-[#0F1626] rounded-2xl border border-gray-200 dark:border-[#1C263B] relative overflow-hidden space-y-2">
               <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Professional Score</div>
               <div className="flex items-baseline space-x-2">
-                <span className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight">8,650</span>
+                <span className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight">{profile.proofScore}</span>
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
-                  Expert
+                  {profile.tier}
                 </span>
               </div>
-              <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">↑ 12.5% this month</div>
+              <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                {profile.totalContributions.toLocaleString()} verified contributions
+              </div>
 
               {/* Sparkline */}
               <svg className="w-full h-8 overflow-visible no-transition" viewBox="0 0 100 30">
@@ -327,6 +316,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               </button>
             </div>
           </header>
+
+          {/* Demo mode banner (Java backend offline) */}
+          {isDemoMode && (
+            <div className="flex items-center gap-2.5 px-4 md:px-8 py-2 bg-amber-500/10 border-b border-amber-500/20 text-amber-700 dark:text-amber-400 text-[11px] font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
+              <span>Demo mode — backend offline, running on local mock data. Everything you do is simulated and stored in your browser.</span>
+            </div>
+          )}
 
           {/* PAGE BODY */}
           <main className="p-4 md:p-8 space-y-6 max-w-[1600px] w-full mx-auto">

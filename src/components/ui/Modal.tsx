@@ -8,6 +8,18 @@ export const Modal: React.FC = () => {
   const { isSearchOpen, setSearchOpen, setActiveTab, profile, setInspectingRepo, setInterviewModalOpen } = useAppStore();
   const [query, setQuery] = useState('');
 
+  // Close modal on Escape key press
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isSearchOpen) {
+        setSearchOpen(false);
+        setQuery('');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSearchOpen, setSearchOpen]);
+
   if (!isSearchOpen) return null;
 
   const views: { id: TabType; label: string; icon: React.ReactNode; shortcut: string }[] = [

@@ -54,7 +54,7 @@ export const LandingPage: React.FC = () => {
         <div className="space-y-6 text-left">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>SkillPassport AI — Next.js 15 TRD Engine</span>
+            <span>SkillPassport AI — Interactive Product Demo</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
@@ -102,10 +102,10 @@ export const LandingPage: React.FC = () => {
       <div className="space-y-6 pt-6">
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
-            5 Core Investor Demo Modules
+            Core Product Modules
           </h2>
           <p className="text-xs text-slate-500 dark:text-gray-400">
-            Architected according to strict TRD technical implementation standards
+            Explore the verified-talent identity stack — click any module to jump in
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export const LandingPage: React.FC = () => {
             <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
               <Award className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Module 2: 10-Platform Passport</h3>
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Module 1: 10-Platform Passport</h3>
             <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
               52-week green activity heatmap aggregating GitHub, GitLab, LeetCode, HackerRank, Codeforces, and Kaggle.
             </p>
@@ -125,7 +125,7 @@ export const LandingPage: React.FC = () => {
             <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
               <Zap className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Module 3: Code Telemetry Vault</h3>
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Module 2: Code Telemetry Vault</h3>
             <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
               Empirical runtime telemetry displaying 42ms response latency, CI build runners, and cryptographic SHA seals.
             </p>
@@ -136,7 +136,7 @@ export const LandingPage: React.FC = () => {
             <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Module 4: Recruiter Sourcing Portal</h3>
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-base">Module 3: Recruiter Sourcing Portal</h3>
             <p className="text-xs text-slate-600 dark:text-gray-400 leading-relaxed">
               Zero-resume evidence hiring pipeline with candidate comparison matrix and direct interview scheduling.
             </p>

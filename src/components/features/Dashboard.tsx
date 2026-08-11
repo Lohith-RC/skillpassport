@@ -229,7 +229,7 @@ export const Dashboard: React.FC = () => {
                         stroke="url(#passportRingGrad)"
                         strokeWidth="8"
                         strokeDasharray="251.2"
-                        strokeDashoffset="12.5"
+                        strokeDashoffset={251.2 * (1 - Math.min(100, Math.max(0, profile.proofScore)) / 100)}
                         strokeLinecap="round"
                         fill="transparent"
                       />
@@ -241,7 +241,7 @@ export const Dashboard: React.FC = () => {
                       </defs>
                     </svg>
                     <div className="absolute text-center">
-                      <div className="text-lg font-extrabold font-mono text-slate-900 dark:text-white">95%</div>
+                      <div className="text-lg font-extrabold font-mono text-slate-900 dark:text-white">{profile.proofScore}%</div>
                       <div className="text-[9px] text-slate-400 font-medium">Completed</div>
                     </div>
                   </div>
@@ -268,7 +268,7 @@ export const Dashboard: React.FC = () => {
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>Experience (4/5)</span>
                     </div>
-                    <button onClick={() => addToast('Social links sync modal opened.', 'info')} className="flex items-center space-x-1.5 text-blue-400 hover:underline font-semibold pt-0.5">
+                    <button onClick={() => setSettingsOpen(true)} className="flex items-center space-x-1.5 text-blue-400 hover:underline font-semibold pt-0.5">
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add Social Links</span>
                     </button>
@@ -517,9 +517,10 @@ export const Dashboard: React.FC = () => {
                     </div>
 
                     {/* Carousel Right Navigation Arrow */}
-                    <button 
-                      onClick={() => addToast('Scrolled projects carousel', 'info')}
+                    <button
+                      onClick={() => setActiveTab('repos')}
                       className="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#232F48] text-white flex items-center justify-center shadow-lg hover:bg-blue-600 transition z-10 hidden xl:flex"
+                      title="View all projects"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -606,7 +607,7 @@ export const Dashboard: React.FC = () => {
                       {/* Tooltip Badge on Peak Data Point */}
                       <div className="absolute right-0 top-0 transform translate-x-2 -translate-y-2">
                         <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-mono font-bold text-xs shadow-lg shadow-blue-600/40">
-                          8,650
+                          {profile.proofScore}
                         </span>
                       </div>
                     </div>

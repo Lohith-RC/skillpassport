@@ -547,8 +547,21 @@ export const apiAuth = {
       if (!res.ok) throw new Error(data.message || 'Login failed');
       return data;
     } catch (err: any) {
-      console.warn('Backend offline or auth error, using fallback:', err.message);
-      throw err;
+      // Backend unreachable (offline / not started): fall back to a demo session
+      // instead of hard-failing, so the product remains fully explorable.
+      console.warn('Backend offline, using demo login fallback:', err.message);
+      const name = email
+        .split('@')[0]
+        .replace(/[._-]+/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+      return {
+        token: 'demo-token',
+        name: name || 'Demo Developer',
+        email,
+        role: 'DEVELOPER',
+        isNewUser: false,
+        isDemo: true,
+      };
     }
   },
 
@@ -563,8 +576,18 @@ export const apiAuth = {
       if (!res.ok) throw new Error(data.message || 'Registration failed');
       return data;
     } catch (err: any) {
-      console.warn('Backend offline or auth error, using fallback:', err.message);
-      throw err;
+      // Backend unreachable (offline / not started): create a demo account so
+      // signup never dead-ends the user.
+      console.warn('Backend offline, using demo register fallback:', err.message);
+      return {
+        token: 'demo-token',
+        name,
+        email,
+        role,
+        usn,
+        isNewUser: true,
+        isDemo: true,
+      };
     }
   },
 

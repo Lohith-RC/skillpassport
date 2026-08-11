@@ -4,24 +4,66 @@ import { X, Calendar, DollarSign, Send, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 
+const defaultDate = () => {
+  const d = new Date();
+  d.setDate(d.getDate() + 3);
+  return d.toISOString().slice(0, 10);
+};
+
 export const InterviewModal: React.FC = () => {
   const { isInterviewModalOpen, setInterviewModalOpen, selectedCandidate, addToast } = useAppStore();
-  const [date, setDate] = useState('2026-08-12');
+  const [date, setDate] = useState(defaultDate);
   const [time, setTime] = useState('14:00');
   const [role, setRole] = useState('Senior Full-Stack Engineer');
   const [comp, setComp] = useState('$140,000 - $170,000 USD');
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isInterviewModalOpen) {
+        setInterviewModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isInterviewModalOpen, setInterviewModalOpen]);
 
   if (!isInterviewModalOpen || !selectedCandidate) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addToast(`Interview invitation successfully sent to ${selectedCandidate.name} for ${role}!`, 'success');
+    const selected = new Date(`${date}T${time}:00Z`);
+    if (selected.getTime() < Date.now()) {
+      addToast('Please pick a future date and time for the interview.', 'warning');
+      return;
+    }
+    try {
+      const invites = JSON.parse(localStorage.getItem('sp_interview_invites') || '[]');
+      invites.push({
+        candidate: selectedCandidate.name,
+        candidateId: selectedCandidate.id,
+        role,
+        date,
+        time,
+        comp,
+        sentAt: new Date().toISOString(),
+      });
+      localStorage.setItem('sp_interview_invites', JSON.stringify(invites));
+    } catch {
+      /* ignore */
+    }
+    addToast(`Interview invitation scheduled for ${selectedCandidate.name} on ${date} at ${time} UTC (${role}).`, 'success');
     setInterviewModalOpen(false);
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="glass-card max-w-lg w-full rounded-2xl border border-slate-200 dark:border-border-default overflow-hidden shadow-2xl p-6 space-y-6">
+    <div 
+      onClick={() => setInterviewModalOpen(false)}
+      className="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="glass-card max-w-lg w-full rounded-2xl border border-slate-200 dark:border-border-default overflow-hidden shadow-2xl p-6 space-y-6"
+      >
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-border-subtle pb-4">

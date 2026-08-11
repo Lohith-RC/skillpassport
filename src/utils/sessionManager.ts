@@ -80,6 +80,22 @@ export const createIsolatedUserSpace = (user: { name: string; email?: string; ro
 };
 
 /**
+ * Saves (or creates) the active session's profile slot so edits survive refresh.
+ */
+export const saveSessionProfile = (profile: DeveloperProfile): void => {
+  try {
+    let sessionId = sessionStorage.getItem('sp_active_session_id');
+    if (!sessionId) {
+      sessionId = `sp_user_${Math.random().toString(36).substring(2, 9)}`;
+      sessionStorage.setItem('sp_active_session_id', sessionId);
+    }
+    sessionStorage.setItem(`sp_session_${sessionId}`, JSON.stringify(profile));
+  } catch (e) {
+    console.warn('Session Storage storage unavailable');
+  }
+};
+
+/**
  * Completely purges and resets user session data to prevent cross-contamination.
  */
 export const purgeSessionData = (): void => {

@@ -53,6 +53,7 @@ export interface DeveloperProfile {
   totalContributions: number;
   pipelinesPassed: number;
   leetcodeSolved: number;
+  role?: UserRole;
   platforms: Record<PlatformId, PlatformConnection>;
 }
 

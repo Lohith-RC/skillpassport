@@ -66,7 +66,7 @@ export const ContributionMatrix: React.FC = () => {
             return (
               <div
                 key={dIndex}
-                onClick={() => addToast(`${platformName}: Verified ${count} contributions on Week ${wIndex + 1}, Day ${dIndex + 1}!`, count > 0 ? 'success' : 'info')}
+                onClick={() => addToast(`${platformName}: ${count} contribution records on Week ${wIndex + 1}, Day ${dIndex + 1} (seeded demo telemetry).`, count > 0 ? 'info' : 'info')}
                 className={`w-3 h-3 rounded-[3px] transition-all duration-150 hover:scale-150 hover:z-10 cursor-pointer ${lvl}`}
                 title={`${platformName}: ${count} activity items on Week ${wIndex + 1}, Day ${dIndex + 1}`}
               />
@@ -310,29 +310,51 @@ export const ContributionMatrix: React.FC = () => {
         </div>
 
         {/* Matrix View Render */}
-        <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle overflow-x-auto space-y-4">
-          <div className="flex justify-between text-xs text-slate-500 dark:text-gray-400 font-mono mb-1">
-            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
-            <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-          </div>
+        {viewMode === 'heatmap' && (
+          <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle overflow-x-auto space-y-4">
+            <div className="flex justify-between text-xs text-slate-500 dark:text-gray-400 font-mono mb-1">
+              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+              <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+            </div>
 
-          {renderGrid(
-            {
-              lvl0: 'bg-slate-200/60 dark:bg-slate-800 border border-slate-300 dark:border-none',
-              lvl1: 'bg-orange-200 dark:bg-orange-950',
-              lvl2: 'bg-orange-400 dark:bg-orange-700',
-              lvl3: 'bg-orange-500 dark:bg-orange-500',
-              lvl4: 'bg-orange-700 dark:bg-orange-300',
-            },
-            3,
-            'GitLab'
-          )}
+            {renderGrid(
+              {
+                lvl0: 'bg-slate-200/60 dark:bg-slate-800 border border-slate-300 dark:border-none',
+                lvl1: 'bg-orange-200 dark:bg-orange-950',
+                lvl2: 'bg-orange-400 dark:bg-orange-700',
+                lvl3: 'bg-orange-500 dark:bg-orange-500',
+                lvl4: 'bg-orange-700 dark:bg-orange-300',
+              },
+              3,
+              'GitLab'
+            )}
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
-            <span>Displaying GitLab {glMetric.toUpperCase()} matrix telemetry</span>
-            <span className="text-orange-500 font-semibold">Runner Pipeline Build Success: 99.1%</span>
+            <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
+              <span>Displaying GitLab {glMetric.toUpperCase()} matrix telemetry</span>
+              <span className="text-orange-500 font-semibold">Runner Pipeline Build Success: 99.1%</span>
+            </div>
           </div>
-        </div>
+        )}
+
+        {viewMode === 'velocity' && (
+          <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle space-y-3 text-xs">
+            <div className="font-bold text-slate-900 dark:text-white">GitLab Monthly MR Merge Velocity</div>
+            <ProgressBar progress={82} color="orange" />
+            <div className="flex justify-between text-slate-500 font-mono">
+              <span>Jan: 22 MRs</span>
+              <span>Mar: 31 MRs</span>
+              <span>Jun: 38 MRs</span>
+              <span>Sep: 41 MRs</span>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'telemetry' && (
+          <div className="p-4 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle text-xs font-mono space-y-2">
+            <div className="text-orange-500 font-bold">🟢 Live GitLab Stream Telemetry</div>
+            <div className="text-slate-600 dark:text-gray-300">Latest MR SHA: <span className="text-purple-600">78912e45</span> — "feat(consensus): implement leader heartbeat failover mechanism"</div>
+          </div>
+        )}
       </Card>
 
       {/* MATRIX SECTION 3: LEETCODE ALGORITHMIC MATRIX */}
@@ -375,29 +397,51 @@ export const ContributionMatrix: React.FC = () => {
         </div>
 
         {/* Matrix View Render */}
-        <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle overflow-x-auto space-y-4">
-          <div className="flex justify-between text-xs text-slate-500 dark:text-gray-400 font-mono mb-1">
-            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
-            <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-          </div>
+        {viewMode === 'heatmap' && (
+          <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle overflow-x-auto space-y-4">
+            <div className="flex justify-between text-xs text-slate-500 dark:text-gray-400 font-mono mb-1">
+              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+              <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+            </div>
 
-          {renderGrid(
-            {
-              lvl0: 'bg-slate-200/60 dark:bg-slate-800 border border-slate-300 dark:border-none',
-              lvl1: 'bg-amber-200 dark:bg-amber-950',
-              lvl2: 'bg-amber-400 dark:bg-amber-700',
-              lvl3: 'bg-amber-500 dark:bg-amber-500',
-              lvl4: 'bg-amber-700 dark:bg-amber-300',
-            },
-            7,
-            'LeetCode'
-          )}
+            {renderGrid(
+              {
+                lvl0: 'bg-slate-200/60 dark:bg-slate-800 border border-slate-300 dark:border-none',
+                lvl1: 'bg-amber-200 dark:bg-amber-950',
+                lvl2: 'bg-amber-400 dark:bg-amber-700',
+                lvl3: 'bg-amber-500 dark:bg-amber-500',
+                lvl4: 'bg-amber-700 dark:bg-amber-300',
+              },
+              7,
+              'LeetCode'
+            )}
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
-            <span>Displaying LeetCode {lcMetric.toUpperCase()} matrix telemetry</span>
-            <span className="text-amber-500 font-semibold">Global Percentile: Top 3.8%</span>
+            <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
+              <span>Displaying LeetCode {lcMetric.toUpperCase()} matrix telemetry</span>
+              <span className="text-amber-500 font-semibold">Global Percentile: Top 3.8%</span>
+            </div>
           </div>
-        </div>
+        )}
+
+        {viewMode === 'velocity' && (
+          <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle space-y-3 text-xs">
+            <div className="font-bold text-slate-900 dark:text-white">LeetCode Weekly Submission Velocity</div>
+            <ProgressBar progress={76} color="amber" />
+            <div className="flex justify-between text-slate-500 font-mono">
+              <span>Mon: 9</span>
+              <span>Wed: 14</span>
+              <span>Fri: 11</span>
+              <span>Sun: 16</span>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'telemetry' && (
+          <div className="p-4 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle text-xs font-mono space-y-2">
+            <div className="text-amber-500 font-bold">🟢 Live LeetCode Stream Telemetry</div>
+            <div className="text-slate-600 dark:text-gray-300">Latest Accepted Solution: <span className="text-purple-600">#2864 — Maximum Odd Binary Number</span> (Runtime: Top 9%)</div>
+          </div>
+        )}
       </Card>
 
       {/* MATRIX SECTION 4: HACKERRANK & CODEFORCES COMBINED MATRIX */}
@@ -419,29 +463,51 @@ export const ContributionMatrix: React.FC = () => {
         </div>
 
         {/* Matrix View Render */}
-        <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle overflow-x-auto space-y-4">
-          <div className="flex justify-between text-xs text-slate-500 dark:text-gray-400 font-mono mb-1">
-            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
-            <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-          </div>
+        {viewMode === 'heatmap' && (
+          <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle overflow-x-auto space-y-4">
+            <div className="flex justify-between text-xs text-slate-500 dark:text-gray-400 font-mono mb-1">
+              <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+              <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+            </div>
 
-          {renderGrid(
-            {
-              lvl0: 'bg-slate-200/60 dark:bg-slate-800 border border-slate-300 dark:border-none',
-              lvl1: 'bg-purple-200 dark:bg-purple-950',
-              lvl2: 'bg-purple-400 dark:bg-purple-700',
-              lvl3: 'bg-purple-500 dark:bg-purple-500',
-              lvl4: 'bg-purple-700 dark:bg-purple-300',
-            },
-            9,
-            'HackerRank & Codeforces'
-          )}
+            {renderGrid(
+              {
+                lvl0: 'bg-slate-200/60 dark:bg-slate-800 border border-slate-300 dark:border-none',
+                lvl1: 'bg-purple-200 dark:bg-purple-950',
+                lvl2: 'bg-purple-400 dark:bg-purple-700',
+                lvl3: 'bg-purple-500 dark:bg-purple-500',
+                lvl4: 'bg-purple-700 dark:bg-purple-300',
+              },
+              9,
+              'HackerRank & Codeforces'
+            )}
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
-            <span>Displaying HackerRank + Codeforces combined matrix telemetry</span>
-            <span className="text-purple-600 font-semibold">Specialist Rating: 1,640</span>
+            <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-border-subtle text-xs text-slate-500 dark:text-gray-400 font-mono">
+              <span>Displaying HackerRank + Codeforces combined matrix telemetry</span>
+              <span className="text-purple-600 font-semibold">Specialist Rating: 1,640</span>
+            </div>
           </div>
-        </div>
+        )}
+
+        {viewMode === 'velocity' && (
+          <div className="p-6 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle space-y-3 text-xs">
+            <div className="font-bold text-slate-900 dark:text-white">HackerRank & Codeforces Contest Solve Velocity</div>
+            <ProgressBar progress={88} color="purple" />
+            <div className="flex justify-between text-slate-500 font-mono">
+              <span>Contests: 48</span>
+              <span>Solves: 243</span>
+              <span>Avg Rank: 412</span>
+              <span>Best: Top 1.2%</span>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'telemetry' && (
+          <div className="p-4 bg-slate-50 dark:bg-bg-base rounded-2xl border border-slate-200 dark:border-border-subtle text-xs font-mono space-y-2">
+            <div className="text-purple-600 font-bold">🟢 Live HackerRank & Codeforces Stream Telemetry</div>
+            <div className="text-slate-600 dark:text-gray-300">Latest Codeforces Round: <span className="text-purple-600">#1922</span> — Solved 4/6 (Rating +38 → 1,640)</div>
+          </div>
+        )}
       </Card>
 
     </div>

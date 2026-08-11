@@ -3,7 +3,7 @@ import { cn } from '../../utils/cn';
 
 export interface ProgressBarProps {
   progress: number; // 0 - 100
-  color?: 'blue' | 'emerald' | 'amber' | 'purple';
+  color?: 'blue' | 'emerald' | 'amber' | 'purple' | 'orange';
   height?: 'sm' | 'md' | 'lg';
   className?: string;
 }
@@ -25,6 +25,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     emerald: 'bg-accent-emerald',
     amber: 'bg-accent-amber',
     purple: 'bg-accent-purple',
+    orange: 'bg-orange-500',
   };
 
   const clampedProgress = Math.min(100, Math.max(0, progress));

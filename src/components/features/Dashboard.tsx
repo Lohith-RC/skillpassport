@@ -77,9 +77,11 @@ export const Dashboard: React.FC = () => {
                     <Shield className="w-3.5 h-3.5 fill-current" />
                   </div>
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">8,650</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+                  {profile.proofScore > 0 ? (profile.proofScore * 100).toLocaleString() : '0'}
+                </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>↑ 12.5% this month</span>
+                  <span>{profile.proofScore > 0 ? '↑ 12.5% this month' : 'New Account'}</span>
                 </div>
               </div>
 
@@ -91,9 +93,11 @@ export const Dashboard: React.FC = () => {
                     <FolderGit2 className="w-3.5 h-3.5" />
                   </div>
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">24</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+                  {profile.totalContributions > 0 ? Math.floor(profile.totalContributions / 35) : 0}
+                </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>↑ 3 this month</span>
+                  <span>{profile.totalContributions > 0 ? '↑ Active Repos' : '0 Repositories'}</span>
                 </div>
               </div>
 
@@ -105,9 +109,11 @@ export const Dashboard: React.FC = () => {
                     <Rocket className="w-3.5 h-3.5" />
                   </div>
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">11</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+                  {profile.pipelinesPassed}
+                </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>↑ 2 this month</span>
+                  <span>{profile.pipelinesPassed > 0 ? '↑ Verified Pipelines' : '0 Pipelines'}</span>
                 </div>
               </div>
 
@@ -119,9 +125,11 @@ export const Dashboard: React.FC = () => {
                     <Eye className="w-3.5 h-3.5" />
                   </div>
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">1,248</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+                  {profile.proofScore > 0 ? Math.floor(profile.proofScore * 14.2) : 0}
+                </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>↑ 18.6% this month</span>
+                  <span>{profile.proofScore > 0 ? '↑ Active Recruiter Views' : '0 Views'}</span>
                 </div>
               </div>
 
@@ -133,9 +141,11 @@ export const Dashboard: React.FC = () => {
                     <Users className="w-3.5 h-3.5" />
                   </div>
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">320</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+                  {profile.proofScore > 0 ? Math.floor(profile.proofScore * 3.6) : 0}
+                </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>↑ 24 this month</span>
+                  <span>{profile.proofScore > 0 ? '↑ Verified Network' : '0 Connections'}</span>
                 </div>
               </div>
 
@@ -147,7 +157,9 @@ export const Dashboard: React.FC = () => {
                     <Award className="w-3.5 h-3.5" />
                   </div>
                 </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">18</div>
+                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+                  {profile.proofScore > 0 ? Math.floor(profile.proofScore / 5) : 0}
+                </div>
                 <button onClick={() => setActiveTab('profile')} className="text-[10px] font-semibold text-blue-400 hover:underline block">
                   View all
                 </button>
@@ -170,17 +182,17 @@ export const Dashboard: React.FC = () => {
                 {/* Left Profile Details */}
                 <div className="flex items-center space-x-5 z-10">
                   <div className="relative shrink-0">
-                    <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-blue-600 to-purple-600 shadow-xl shadow-blue-600/20">
-                      <img src={avatarUrl} alt="Rahul Dev" className="w-full h-full object-cover rounded-full" />
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 shadow-xl shadow-blue-600/20 flex items-center justify-center text-2xl font-extrabold text-white border border-blue-400/40">
+                      {profile.avatar}
                     </div>
-                    <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#0B0F19]" />
+                    <span className={`absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-[#0B0F19] ${profile.verified ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center space-x-3">
                       <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Your Skill Passport</h2>
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                        Verified
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${profile.verified ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}`}>
+                        {profile.verified ? 'Verified' : 'New Member'}
                       </span>
                     </div>
                     <p className="text-xs text-slate-300 max-w-sm leading-relaxed">

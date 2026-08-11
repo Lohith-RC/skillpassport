@@ -20,9 +20,41 @@ import {
 } from 'lucide-react';
 
 export const TimeCapsuleView: React.FC = () => {
-  const { addToast } = useAppStore();
+  const { addToast, profile, setSyncModalOpen } = useAppStore();
   const [activeFilter, setActiveFilter] = useState<'All' | 'Projects' | 'Experience' | 'Achievements' | 'Certifications' | 'Education'>('All');
   const [viewMode, setViewMode] = useState<'Timeline' | 'Calendar'>('Timeline');
+
+  if (profile.proofScore === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Time Capsule</h1>
+            <p className="text-xs text-slate-400 mt-1">Visualizing your journey, growth and verified career milestones</p>
+          </div>
+          <button
+            onClick={() => addToast('Opening milestone submission form...', 'info')}
+            className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-xs transition shadow-lg shadow-blue-600/25 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Milestone</span>
+          </button>
+        </div>
+
+        <div className="p-16 text-center bg-white dark:bg-[#0B0F19] rounded-2xl border border-gray-200 dark:border-[#161D2F] space-y-4 shadow-xl">
+          <div className="w-20 h-20 rounded-full bg-purple-600/10 text-purple-400 flex items-center justify-center mx-auto border border-purple-500/20">
+            <Sparkles className="w-10 h-10" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">No Milestones Logged Yet</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+              Your career time capsule starts clean. Sync platforms or upload your academic degree transcripts to generate cryptographic SHA proof seals.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

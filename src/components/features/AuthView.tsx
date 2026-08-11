@@ -299,6 +299,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
   const [fullName, setFullName]           = useState('');
   const [username, setUsername]           = useState('');
   const [emailAddr, setEmailAddr]         = useState('');
+  const [usn, setUsn]                     = useState('');
   const [password, setPassword]           = useState('');
   const [confirmPw, setConfirmPw]         = useState('');
   const [showPw, setShowPw]               = useState(false);
@@ -308,6 +309,19 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
   const [loading, setLoading]             = useState(false);
 
   const strength = getPasswordStrength(password);
+  const isPwMatching = confirmPw.length > 0 && password === confirmPw;
+  const isPwMismatch = confirmPw.length > 0 && password !== confirmPw;
+
+  const handleQuickFill = useCallback(() => {
+    setFullName('Kavya Nair');
+    setUsername('kavyanair');
+    setEmailAddr(`kavya.${Math.floor(100 + Math.random() * 900)}@skillpassport.ai`);
+    setUsn('1VT22CS145');
+    setPassword('Password@123');
+    setConfirmPw('Password@123');
+    setAgreedTerms(true);
+    addToast('Demo signup credentials auto-filled!', 'info');
+  }, [addToast]);
 
   const handleCreate = useCallback(async () => {
     if (!fullName || !username || !emailAddr || !password) {
@@ -315,7 +329,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       return;
     }
     if (password !== confirmPw) {
-      addToast('Passwords do not match. Please try again.', 'warning');
+      addToast('Passwords do not match. Please verify your password.', 'warning');
       return;
     }
     if (!agreedTerms) {
@@ -324,36 +338,44 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
     }
     setLoading(true);
     try {
-      const data = await apiAuth.register(fullName, emailAddr, password, selectedRole.toUpperCase(), username);
+      const data = await apiAuth.register(fullName, emailAddr, password, selectedRole.toUpperCase(), usn || username);
       data.isNewUser = true;
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data));
       
-      // Update in-memory profile with fresh clean state
-      updateProfile(createFreshDeveloperProfile(data));
+      // Initialize unique isolated data space for the new session
+      useAppStore.getState().initializeUserSession({ ...data, usn });
 
       addToast(`Account created! Welcome aboard, ${data.name}.`, 'success');
-      setActiveTab('dashboard');
     } catch (err: any) {
       addToast(`Registration notice: ${err.message}`, 'warning');
     } finally {
       setLoading(false);
     }
-  }, [fullName, username, emailAddr, password, confirmPw, agreedTerms, selectedRole, addToast, setActiveTab, updateProfile]);
+  }, [fullName, username, emailAddr, password, confirmPw, agreedTerms, selectedRole, usn, addToast, setActiveTab, updateProfile]);
 
   return (
     <div className="space-y-4 text-left">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-          Create Your Account <Sparkles className="w-5 h-5 text-indigo-400 fill-indigo-400" />
-        </h2>
-        <p className="text-xs text-slate-400">Start building your professional identity</p>
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+            Create Account <Sparkles className="w-5 h-5 text-indigo-400 fill-indigo-400" />
+          </h2>
+          <p className="text-xs text-slate-400">Start building your verified professional identity</p>
+        </div>
+        <button
+          type="button"
+          onClick={handleQuickFill}
+          className="px-2.5 py-1 text-[10px] font-bold text-purple-400 bg-purple-950/40 border border-purple-800/40 rounded-lg hover:bg-purple-900/60 transition shrink-0"
+        >
+          ⚡ Auto-Fill Demo
+        </button>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <InputField
           id="signup-fullname"
-          label="Full Name"
+          label="Full Name *"
           placeholder="Enter your full name"
           value={fullName}
           onChange={setFullName}
@@ -361,7 +383,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
         />
         <InputField
           id="signup-username"
-          label="Username"
+          label="Username *"
           placeholder="Choose a username"
           value={username}
           onChange={setUsername}
@@ -369,20 +391,30 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
         />
       </div>
 
-      <InputField
-        id="signup-email"
-        label="Email Address"
-        type="email"
-        placeholder="Enter your email address"
-        value={emailAddr}
-        onChange={setEmailAddr}
-        IconLeft={Mail}
-      />
+      <div className="grid grid-cols-2 gap-3">
+        <InputField
+          id="signup-email"
+          label="Email Address *"
+          type="email"
+          placeholder="your.email@example.com"
+          value={emailAddr}
+          onChange={setEmailAddr}
+          IconLeft={Mail}
+        />
+        <InputField
+          id="signup-usn"
+          label="University USN / Roll No."
+          placeholder="e.g. 1VT22CS084"
+          value={usn}
+          onChange={setUsn}
+          IconLeft={GraduationCap}
+        />
+      </div>
 
       <div className="space-y-1.5">
         <InputField
           id="signup-password"
-          label="Password"
+          label="Password *"
           type={showPw ? 'text' : 'password'}
           placeholder="Create a strong password"
           value={password}
@@ -417,31 +449,39 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
               );
             })}
             <span className="text-[10px] font-semibold text-slate-400 shrink-0 ml-1">
-              Password strength: <span style={{ color: strength.color || '#EF4444' }}>{strength.label || 'Weak'}</span>
+              Strength: <span style={{ color: strength.color || '#EF4444' }}>{strength.label || 'Weak'}</span>
             </span>
           </div>
         </div>
       </div>
 
-      <InputField
-        id="signup-confirm"
-        label="Confirm Password"
-        type={showConfirm ? 'text' : 'password'}
-        placeholder="Confirm your password"
-        value={confirmPw}
-        onChange={setConfirmPw}
-        IconLeft={Lock}
-        trailing={
-          <button
-            type="button"
-            onClick={() => setShowConfirm((s) => !s)}
-            className="text-slate-500 hover:text-slate-300 transition"
-            aria-label={showConfirm ? 'Hide password' : 'Show password'}
-          >
-            {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-          </button>
-        }
-      />
+      <div className="space-y-1">
+        <InputField
+          id="signup-confirm"
+          label="Confirm Password *"
+          type={showConfirm ? 'text' : 'password'}
+          placeholder="Confirm your password"
+          value={confirmPw}
+          onChange={setConfirmPw}
+          IconLeft={Lock}
+          trailing={
+            <button
+              type="button"
+              onClick={() => setShowConfirm((s) => !s)}
+              className="text-slate-500 hover:text-slate-300 transition"
+              aria-label={showConfirm ? 'Hide password' : 'Show password'}
+            >
+              {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
+        />
+        {isPwMatching && (
+          <p className="text-[10px] font-semibold text-emerald-400 pl-1">✓ Passwords match</p>
+        )}
+        {isPwMismatch && (
+          <p className="text-[10px] font-semibold text-rose-400 pl-1">✕ Passwords do not match</p>
+        )}
+      </div>
 
       {/* Role selector - 4 items in 1 row */}
       <div className="space-y-1.5">

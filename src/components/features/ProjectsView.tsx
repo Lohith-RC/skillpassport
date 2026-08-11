@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 
 export const ProjectsView: React.FC = () => {
-  const { addToast } = useAppStore();
+  const { addToast, profile, setSyncModalOpen } = useAppStore();
   const [activeFilter, setActiveFilter] = useState<'All' | 'Personal' | 'Team' | 'Collaborations' | 'Archived'>('All');
   const [selectedProjectId, setSelectedProjectId] = useState<string>('ai-code-reviewer');
   const [activeSubTab, setActiveSubTab] = useState<'Overview' | 'Features' | 'Tech Stack' | 'Architecture' | 'Screenshots' | 'Documentation' | 'Activity' | 'Analytics'>('Overview');
@@ -83,6 +83,45 @@ export const ProjectsView: React.FC = () => {
   ];
 
   const selectedProject = projects.find(p => p.id === selectedProjectId) || projects[0];
+
+  if (profile.proofScore === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Code Telemetry Vault</h1>
+            <p className="text-xs text-slate-400 mt-1">Showcasing your verified codebase telemetry & proof seals</p>
+          </div>
+          <button
+            onClick={() => setSyncModalOpen(true)}
+            className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-xs transition shadow-lg shadow-blue-600/25 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Sync First Repository</span>
+          </button>
+        </div>
+
+        <div className="p-16 text-center bg-white dark:bg-[#0B0F19] rounded-2xl border border-gray-200 dark:border-[#161D2F] space-y-4 shadow-xl">
+          <div className="w-20 h-20 rounded-full bg-blue-600/10 text-blue-500 flex items-center justify-center mx-auto border border-blue-500/20">
+            <Code2 className="w-10 h-10" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Your Project Vault Starts at 0</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+              No pre-populated repositories found. Connect your GitHub or GitLab accounts to automatically generate verified cryptographic telemetry seals.
+            </p>
+          </div>
+          <button
+            onClick={() => setSyncModalOpen(true)}
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition shadow-lg shadow-blue-600/25 cursor-pointer"
+          >
+            <Zap className="w-4 h-4 mr-1 text-amber-300" />
+            <span>Connect 10 Developer Platforms</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

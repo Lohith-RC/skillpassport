@@ -234,11 +234,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
               {/* Sign out */}
               <button
-                onClick={() => setActiveTab('login')}
-                className="w-full flex items-center gap-2 pt-1 text-[11px] text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition"
+                onClick={() => {
+                  useAppStore.getState().purgeAndResetSession();
+                }}
+                className="w-full flex items-center gap-2 pt-1 text-[11px] text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition cursor-pointer"
               >
                 <LogOut className="w-3 h-3" />
-                <span>Sign out</span>
+                <span>Sign out & Wipe Session</span>
               </button>
             </div>
           </div>
@@ -313,14 +315,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 className="flex items-center space-x-2.5 pl-3 border-l border-gray-200 dark:border-[#161D2F] hover:opacity-90 transition"
               >
                 <div className="relative">
-                  <div className="w-8 h-8 rounded-full overflow-hidden border border-blue-500/50">
-                    <img src={avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-xs font-extrabold text-white shadow-sm border border-blue-400/40">
+                    {profile.avatar}
                   </div>
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#070A11]" />
                 </div>
                 <div className="hidden sm:block text-left">
                   <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{profile.name}</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">Full Stack Developer</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400">Verified Developer</div>
                 </div>
               </button>
             </div>

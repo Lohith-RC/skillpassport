@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { TabType, DeveloperProfile, PlatformId, RecruiterCandidate, Repository } from '../types';
+import { DEFAULT_PREDEFINED_PROFILE, createIsolatedUserSpace, purgeSessionData } from '../utils/sessionManager';
 
 interface Toast {
   id: string;
@@ -32,6 +33,8 @@ interface AppState {
   profile: DeveloperProfile;
 
   // Actions
+  purgeAndResetSession: () => void;
+  initializeUserSession: (user: any) => void;
   setActiveTab: (tab: TabType) => void;
   setSearchOpen: (open: boolean) => void;
   toggleTheme: () => void;
@@ -63,9 +66,9 @@ export const createFreshDeveloperProfile = (user: { name: string; email?: string
     headline: `Verified ${user.role || 'Developer'} | SkillPassport Community Member`,
     location: 'Newly Registered Member',
     degree: user.usn ? `Student USN: ${user.usn}` : 'Software Engineering',
-    verified: true,
+    verified: false,
     tier: 'BRONZE',
-    proofScore: 50,
+    proofScore: 0,
     totalContributions: 0,
     pipelinesPassed: 0,
     leetcodeSolved: 0,
@@ -97,50 +100,39 @@ export const useAppStore = create<AppState>((set) => ({
   selectedCandidate: null,
   heatmapFilter: 'all',
   toasts: [],
-  notifications: [
-    { id: 'n1', title: 'SHA-256 Verified Seal generated for AI Code Reviewer', time: '10m ago', read: false, type: 'security' },
-    { id: 'n2', title: 'TechNova requested interview slot for Senior Fullstack Role', time: '1h ago', read: false, type: 'interview' },
-    { id: 'n3', title: 'Live Telemetry Runner #482 deployed to AWS ap-south-1', time: '3h ago', read: false, type: 'deployment' },
-    { id: 'n4', title: 'Earned Knight Tier Badge on LeetCode Contest #392', time: '1d ago', read: true, type: 'badge' },
-  ],
-  profile: (() => {
-    const defaultProfile: DeveloperProfile = {
-      id: 'dev_8921',
-      name: 'Rahul Sharma',
-      avatar: 'RS',
-      headline: 'Full Stack Developer | Senior Software Engineering Student @ VTU, Bengaluru',
-      location: 'Bengaluru, India',
-      degree: 'Computer Science & Engineering',
-      verified: true,
-      tier: 'GOLD',
-      proofScore: 88,
-      totalContributions: 1482,
-      pipelinesPassed: 312,
-      leetcodeSolved: 264,
-      platforms: {
-        github: { id: 'github', name: 'GitHub', handle: 'github/rahulsharma', icon: 'fa-brands fa-github', color: '#10B981', connected: true, contributions: 840, lastSynced: '5m ago', badge: '840 Commits', topMetric: '184 Stars' },
-        gitlab: { id: 'gitlab', name: 'GitLab', handle: 'gitlab/rahul_dev', icon: 'fa-brands fa-gitlab', color: '#F97316', connected: true, contributions: 412, lastSynced: '12m ago', badge: '412 MRs', topMetric: '99.1% Success' },
-        leetcode: { id: 'leetcode', name: 'LeetCode', handle: 'leetcode/rahul_coder', icon: 'fa-solid fa-code', color: '#F59E0B', connected: true, contributions: 230, lastSynced: '1h ago', badge: '264 Solved', topMetric: '1,942 Knight' },
-        hackerrank: { id: 'hackerrank', name: 'HackerRank', handle: 'hackerrank/rahul_hr', icon: 'fa-brands fa-hackerrank', color: '#2563EB', connected: true, contributions: 145, lastSynced: '2h ago', badge: '145 Challenges', topMetric: '6 Stars PS' },
-        codeforces: { id: 'codeforces', name: 'Codeforces', handle: 'codeforces/rahul_cf', icon: 'fa-solid fa-terminal', color: '#EF4444', connected: true, contributions: 98, lastSynced: '1d ago', badge: '98 Contests', topMetric: '1,640 Rating' },
-        exercism: { id: 'exercism', name: 'Exercism', handle: 'exercism/rahul_ex', icon: 'fa-solid fa-graduation-cap', color: '#8B5CF6', connected: true, contributions: 64, lastSynced: '2d ago', badge: '64 Solutions', topMetric: 'Go/Rust/TS' },
-        kaggle: { id: 'kaggle', name: 'Kaggle', handle: 'kaggle/rahul_data', icon: 'fa-brands fa-kaggle', color: '#06B6D4', connected: true, contributions: 52, lastSynced: '3d ago', badge: '52 Notebooks', topMetric: '2 Silver Medals' },
-        frontendmentor: { id: 'frontendmentor', name: 'Frontend Mentor', handle: 'frontendmentor/rahul_fm', icon: 'fa-solid fa-layer-group', color: '#EC4899', connected: true, contributions: 38, lastSynced: '4d ago', badge: '38 UI Matches', topMetric: '98% Accuracy' },
-        codecademy: { id: 'codecademy', name: 'Codecademy', handle: 'codecademy/rahul_ca', icon: 'fa-solid fa-laptop-code', color: '#3B82F6', connected: false, contributions: 0, lastSynced: 'Never', badge: 'Pro Paths', topMetric: 'Full-Stack Cert' },
-        bitbucket: { id: 'bitbucket', name: 'Bitbucket', handle: 'bitbucket/rahul_bb', icon: 'fa-brands fa-bitbucket', color: '#0052CC', connected: true, contributions: 84, lastSynced: '1d ago', badge: '84 Commits', topMetric: '28 Approved PRs' },
-      },
-    };
+  notifications: (() => {
     try {
+      const stored = localStorage.getItem('user');
+      if (stored && JSON.parse(stored).isNewUser) {
+        return [];
+      }
+    } catch (e) {}
+    return [
+      { id: 'n1', title: 'SHA-256 Verified Seal generated for AI Code Reviewer', time: '10m ago', read: false, type: 'security' },
+      { id: 'n2', title: 'TechNova requested interview slot for Senior Fullstack Role', time: '1h ago', read: false, type: 'interview' },
+      { id: 'n3', title: 'Live Telemetry Runner #482 deployed to AWS ap-south-1', time: '3h ago', read: false, type: 'deployment' },
+      { id: 'n4', title: 'Earned Knight Tier Badge on LeetCode Contest #392', time: '1d ago', read: true, type: 'badge' },
+    ];
+  })(),
+  profile: (() => {
+    try {
+      const activeSessionId = sessionStorage.getItem('sp_active_session_id');
+      if (activeSessionId) {
+        const sessionData = sessionStorage.getItem(`sp_session_${activeSessionId}`);
+        if (sessionData) {
+          return JSON.parse(sessionData);
+        }
+      }
       const stored = localStorage.getItem('user');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed.isNewUser) {
-          return createFreshDeveloperProfile(parsed);
+          return createIsolatedUserSpace(parsed);
         }
         if (parsed.name) {
           const initials = parsed.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase();
           return {
-            ...defaultProfile,
+            ...DEFAULT_PREDEFINED_PROFILE,
             name: parsed.name,
             avatar: initials || 'SP',
             proofScore: parsed.proofScore || 85,
@@ -150,8 +142,27 @@ export const useAppStore = create<AppState>((set) => ({
     } catch (e) {
       // ignore JSON parse error
     }
-    return defaultProfile;
+    return DEFAULT_PREDEFINED_PROFILE;
   })(),
+
+  purgeAndResetSession: () => {
+    purgeSessionData();
+    set({
+      activeTab: 'landing',
+      profile: DEFAULT_PREDEFINED_PROFILE,
+      notifications: [],
+      toasts: [{ id: Math.random().toString(), message: 'Session data wiped clean. Reset to default environment.', type: 'info' }],
+    });
+  },
+
+  initializeUserSession: (userData: any) => {
+    const isolatedProfile = createIsolatedUserSpace(userData);
+    set({
+      profile: isolatedProfile,
+      notifications: [],
+      activeTab: 'dashboard',
+    });
+  },
 
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSearchOpen: (open) => set({ isSearchOpen: open }),

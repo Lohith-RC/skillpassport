@@ -1,5 +1,6 @@
 package com.skillpassport.backend.dto;
 
+import com.skillpassport.backend.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class RegisterRequest {
     @Size(min = 6, max = 100)
     private String password;
 
-    private String role = "STUDENT";
+    private UserRole role = UserRole.STUDENT;
     private String usn;
 
     public RegisterRequest() {}
@@ -31,8 +32,8 @@ public class RegisterRequest {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
 
     public String getUsn() { return usn; }
     public void setUsn(String usn) { this.usn = usn; }

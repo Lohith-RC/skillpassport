@@ -4,6 +4,7 @@ import com.skillpassport.backend.dto.AuthRequest;
 import com.skillpassport.backend.dto.AuthResponse;
 import com.skillpassport.backend.dto.RegisterRequest;
 import com.skillpassport.backend.entity.User;
+import com.skillpassport.backend.entity.UserRole;
 import com.skillpassport.backend.repository.UserRepository;
 import com.skillpassport.backend.security.JwtUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,12 +30,14 @@ public class AuthService {
             throw new RuntimeException("Error: Email is already registered!");
         }
 
+        UserRole role = request.getRole() != null ? request.getRole() : UserRole.STUDENT;
+
         User user = new User(
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getName(),
-                request.getRole() != null ? request.getRole() : "STUDENT",
-                request.getUsn() != null ? request.getUsn() : "1VT22CS084"
+                role,
+                request.getUsn() != null ? request.getUsn() : ""
         );
 
         User savedUser = userRepository.save(user);
@@ -45,7 +48,7 @@ public class AuthService {
                 savedUser.getId(),
                 savedUser.getEmail(),
                 savedUser.getName(),
-                savedUser.getRole(),
+                savedUser.getRole().name(),
                 savedUser.getUsn(),
                 savedUser.getProofScore()
         );
@@ -54,7 +57,7 @@ public class AuthService {
     public AuthResponse login(AuthRequest request) {
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
         if (userOpt.isEmpty() || !passwordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
-            throw new RuntimeException("Error: Invalid email or password credentials!");
+            throw new RuntimeException("Invalid email or password.");
         }
 
         User user = userOpt.get();
@@ -65,7 +68,7 @@ public class AuthService {
                 user.getId(),
                 user.getEmail(),
                 user.getName(),
-                user.getRole(),
+                user.getRole().name(),
                 user.getUsn(),
                 user.getProofScore()
         );
@@ -81,7 +84,7 @@ public class AuthService {
                 user.getId(),
                 user.getEmail(),
                 user.getName(),
-                user.getRole(),
+                user.getRole().name(),
                 user.getUsn(),
                 user.getProofScore()
         );

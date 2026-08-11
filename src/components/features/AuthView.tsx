@@ -150,9 +150,9 @@ const InputField: React.FC<InputFieldProps> = ({
 // ─────────────────────────────────────────────────────────────────────────────
 
 const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
-  const { setActiveTab, addToast } = useAppStore();
-  const [email, setEmail] = useState('demo@skillpassport.ai');
-  const [password, setPassword] = useState('password123');
+  const { addToast } = useAppStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -163,11 +163,19 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    setLoading(false);
-    addToast('Signed in successfully! Welcome back, Rahul.', 'success');
-    setActiveTab('dashboard');
-  }, [email, password, addToast, setActiveTab]);
+    try {
+      const data = await apiAuth.login(email, password);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data));
+      // Load the authenticated user profile into the store
+      useAppStore.getState().initializeUserSession(data);
+      addToast(`Signed in successfully! Welcome back, ${data.name.split(' ')[0]}.`, 'success');
+    } catch (err: any) {
+      addToast(err.message || 'Login failed. Please check your credentials.', 'warning');
+    } finally {
+      setLoading(false);
+    }
+  }, [email, password, addToast]);
 
   return (
     <div className="space-y-5 text-left">
@@ -254,29 +262,29 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
       <div className="space-y-2.5">
         <button
           type="button"
-          onClick={() => addToast('Redirecting to GitHub OAuth…', 'info')}
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-200 hover:bg-[#13192B] hover:border-[#2C3A55] transition"
+          disabled
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
         >
           <Github className="w-4 h-4" />
-          <span>Continue with GitHub</span>
+          <span>GitHub OAuth (Coming Soon)</span>
         </button>
 
         <button
           type="button"
-          onClick={() => addToast('Redirecting to Google OAuth…', 'info')}
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-200 hover:bg-[#13192B] hover:border-[#2C3A55] transition"
+          disabled
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
         >
-          <Chrome className="w-4 h-4 text-rose-500" />
-          <span>Continue with Google</span>
+          <Chrome className="w-4 h-4 text-rose-500/50" />
+          <span>Google OAuth (Coming Soon)</span>
         </button>
 
         <button
           type="button"
-          onClick={() => addToast('Redirecting to LinkedIn OAuth…', 'info')}
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-200 hover:bg-[#13192B] hover:border-[#2C3A55] transition"
+          disabled
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
         >
-          <Linkedin className="w-4 h-4 text-blue-400" />
-          <span>Continue with LinkedIn</span>
+          <Linkedin className="w-4 h-4 text-blue-400/50" />
+          <span>LinkedIn OAuth (Coming Soon)</span>
         </button>
       </div>
 
@@ -564,8 +572,8 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       <div className="grid grid-cols-3 gap-2">
         <button
           type="button"
-          onClick={() => addToast('Redirecting to GitHub OAuth…', 'info')}
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-200 hover:bg-[#13192B] transition"
+          disabled
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
         >
           <Github className="w-3.5 h-3.5" />
           <span>GitHub</span>
@@ -573,19 +581,19 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
 
         <button
           type="button"
-          onClick={() => addToast('Redirecting to Google OAuth…', 'info')}
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-200 hover:bg-[#13192B] transition"
+          disabled
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
         >
-          <Chrome className="w-3.5 h-3.5 text-rose-500" />
+          <Chrome className="w-3.5 h-3.5 text-rose-500/50" />
           <span>Google</span>
         </button>
 
         <button
           type="button"
-          onClick={() => addToast('Redirecting to LinkedIn OAuth…', 'info')}
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-200 hover:bg-[#13192B] transition"
+          disabled
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
         >
-          <Linkedin className="w-3.5 h-3.5 text-blue-400" />
+          <Linkedin className="w-3.5 h-3.5 text-blue-400/50" />
           <span>LinkedIn</span>
         </button>
       </div>

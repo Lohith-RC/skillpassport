@@ -52,10 +52,10 @@ export const InvestorAnalytics: React.FC = () => {
           <Button
             variant="purple"
             size="sm"
-            onClick={() => addToast('Exported Venture Portfolio Telemetry Audit PDF!', 'success')}
+            onClick={() => addToast('Venture dealflow export coming soon in Stage 2.', 'info')}
           >
             <TrendingUp className="w-4 h-4 mr-1.5" />
-            Export Venture Dealflow Report
+            Export Dealflow Report (Coming Soon)
           </Button>
         </div>
 

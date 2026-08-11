@@ -408,7 +408,7 @@ export const Dashboard: React.FC = () => {
                               <div className="w-1 h-1 rounded-full bg-green-500" />
                             </div>
                             <div className="text-[9px] font-mono text-blue-400">const review = await ai.analyze();</div>
-                            <div className="text-[8px] font-mono text-slate-500">Passed 142 tests</div>
+                            <div className="text-[8px] font-mono text-slate-500">Demo Preview</div>
                           </div>
                         </div>
 

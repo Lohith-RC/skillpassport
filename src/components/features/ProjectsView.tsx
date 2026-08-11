@@ -441,129 +441,103 @@ export const ProjectsView: React.FC = () => {
         </div>
 
 
-        {/* SUB-PANELS BREAKDOWN (3 COLUMNS) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          {/* Left Panel: Project Overview & Key Highlights */}
-          <div className="space-y-4">
-            <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Project Overview</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              AI Code Reviewer is an intelligent code analysis tool that helps developers improve code quality, security, and performance. It uses advanced AI algorithms to provide real-time suggestions and identify potential issues.
-            </p>
+        {/* SUB-PANELS BREAKDOWN BASED ON ACTIVE SUB-TAB */}
+        {activeSubTab === 'Overview' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Panel: Project Overview & Key Highlights */}
+            <div className="space-y-4">
+              <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Project Overview</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {selectedProject.description} It uses advanced AI algorithms to provide real-time suggestions and identify potential performance bottlenecks.
+              </p>
 
-            <div className="grid grid-cols-2 gap-2 text-xs pt-2">
-              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
-                <Shield className="w-4 h-4 text-purple-400" />
-                <span>AI Code Analysis</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
-                <Zap className="w-4 h-4 text-blue-400" />
-                <span>Real-time Feedback</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
-                <Bug className="w-4 h-4 text-pink-400" />
-                <span>Bug Detection</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
-                <Award className="w-4 h-4 text-amber-400" />
-                <span>Security Scan</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
-                <Zap className="w-4 h-4 text-emerald-400" />
-                <span>Performance Tips</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                <span>Best Practices</span>
+              <div className="grid grid-cols-2 gap-2 text-xs pt-2">
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+                  <Shield className="w-4 h-4 text-purple-400" />
+                  <span>AI Code Analysis</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+                  <Zap className="w-4 h-4 text-blue-400" />
+                  <span>Real-time Feedback</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+                  <Bug className="w-4 h-4 text-pink-400" />
+                  <span>Bug Detection</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center space-x-2 text-slate-300 font-medium">
+                  <Award className="w-4 h-4 text-amber-400" />
+                  <span>Security Scan</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Middle Panel: Tech Stack Grid */}
-          <div className="space-y-4">
-            <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Tech Stack</h4>
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-slate-900 dark:text-white">N Next.js</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-blue-400">TS TypeScript</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-cyan-400">🌊 Tailwind CSS</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-emerald-400">🟢 Node.js</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-blue-500">🐘 PostgreSQL</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-red-500">🔴 Redis</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-purple-400">🤖 OpenAI API</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
-                <div className="font-bold text-sky-400">🐳 Docker</div>
-              </div>
-              <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-400 flex items-center justify-center">
-                +2 more
+            {/* Middle Panel: Tech Stack Grid */}
+            <div className="space-y-4">
+              <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Tech Stack</h4>
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                {selectedProject.tech.map((t) => (
+                  <div key={t} className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center font-medium text-slate-200">
+                    <div className="font-bold text-blue-400">{t}</div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
 
-          {/* Right Panel: Activity Timeline Stream */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Activity Timeline</h4>
-              <button className="text-[11px] text-blue-400 hover:underline">View All</button>
-            </div>
-
-            <div className="space-y-3 text-[11px]">
-              <div className="flex items-start space-x-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1 shrink-0" />
-                <div className="flex-1">
-                  <div className="font-bold text-slate-900 dark:text-white">Project deployed successfully</div>
-                  <div className="text-[10px] text-slate-500 font-mono">2 hours ago</div>
-                </div>
+            {/* Right Panel: Activity Timeline Stream */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">Activity Timeline</h4>
               </div>
-
-              <div className="flex items-start space-x-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1 shrink-0" />
-                <div className="flex-1">
-                  <div className="font-bold text-slate-900 dark:text-white">New commit pushed to main branch</div>
-                  <div className="text-[10px] text-slate-500 font-mono">5 hours ago</div>
+              <div className="space-y-3 text-[11px]">
+                <div className="flex items-start space-x-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 mt-1 shrink-0" />
+                  <div className="flex-1">
+                    <div className="font-bold text-slate-900 dark:text-white">Project deployed successfully</div>
+                    <div className="text-[10px] text-slate-500 font-mono">2 hours ago</div>
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-500 mt-1 shrink-0" />
-                <div className="flex-1">
-                  <div className="font-bold text-slate-900 dark:text-white">Updated README.md</div>
-                  <div className="text-[10px] text-slate-500 font-mono">1 day ago</div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 mt-1 shrink-0" />
-                <div className="flex-1">
-                  <div className="font-bold text-slate-900 dark:text-white">New contributor joined the project</div>
-                  <div className="text-[10px] text-slate-500 font-mono">2 days ago</div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 mt-1 shrink-0" />
-                <div className="flex-1">
-                  <div className="font-bold text-slate-900 dark:text-white">Issue #42 has been resolved</div>
-                  <div className="text-[10px] text-slate-500 font-mono">3 days ago</div>
+                <div className="flex items-start space-x-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1 shrink-0" />
+                  <div className="flex-1">
+                    <div className="font-bold text-slate-900 dark:text-white">New commit pushed to main branch</div>
+                    <div className="text-[10px] text-slate-500 font-mono">5 hours ago</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        )}
 
-        </div>
+        {activeSubTab === 'Features' && (
+          <div className="p-6 rounded-2xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-4">
+            <h4 className="font-extrabold text-slate-900 dark:text-white text-sm">Key Features & Functional Capabilities</h4>
+            <ul className="space-y-2 text-xs text-slate-300 font-mono">
+              <li>• Automated AST Syntax Tree Analysis & Vulnerability Guard</li>
+              <li>• Real-Time WebSocket Telemetry Engine Sync</li>
+              <li>• Multi-Language Code Reviewer (TypeScript, Python, Java 21, Go)</li>
+            </ul>
+          </div>
+        )}
+
+        {activeSubTab === 'Tech Stack' && (
+          <div className="p-6 rounded-2xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] space-y-4">
+            <h4 className="font-extrabold text-slate-900 dark:text-white text-sm">Complete Technology Ecosystem</h4>
+            <div className="flex flex-wrap gap-2">
+              {selectedProject.tech.map((t) => (
+                <span key={t} className="px-3 py-1 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-mono font-bold">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(activeSubTab === 'Architecture' || activeSubTab === 'Screenshots' || activeSubTab === 'Documentation' || activeSubTab === 'Activity' || activeSubTab === 'Analytics') && (
+          <div className="p-6 rounded-2xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-center space-y-2">
+            <h4 className="font-extrabold text-slate-900 dark:text-white text-sm">{activeSubTab} Telemetry Module</h4>
+            <p className="text-xs text-slate-400">Detailed {activeSubTab.toLowerCase()} data for <span className="font-bold text-blue-400">{selectedProject.title}</span>.</p>
+          </div>
+        )}
 
       </div>
 

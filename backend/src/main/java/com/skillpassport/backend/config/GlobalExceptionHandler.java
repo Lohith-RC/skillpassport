@@ -44,11 +44,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
+        // Log the real error server-side for debugging; don't leak internals to clients
+        System.err.println("[GlobalExceptionHandler] Unhandled: " + ex.getClass().getSimpleName() + " — " + ex.getMessage());
+
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         body.put("error", "Internal Server Error");
-        body.put("message", ex.getMessage());
+        body.put("message", "An unexpected error occurred. Please try again later.");
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }

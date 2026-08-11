@@ -99,26 +99,32 @@ export const ChallengesView: React.FC = () => {
     },
   ];
 
+  // Filtered challenges list based on active tab
+  const filteredChallenges = challenges.filter((c) => {
+    if (activeTab === 'Recommended') return c.featured;
+    if (activeTab === 'Popular') return c.participants > 400;
+    if (activeTab === 'New') return c.id.includes('docs') || c.id.includes('aws');
+    if (activeTab === 'Ending Soon') return c.timeLeft.includes('3d') || c.timeLeft.includes('5d');
+    if (activeTab === 'High Rewards') return c.reward.includes('5,000') || c.reward.includes('4,000');
+    return true;
+  });
+
   return (
     <div className="space-y-6">
       
-      {/* TITLE BANNER & HOST ACTION */}
+      {/* PAGE TITLE BANNER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center">
-            Challenge Marketplace <Trophy className="w-6 h-6 ml-2 text-amber-400 fill-current" />
-          </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Solve real-world problems, showcase your skills, earn rewards and get noticed by top companies.
-          </p>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Code Challenges &amp; Bounties</h1>
+          <p className="text-xs text-slate-400 mt-1">Solve real-world engineering problems, prove your skills and earn rewards</p>
         </div>
 
         <button
-          onClick={() => addToast('Opening challenge host wizard...', 'info')}
-          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-xs transition shadow-lg shadow-purple-500/25"
+          onClick={() => addToast('Host a Challenge integration coming soon in Stage 2.', 'info')}
+          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold text-xs transition shadow-lg shadow-purple-600/25"
         >
           <Plus className="w-4 h-4" />
-          <span>Host a Challenge</span>
+          <span>Host a Challenge (Coming Soon)</span>
         </button>
       </div>
 
@@ -227,7 +233,12 @@ export const ChallengesView: React.FC = () => {
 
           {/* Challenge Cards List */}
           <div className="space-y-4">
-            {challenges.map((c) => (
+            {filteredChallenges.length === 0 ? (
+              <div className="p-8 text-center bg-white dark:bg-[#0B0F19] rounded-2xl border border-gray-200 dark:border-[#161D2F] text-slate-400 text-xs">
+                No challenges found for the selected filter.
+              </div>
+            ) : (
+              filteredChallenges.map((c) => (
               <div
                 key={c.id}
                 className="p-5 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] hover:border-purple-500/40 transition space-y-4 relative overflow-hidden"
@@ -307,10 +318,10 @@ export const ChallengesView: React.FC = () => {
                     </div>
 
                   </div>
-
                 </div>
               </div>
-            ))}
+            ))
+          )}
           </div>
 
           <button

@@ -15,3 +15,6 @@ build
 .idea
 *.log
 .DS_Store
+
+# Java Backend compiled artifacts
+backend/target/

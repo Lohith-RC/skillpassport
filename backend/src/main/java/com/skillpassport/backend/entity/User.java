@@ -20,18 +20,19 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
-    private String role; // STUDENT, RECRUITER, REGISTRAR
+    private UserRole role = UserRole.STUDENT;
 
     private String usn;
 
-    private Integer proofScore = 85;
+    private Integer proofScore = 0;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public User() {}
 
-    public User(String email, String password, String name, String role, String usn) {
+    public User(String email, String password, String name, UserRole role, String usn) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -51,8 +52,8 @@ public class User {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
 
     public String getUsn() { return usn; }
     public void setUsn(String usn) { this.usn = usn; }

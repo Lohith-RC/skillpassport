@@ -4,6 +4,7 @@ import com.skillpassport.backend.entity.MilestoneEntity;
 import com.skillpassport.backend.entity.RepositoryEntity;
 import com.skillpassport.backend.entity.StudentEntity;
 import com.skillpassport.backend.entity.User;
+import com.skillpassport.backend.entity.UserRole;
 import com.skillpassport.backend.repository.MilestoneRepository;
 import com.skillpassport.backend.repository.RepositoryItemRepository;
 import com.skillpassport.backend.repository.StudentRepository;
@@ -42,14 +43,16 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedUsers() {
+        System.out.println("[DataInitializer] Seeding demo users (demo-only credentials, NOT for production)");
+
         if (!userRepository.existsByEmail("demo@skillpassport.ai")) {
-            User demoUser = new User("demo@skillpassport.ai", passwordEncoder.encode("password123"), "Rahul Sharma", "STUDENT", "1VT22CS084");
+            User demoUser = new User("demo@skillpassport.ai", passwordEncoder.encode("DemoPass!2026"), "Rahul Sharma", UserRole.STUDENT, "1VT22CS084");
             demoUser.setProofScore(88);
             userRepository.save(demoUser);
         }
 
         if (!userRepository.existsByEmail("recruiter@skillpassport.ai")) {
-            User recruiterUser = new User("recruiter@skillpassport.ai", passwordEncoder.encode("password123"), "Priya Patel", "RECRUITER", "REC001");
+            User recruiterUser = new User("recruiter@skillpassport.ai", passwordEncoder.encode("DemoPass!2026"), "Priya Patel", UserRole.RECRUITER, "REC001");
             recruiterUser.setProofScore(92);
             userRepository.save(recruiterUser);
         }
@@ -72,7 +75,7 @@ public class DataInitializer implements CommandLineRunner {
 
         for (String[] u : freshUsers) {
             if (!userRepository.existsByEmail(u[0])) {
-                User user = new User(u[0], passwordEncoder.encode("password123"), u[1], u[2], u[3]);
+                User user = new User(u[0], passwordEncoder.encode("DemoPass!2026"), u[1], UserRole.valueOf(u[2]), u[3]);
                 user.setProofScore(Integer.parseInt(u[4]));
                 userRepository.save(user);
             }

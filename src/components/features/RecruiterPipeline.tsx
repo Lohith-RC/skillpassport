@@ -67,10 +67,10 @@ export const RecruiterPipeline: React.FC = () => {
           <Button
             variant="purple"
             size="sm"
-            onClick={() => addToast('Exported Recruiter Evidence Audit Report PDF!', 'success')}
+            onClick={() => addToast('Audit PDF export integration coming soon in Stage 2.', 'info')}
           >
             <ShieldCheck className="w-4 h-4 mr-1.5" />
-            Export Evidence Audit PDF
+            Export Evidence Audit PDF (Coming Soon)
           </Button>
         </div>
 

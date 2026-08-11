@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { useAppStore } from '../../stores/useAppStore';
+import { useAppStore, createFreshDeveloperProfile } from '../../stores/useAppStore';
 import { Auth3DGlobe } from '../canvas/Auth3DGlobe';
+import { apiAuth } from '../../services/api';
 import {
   Eye,
   EyeOff,
@@ -100,33 +101,46 @@ function getPasswordStrength(password: string): {
 // Input Field Component
 // ─────────────────────────────────────────────────────────────────────────────
 
-const InputField: React.FC<{
+interface InputFieldProps {
   id: string;
   label: string;
   type?: string;
   placeholder: string;
   value: string;
-  onChange: (v: string) => void;
-  IconLeft: React.FC<{ className?: string }>;
+  onChange: (val: string) => void;
+  IconLeft?: React.FC<{ className?: string }>;
   trailing?: React.ReactNode;
-}> = ({ id, label, type = 'text', placeholder, value, onChange, IconLeft, trailing }) => (
-  <div className="space-y-1.5 text-left">
-    <label htmlFor={id} className="block text-[11px] font-semibold text-slate-300">
+}
+
+const InputField: React.FC<InputFieldProps> = ({
+  id,
+  label,
+  type = 'text',
+  placeholder,
+  value,
+  onChange,
+  IconLeft,
+  trailing,
+}) => (
+  <div className="space-y-1 text-left">
+    <label htmlFor={id} className="block text-xs font-semibold text-slate-300">
       {label}
     </label>
-    <div className="relative">
-      <IconLeft className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+    <div className="relative flex items-center">
+      {IconLeft && (
+        <IconLeft className="absolute left-3.5 w-4 h-4 text-slate-500 pointer-events-none" />
+      )}
       <input
         id={id}
         type={type}
+        placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full pl-10 pr-10 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-purple-500/70 focus:ring-1 focus:ring-purple-500/20 transition"
+        className={`w-full bg-[#0F1626] border border-[#1C263B] rounded-xl py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 transition ${
+          IconLeft ? 'pl-10' : 'pl-3.5'
+        } ${trailing ? 'pr-10' : 'pr-3.5'}`}
       />
-      {trailing && (
-        <span className="absolute right-3.5 top-1/2 -translate-y-1/2">{trailing}</span>
-      )}
+      {trailing && <div className="absolute right-3.5 flex items-center">{trailing}</div>}
     </div>
   </div>
 );
@@ -137,11 +151,11 @@ const InputField: React.FC<{
 
 const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
   const { setActiveTab, addToast } = useAppStore();
-  const [email, setEmail]               = useState('');
-  const [password, setPassword]         = useState('');
+  const [email, setEmail] = useState('demo@skillpassport.ai');
+  const [password, setPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember]         = useState(false);
-  const [loading, setLoading]           = useState(false);
+  const [remember, setRemember] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = useCallback(async () => {
     if (!email || !password) {
@@ -281,7 +295,7 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
-  const { setActiveTab, addToast } = useAppStore();
+  const { setActiveTab, addToast, updateProfile } = useAppStore();
   const [fullName, setFullName]           = useState('');
   const [username, setUsername]           = useState('');
   const [emailAddr, setEmailAddr]         = useState('');
@@ -309,11 +323,23 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setLoading(false);
-    addToast(`Account created! Welcome aboard, ${fullName.split(' ')[0]}.`, 'success');
-    setActiveTab('dashboard');
-  }, [fullName, username, emailAddr, password, confirmPw, agreedTerms, addToast, setActiveTab]);
+    try {
+      const data = await apiAuth.register(fullName, emailAddr, password, selectedRole.toUpperCase(), username);
+      data.isNewUser = true;
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data));
+      
+      // Update in-memory profile with fresh clean state
+      updateProfile(createFreshDeveloperProfile(data));
+
+      addToast(`Account created! Welcome aboard, ${data.name}.`, 'success');
+      setActiveTab('dashboard');
+    } catch (err: any) {
+      addToast(`Registration notice: ${err.message}`, 'warning');
+    } finally {
+      setLoading(false);
+    }
+  }, [fullName, username, emailAddr, password, confirmPw, agreedTerms, selectedRole, addToast, setActiveTab, updateProfile]);
 
   return (
     <div className="space-y-4 text-left">

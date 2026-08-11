@@ -3,7 +3,7 @@
 > **One Identity. Endless Opportunities.**  
 > A Next-Generation AI-powered Developer Proof-of-Skill Platform featuring multi-platform telemetry aggregation, cryptographic SHA-256 verification seals, live coding sandboxes, and recruiter pipeline analytics.
 
----
+----
 
 ## 📁 Repository Structure
 

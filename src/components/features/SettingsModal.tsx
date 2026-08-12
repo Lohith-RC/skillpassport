@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { UserRole } from '../../types';
-import { X, User, Sliders, Shield, Bell, Zap, Save, Check } from 'lucide-react';
+import { X, User, Sliders, Shield, Bell, Zap, Save, Check, Github, Linkedin, Twitter, Globe } from 'lucide-react';
 
 const ROLE_OPTIONS: { id: UserRole; label: string }[] = [
   { id: 'developer', label: 'Developer' },
@@ -27,6 +27,22 @@ export const SettingsModal: React.FC = () => {
   const [location, setLocation] = useState(profile.location);
   const [degree, setDegree] = useState(profile.degree);
   const [role, setRole] = useState<UserRole>(profile.role ?? 'developer');
+  const [socialLinks, setSocialLinks] = useState(profile.socialLinks ?? {
+    github: '', linkedin: '', twitter: '', portfolio: '',
+  });
+
+  // Re-sync form state every time the modal opens so stale edits never persist.
+  useEffect(() => {
+    if (isSettingsOpen) {
+      setName(profile.name);
+      setHeadline(profile.headline);
+      setLocation(profile.location);
+      setDegree(profile.degree);
+      setRole(profile.role ?? 'developer');
+      setSocialLinks(profile.socialLinks ?? { github: '', linkedin: '', twitter: '', portfolio: '' });
+    }
+  }, [isSettingsOpen, profile]);
+
   const [notificationPrefs, setNotificationPrefs] = useState(() => {
     try {
       const stored = localStorage.getItem('sp_notification_prefs');
@@ -52,8 +68,14 @@ export const SettingsModal: React.FC = () => {
   };
 
   const handleSaveProfile = () => {
-    updateProfile({ name, headline, location, degree, role });
-    addToast('Developer Profile settings saved successfully!', 'success');
+    if (!name.trim()) {
+      addToast('Display name cannot be empty.', 'warning');
+      return;
+    }
+    updateProfile({ name, headline, location, degree, role, socialLinks });
+    addToast(activeTab === 'profile'
+      ? 'Developer Profile settings saved successfully!'
+      : 'Settings saved successfully!', 'success');
     setSettingsOpen(false);
   };
 
@@ -181,6 +203,62 @@ export const SettingsModal: React.FC = () => {
                   ))}
                 </div>
                 <p className="text-[10px] text-slate-400">Tailors the sidebar and landing experience to your workflow.</p>
+              </div>
+
+              <div className="space-y-1.5 pt-2 border-t border-gray-200 dark:border-[#161D2F]">
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 pt-2">
+                  <Github className="w-3.5 h-3.5 text-slate-400" /> Social Links
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                      <Github className="w-3 h-3" /> GitHub
+                    </label>
+                    <input
+                      type="url"
+                      value={socialLinks.github ?? ''}
+                      onChange={(e) => setSocialLinks({ ...socialLinks, github: e.target.value })}
+                      placeholder="https://github.com/username"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                      <Linkedin className="w-3 h-3" /> LinkedIn
+                    </label>
+                    <input
+                      type="url"
+                      value={socialLinks.linkedin ?? ''}
+                      onChange={(e) => setSocialLinks({ ...socialLinks, linkedin: e.target.value })}
+                      placeholder="https://linkedin.com/in/username"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                      <Twitter className="w-3 h-3" /> X / Twitter
+                    </label>
+                    <input
+                      type="url"
+                      value={socialLinks.twitter ?? ''}
+                      onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
+                      placeholder="https://x.com/username"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                      <Globe className="w-3 h-3" /> Portfolio
+                    </label>
+                    <input
+                      type="url"
+                      value={socialLinks.portfolio ?? ''}
+                      onChange={(e) => setSocialLinks({ ...socialLinks, portfolio: e.target.value })}
+                      placeholder="https://portfolio.dev"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           )}

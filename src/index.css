@@ -173,3 +173,12 @@ svg circle,
 svg rect {
   transition: none !important;
 }
+
+/* Hide scrollbars on horizontally scrollable nav strips */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

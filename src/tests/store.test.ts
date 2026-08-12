@@ -37,6 +37,7 @@ describe('Zustand App Store', () => {
     useAppStore.getState().initializeUserSession({
       name: 'Bob Dev',
       email: 'bob@dev.com',
+      isNewUser: true,
     });
 
     const state = useAppStore.getState();

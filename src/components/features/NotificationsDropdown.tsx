@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { Bell, ShieldCheck, Briefcase, Rocket, Trophy, CheckCircle, Trash2, X } from 'lucide-react';
 
@@ -11,6 +11,30 @@ export const NotificationsDropdown: React.FC = () => {
     clearNotifications,
     addToast,
   } = useAppStore();
+
+  // Close on outside click or Escape so the panel never lingers over the UI.
+  const panelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isNotificationsOpen) return;
+
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setNotificationsOpen(false);
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isNotificationsOpen, setNotificationsOpen]);
 
   if (!isNotificationsOpen) return null;
 
@@ -30,7 +54,7 @@ export const NotificationsDropdown: React.FC = () => {
   };
 
   return (
-    <div className="absolute right-12 top-16 z-50 w-80 sm:w-96 bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
+    <div ref={panelRef} className="absolute right-12 top-16 z-50 w-80 sm:w-96 bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-[#161D2F] bg-gray-50 dark:bg-[#0F1626]">
         <div className="flex items-center space-x-2">

@@ -2,6 +2,7 @@ package com.skillpassport.backend.controller;
 
 import com.skillpassport.backend.entity.RepositoryEntity;
 import com.skillpassport.backend.repository.RepositoryItemRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,9 @@ public class RepositoryController {
 
     @PostMapping
     public ResponseEntity<RepositoryEntity> createRepository(@RequestBody RepositoryEntity repository) {
-        if (repository.getId() == null || repository.getId().isEmpty()) {
-            repository.setId("repo_" + UUID.randomUUID().toString().substring(0, 8));
-        }
+        // IDs are always server-generated: client-supplied IDs could overwrite seeded rows.
+        repository.setId("repo_" + UUID.randomUUID().toString().substring(0, 12));
         RepositoryEntity saved = repositoryItemRepository.save(repository);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }

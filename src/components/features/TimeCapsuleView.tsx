@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
-import { mockCareerMilestones } from '../../services/api';
+import { mockCareerMilestones, fetchCareerMilestones } from '../../services/api';
 import { CareerMilestone } from '../../types';
 import {
   Plus,
@@ -59,6 +59,16 @@ export const TimeCapsuleView: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(6);
   const [formOpen, setFormOpen] = useState(false);
   const [form, setForm] = useState({ title: '', year: new Date().getFullYear().toString(), category: 'REPO' as CareerMilestone['category'], description: '' });
+
+  // Load live career milestones from the backend; falls back to the seeded
+  // mock list when the backend is offline (demo mode).
+  useEffect(() => {
+    let cancelled = false;
+    fetchCareerMilestones()
+      .then((data) => { if (!cancelled) setMilestones(data); })
+      .catch(() => { /* keep seeded fallback on server errors */ });
+    return () => { cancelled = true; };
+  }, []);
 
   const filtered = useMemo(
     () => (FILTER_MAP[activeFilter] ? milestones.filter((m) => FILTER_MAP[activeFilter]!.includes(m.category)) : milestones),

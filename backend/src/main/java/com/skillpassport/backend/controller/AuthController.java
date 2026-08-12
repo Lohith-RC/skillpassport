@@ -23,22 +23,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        try {
-            AuthResponse response = authService.register(registerRequest);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        // Domain errors (duplicate email, disallowed role) surface as 400 via IllegalArgumentException;
+        // genuine server faults are handled by GlobalExceptionHandler as 500.
+        AuthResponse response = authService.register(registerRequest);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthRequest authRequest) {
-        try {
-            AuthResponse response = authService.login(authRequest);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
+        AuthResponse response = authService.login(authRequest);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")

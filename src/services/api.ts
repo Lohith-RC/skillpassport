@@ -525,95 +525,152 @@ export const mockCandidates: RecruiterCandidate[] = [
   },
 ];
 
-export const API_BASE_URL = 'http://localhost:8080/api/v1';
+// Same-origin `/api/v1` by default (proxied by nginx in Docker / dev vite proxy).
+// Override per environment with VITE_API_BASE_URL, e.g. https://api.skillpassport.ai/api/v1
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api/v1').replace(/\/+$/, '');
+
+const REQUEST_TIMEOUT_MS = 8000;
+
+/** Returns true only for genuine network failures — NOT HTTP error responses. */
+const isNetworkError = (err: any) =>
+  err instanceof TypeError || (err && err.name === 'AbortError');
+
+const fetchWithTimeout = async (url: string, options: RequestInit = {}): Promise<Response> => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+};
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   return {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 };
 
+const persistAuth = (token: string, user: Record<string, unknown>, remember: boolean): void => {
+  const storage = remember ? localStorage : sessionStorage;
+  storage.setItem('token', token);
+  storage.setItem('user', JSON.stringify(user));
+};
+
+const clearStoredAuth = (): void => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('user');
+};
+
 export const apiAuth = {
-  login: async (email: string, password: string) => {
+  /**
+   * Builds an offline demo session so the product stays fully explorable
+   * without a reachable backend.
+   */
+  createDemoSession: (email: string, remember: boolean, isNewUser: boolean, extra: Record<string, unknown> = {}) => {
+    const derivedName =
+      email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const demoUser = {
+      token: 'demo-token',
+      name: (extra.name as string) || derivedName || 'Demo Developer',
+      email,
+      role: 'DEVELOPER',
+      isNewUser,
+      isDemo: true,
+      ...extra,
+    };
+    persistAuth(demoUser.token, demoUser, remember);
+    return demoUser;
+  },
+
+  login: async (email: string, password: string, remember = true) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Login failed');
-      return data;
+      // Guard against non-JSON error bodies (proxy/nginx HTML 4xx/5xx pages).
+      const data = await res.json().catch(() => ({}));
+      // 4xx are genuine auth/validation errors that MUST surface to the user.
+      // 5xx means the backend is down or a gateway/proxy sits between browser
+      // and backend (vite dev proxy, nginx) — the demo fallback below keeps
+      // the product explorable, exactly like a raw network failure.
+      if (!res.ok && res.status < 500) throw new ApiError(data.message || 'Login failed', res.status);
+      if (res.ok) {
+        persistAuth(data.token, data, remember);
+        return data;
+      }
+      console.warn(`Backend unreachable (HTTP ${res.status}), using demo login fallback.`);
     } catch (err: any) {
-      // Backend unreachable (offline / not started): fall back to a demo session
-      // instead of hard-failing, so the product remains fully explorable.
+      if (!isNetworkError(err)) throw err; // real 4xx errors must surface, not become demos
       console.warn('Backend offline, using demo login fallback:', err.message);
-      const name = email
-        .split('@')[0]
-        .replace(/[._-]+/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-      return {
-        token: 'demo-token',
-        name: name || 'Demo Developer',
-        email,
-        role: 'DEVELOPER',
-        isNewUser: false,
-        isDemo: true,
-      };
     }
+    return apiAuth.createDemoSession(email, remember, false);
   },
 
-  register: async (name: string, email: string, password: string, role: string = 'STUDENT', usn?: string) => {
+  register: async (name: string, email: string, password: string, role: string = 'STUDENT', usn?: string, remember = true) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+      const res = await fetchWithTimeout(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, role, usn }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Registration failed');
-      return data;
+      // Guard against non-JSON error bodies (proxy/nginx HTML 4xx/5xx pages).
+      const data = await res.json().catch(() => ({}));
+      // 4xx (duplicate email, validation) surface as real errors; 5xx (backend
+      // down / gateway in the way) falls through to the demo-account fallback.
+      if (!res.ok && res.status < 500) throw new ApiError(data.message || 'Registration failed', res.status);
+      if (res.ok) {
+        persistAuth(data.token, data, remember);
+        return data;
+      }
+      console.warn(`Backend unreachable (HTTP ${res.status}), using demo register fallback.`);
     } catch (err: any) {
-      // Backend unreachable (offline / not started): create a demo account so
-      // signup never dead-ends the user.
+      if (!isNetworkError(err)) throw err;
       console.warn('Backend offline, using demo register fallback:', err.message);
-      return {
-        token: 'demo-token',
-        name,
-        email,
-        role,
-        usn,
-        isNewUser: true,
-        isDemo: true,
-      };
     }
+    return apiAuth.createDemoSession(email, remember, true, { name, role, usn });
   },
 
   getCurrentUser: async () => {
-    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/me`, {
       headers: getAuthHeaders(),
     });
-    if (!res.ok) throw new Error('Unauthorized');
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new ApiError(data.message || 'Unauthorized', res.status);
+    return data;
   },
 };
 
+/** Parses an error response consistently for UI toasts. */
+export class ApiError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 export const fetchRepositories = async (): Promise<Repository[]> => {
   try {
-    const res = await fetch(`${API_BASE_URL}/repositories`, { headers: getAuthHeaders() });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return data.map((r: any) => ({
-          ...r,
-          tags: typeof r.tags === 'string' ? r.tags.split(',') : (r.tags || []),
-          commitHistory: r.commitHistory || mockRepositories[0].commitHistory,
-        }));
-      }
+    const res = await fetchWithTimeout(`${API_BASE_URL}/repositories`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new ApiError('Repository fetch failed', res.status);
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      return data.map((r: any) => ({
+        ...r,
+        tags: typeof r.tags === 'string' ? r.tags.split(',') : (r.tags || []),
+        commitHistory: r.commitHistory || mockRepositories[0].commitHistory,
+      }));
     }
-  } catch (err) {
+  } catch (err: any) {
+    if (!isNetworkError(err)) throw err;
     console.warn('Java backend offline, serving mock repositories');
   }
   return mockRepositories;
@@ -621,14 +678,14 @@ export const fetchRepositories = async (): Promise<Repository[]> => {
 
 export const fetchCareerMilestones = async (): Promise<CareerMilestone[]> => {
   try {
-    const res = await fetch(`${API_BASE_URL}/milestones`, { headers: getAuthHeaders() });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return data;
-      }
+    const res = await fetchWithTimeout(`${API_BASE_URL}/milestones`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new ApiError('Milestones fetch failed', res.status);
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
     }
-  } catch (err) {
+  } catch (err: any) {
+    if (!isNetworkError(err)) throw err;
     console.warn('Java backend offline, serving mock career milestones');
   }
   return mockCareerMilestones;
@@ -636,14 +693,14 @@ export const fetchCareerMilestones = async (): Promise<CareerMilestone[]> => {
 
 export const fetchUniversityStudents = async (): Promise<UniversityStudent[]> => {
   try {
-    const res = await fetch(`${API_BASE_URL}/students`, { headers: getAuthHeaders() });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return data;
-      }
+    const res = await fetchWithTimeout(`${API_BASE_URL}/students`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new ApiError('Students fetch failed', res.status);
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
     }
-  } catch (err) {
+  } catch (err: any) {
+    if (!isNetworkError(err)) throw err;
     console.warn('Java backend offline, serving mock university students');
   }
   return mockUniversityStudents;

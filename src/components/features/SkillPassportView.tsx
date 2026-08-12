@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
-import { mockRepositories, mockCareerMilestones } from '../../services/api';
+import { mockRepositories, mockCareerMilestones, fetchRepositories, fetchCareerMilestones } from '../../services/api';
+import { CareerMilestone, Repository } from '../../types';
 import {
   ShieldCheck,
   Share2,
@@ -164,7 +165,7 @@ const VerificationSection: React.FC = () => {
   );
 };
 
-const TimelineSection: React.FC = () => (
+const TimelineSection: React.FC<{ milestones: CareerMilestone[] }> = ({ milestones }) => (
   <SectionCard
     title="Experience Timeline"
     action={
@@ -174,7 +175,7 @@ const TimelineSection: React.FC = () => (
     }
   >
     <div className="relative pl-6 space-y-6 border-l-2 border-blue-500/30 my-2 text-xs">
-      {mockCareerMilestones.map((m) => (
+      {milestones.map((m) => (
         <div key={m.id} className="relative group">
           <span className="absolute -left-[31px] top-0.5 w-4 h-4 rounded-full bg-blue-600 border-2 border-[#0B0F19] shadow-md shadow-blue-600/50" />
           <div className="space-y-1">
@@ -194,11 +195,11 @@ const TimelineSection: React.FC = () => (
   </SectionCard>
 );
 
-const ProjectsSection: React.FC = () => {
+const ProjectsSection: React.FC<{ repos: Repository[] }> = ({ repos }) => {
   const { setActiveTab, setInspectingRepo } = useAppStore();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-      {mockRepositories.map((repo) => {
+      {repos.map((repo) => {
         const statusColor =
           repo.status === 'PASSED' ? 'text-emerald-400' : repo.status === 'LIVE' ? 'text-blue-400' : 'text-amber-400';
         return (
@@ -303,6 +304,21 @@ const EmptyStateSection: React.FC<{ title: string; message: string; cta: string;
 export const SkillPassportView: React.FC = () => {
   const { setActiveTab, addToast, profile } = useAppStore();
   const [activeSubTab, setActiveSubTab] = useState<PassportTab>('Overview');
+  const [repos, setRepos] = useState<Repository[]>(mockRepositories);
+  const [milestones, setMilestones] = useState<CareerMilestone[]>(mockCareerMilestones);
+
+  // Load live data from the backend; the API layer falls back to the seeded
+  // mocks when the backend is unreachable (demo mode), so these always resolve.
+  useEffect(() => {
+    let cancelled = false;
+    fetchRepositories()
+      .then((data) => { if (!cancelled) setRepos(data); })
+      .catch(() => { /* keep seeded fallback on server errors */ });
+    fetchCareerMilestones()
+      .then((data) => { if (!cancelled) setMilestones(data); })
+      .catch(() => { /* keep seeded fallback on server errors */ });
+    return () => { cancelled = true; };
+  }, []);
 
   // Derived identity metrics (honest: derived from real profile state)
   const score = Math.min(100, Math.max(0, profile.proofScore));
@@ -531,10 +547,10 @@ export const SkillPassportView: React.FC = () => {
 
           {/* Timeline, Projects, Achievements */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <TimelineSection />
+            <TimelineSection milestones={milestones} />
             <div className="lg:col-span-1">
               <SectionCard title="Featured Projects" action={<button onClick={() => setActiveSubTab('Projects')} className="text-xs text-blue-400 hover:underline font-medium">View all</button>}>
-                {mockRepositories.slice(0, 3).map((repo) => (
+                {repos.slice(0, 3).map((repo) => (
                   <div key={repo.id} className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/40 transition flex items-center space-x-3">
                     <div className="w-12 h-12 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] overflow-hidden shrink-0 flex flex-col justify-between p-1">
                       <div className="w-full h-1 bg-blue-500 rounded" />
@@ -573,11 +589,11 @@ export const SkillPassportView: React.FC = () => {
             Open Projects Vault →
           </button>
         }>
-          <ProjectsSection />
+          <ProjectsSection repos={repos} />
         </SectionCard>
       )}
 
-      {activeSubTab === 'Experience' && <TimelineSection />}
+      {activeSubTab === 'Experience' && <TimelineSection milestones={milestones} />}
 
       {activeSubTab === 'Certifications' && (
         <>

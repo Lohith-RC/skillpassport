@@ -32,11 +32,8 @@ import {
 } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
-  const { setActiveTab, setSearchOpen, addToast, setSettingsOpen, profile } = useAppStore();
+  const { setActiveTab, setSearchOpen, addToast, setSettingsOpen, profile, isDemoMode } = useAppStore();
   const [activeGrowthTab, setActiveGrowthTab] = useState<'Score' | 'Projects' | 'Contributions'>('Score');
-
-  // Avatar URL (developer portrait matching screenshot)
-  const avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80";
 
   return (
     <>
@@ -78,7 +75,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.proofScore > 0 ? (profile.proofScore * 100).toLocaleString() : '0'}
+                  {profile.proofScore}
                 </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
                   <span>{profile.proofScore > 0 ? '↑ 12.5% this month' : 'New Account'}</span>
@@ -258,15 +255,15 @@ export const Dashboard: React.FC = () => {
                     </div>
                     <div className="flex items-center space-x-2 text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Projects (24/25)</span>
+                      <span>{isDemoMode ? 'Projects (24/25)' : 'Projects (0)'}</span>
                     </div>
                     <div className="flex items-center space-x-2 text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Certifications (8/10)</span>
+                      <span>{isDemoMode ? 'Certifications (8/10)' : 'Certifications (0)'}</span>
                     </div>
                     <div className="flex items-center space-x-2 text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Experience (4/5)</span>
+                      <span>{isDemoMode ? 'Experience (4/5)' : 'Experience (0)'}</span>
                     </div>
                     <button onClick={() => setSettingsOpen(true)} className="flex items-center space-x-1.5 text-blue-400 hover:underline font-semibold pt-0.5">
                       <Plus className="w-3.5 h-3.5" />
@@ -287,6 +284,7 @@ export const Dashboard: React.FC = () => {
                   </button>
                 </div>
 
+                {isDemoMode ? (
                 <div className="space-y-3.5 text-xs">
                   {/* Activity Item 1 */}
                   <div className="flex items-start justify-between space-x-3">
@@ -357,8 +355,21 @@ export const Dashboard: React.FC = () => {
                     </div>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 mt-2" />
                   </div>
-
                 </div>
+              ) : (
+                <div className="py-8 text-center space-y-2">
+                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-300">No activity yet</div>
+                  <p className="text-[11px] text-slate-400 max-w-[220px] mx-auto">
+                    Connect your first platform to start building your proof trail.
+                  </p>
+                  <button
+                    onClick={() => setSettingsOpen(true)}
+                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition"
+                  >
+                    Connect platforms
+                  </button>
+                </div>
+              )}
               </div>
 
             </div>
@@ -383,7 +394,9 @@ export const Dashboard: React.FC = () => {
 
                   {/* 4 Cards Carousel Row with Right Arrow Nav */}
                   <div className="relative">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {/* Seeded carousel is demo-only; real accounts see the empty state below */}
+                  {isDemoMode && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                       
                       {/* Project Card 1 */}
                       <div className="p-4 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/40 transition space-y-3 flex flex-col justify-between">
@@ -515,16 +528,35 @@ export const Dashboard: React.FC = () => {
                       </div>
 
                     </div>
+                    )}
 
-                    {/* Carousel Right Navigation Arrow */}
-                    <button
-                      onClick={() => setActiveTab('repos')}
-                      className="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#232F48] text-white flex items-center justify-center shadow-lg hover:bg-blue-600 transition z-10 hidden xl:flex"
-                      title="View all projects"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
+                    {/* Carousel Right Navigation Arrow — demo-only (no carousel for real accounts) */}
+                    {isDemoMode && (
+                      <button
+                        onClick={() => setActiveTab('repos')}
+                        className="absolute -right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-gray-100 dark:bg-[#172033] border border-gray-300 dark:border-[#232F48] text-white flex items-center justify-center shadow-lg hover:bg-blue-600 transition z-10 hidden xl:flex"
+                        title="View all projects"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
+
+                  {/* Seeded carousel above is demo-only; real accounts see an empty state */}
+                  {!isDemoMode && (
+                    <div className="py-8 text-center space-y-2 border border-dashed border-gray-300 dark:border-[#232F48] rounded-2xl">
+                      <div className="text-xs font-semibold text-slate-500 dark:text-slate-300">No projects yet</div>
+                      <p className="text-[11px] text-slate-400 max-w-[260px] mx-auto">
+                        Push your first repository to GitHub, GitLab or Bitbucket — it will appear here with verified stats.
+                      </p>
+                      <button
+                        onClick={() => setActiveTab('repos')}
+                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition"
+                      >
+                        View Projects
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* PROFESSIONAL GROWTH SPLINE CHART CARD */}
@@ -628,6 +660,7 @@ export const Dashboard: React.FC = () => {
                     </button>
                   </div>
 
+                  {isDemoMode ? (
                   <div className="space-y-3 text-xs">
                     {/* Job Item 1 */}
                     <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] hover:border-blue-500/40 transition space-y-2">
@@ -698,6 +731,20 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                  ) : (
+                  <div className="py-8 text-center space-y-2">
+                    <div className="text-xs font-semibold text-slate-500 dark:text-slate-300">No matching opportunities yet</div>
+                    <p className="text-[11px] text-slate-400 max-w-[240px] mx-auto">
+                      Opportunities appear once your proof trail is verified.
+                    </p>
+                    <button
+                      onClick={() => setActiveTab('recruiter')}
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition"
+                    >
+                      Browse Recruiter Portal
+                    </button>
+                  </div>
+                  )}
 
                   {/* Explore All Opportunities Footer Link */}
                   <div className="pt-2 text-center border-t border-gray-200 dark:border-[#161D2F]">
@@ -716,11 +763,15 @@ export const Dashboard: React.FC = () => {
                 <div className="p-6 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-4">
                   <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#161D2F] pb-3">
                     <h3 className="font-extrabold text-slate-900 dark:text-white text-sm">Upcoming</h3>
-                    <button onClick={() => addToast('Calendar view opened.', 'info')} className="text-xs text-blue-400 hover:underline font-medium">
+                    <button
+                      onClick={() => addToast(isDemoMode ? 'Calendar preview opened.' : 'Calendar view is not available in this build yet.', 'info')}
+                      className="text-xs text-blue-400 hover:underline font-medium"
+                    >
                       View calendar
                     </button>
                   </div>
 
+                  {isDemoMode ? (
                   <div className="p-4 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] flex items-center justify-between gap-3 text-xs">
                     <div className="flex items-center space-x-3">
                       <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center shrink-0">
@@ -739,6 +790,12 @@ export const Dashboard: React.FC = () => {
                       Prepare
                     </button>
                   </div>
+                  ) : (
+                  <div className="py-8 text-center space-y-2">
+                    <div className="text-xs font-semibold text-slate-500 dark:text-slate-300">Nothing scheduled</div>
+                    <p className="text-[11px] text-slate-400">Interviews and deadlines will show up here.</p>
+                  </div>
+                  )}
                 </div>
 
               </div>

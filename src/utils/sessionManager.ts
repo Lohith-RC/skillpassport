@@ -81,6 +81,8 @@ export const createIsolatedUserSpace = (user: { name: string; email?: string; ro
 
 /**
  * Saves (or creates) the active session's profile slot so edits survive refresh.
+ * Also mirrors to localStorage so the profile survives in NEW tabs (sessionStorage
+ * is per-tab and silently discards edits otherwise).
  */
 export const saveSessionProfile = (profile: DeveloperProfile): void => {
   try {
@@ -90,6 +92,7 @@ export const saveSessionProfile = (profile: DeveloperProfile): void => {
       sessionStorage.setItem('sp_active_session_id', sessionId);
     }
     sessionStorage.setItem(`sp_session_${sessionId}`, JSON.stringify(profile));
+    localStorage.setItem('sp_profile_backup', JSON.stringify(profile));
   } catch (e) {
     console.warn('Session Storage storage unavailable');
   }
@@ -97,6 +100,7 @@ export const saveSessionProfile = (profile: DeveloperProfile): void => {
 
 /**
  * Completely purges and resets user session data to prevent cross-contamination.
+ * Only removes app-owned keys — never calls sessionStorage.clear().
  */
 export const purgeSessionData = (): void => {
   try {
@@ -105,9 +109,12 @@ export const purgeSessionData = (): void => {
       sessionStorage.removeItem(`sp_session_${activeSessionId}`);
       sessionStorage.removeItem('sp_active_session_id');
     }
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    sessionStorage.clear();
+    localStorage.removeItem('sp_profile_backup');
+    localStorage.removeItem('sp_notification_prefs');
   } catch (e) {
     console.warn('Error purging session storage');
   }

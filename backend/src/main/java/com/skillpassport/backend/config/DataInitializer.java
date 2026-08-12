@@ -9,6 +9,9 @@ import com.skillpassport.backend.repository.MilestoneRepository;
 import com.skillpassport.backend.repository.RepositoryItemRepository;
 import com.skillpassport.backend.repository.StudentRepository;
 import com.skillpassport.backend.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -16,11 +19,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
+
     private final UserRepository userRepository;
     private final RepositoryItemRepository repositoryItemRepository;
     private final MilestoneRepository milestoneRepository;
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
+
+    /** Seed demo data only when explicitly enabled (local/dev default; disabled in prod profile). */
+    @Value("${app.seed-enabled:true}")
+    private boolean seedEnabled;
 
     public DataInitializer(UserRepository userRepository,
                            RepositoryItemRepository repositoryItemRepository,
@@ -36,6 +45,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        if (!seedEnabled) {
+            log.info("[DataInitializer] Demo seeding disabled (app.seed-enabled=false)");
+            return;
+        }
         seedUsers();
         seedRepositories();
         seedMilestones();
@@ -43,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedUsers() {
-        System.out.println("[DataInitializer] Seeding demo users (demo-only credentials, NOT for production)");
+        log.info("[DataInitializer] Seeding demo users (demo-only credentials, NOT for production)");
 
         if (!userRepository.existsByEmail("demo@skillpassport.ai")) {
             User demoUser = new User("demo@skillpassport.ai", passwordEncoder.encode("DemoPass!2026"), "Rahul Sharma", UserRole.STUDENT, "1VT22CS084");
@@ -206,8 +219,12 @@ public class DataInitializer implements CommandLineRunner {
             };
 
             for (Object[] s : freshStudents) {
+                String studentId = (String) s[0];
+                if (studentRepository.existsById(studentId)) {
+                    continue; // never overwrite existing rows
+                }
                 StudentEntity student = new StudentEntity();
-                student.setId((String) s[0]);
+                student.setId(studentId);
                 student.setUsn((String) s[1]);
                 student.setName((String) s[2]);
                 student.setCgpa((Double) s[3]);

@@ -1,0 +1,34 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      # MUST override the JWT secret in any real deployment
+      JWT_SECRET: ${JWT_SECRET:-9a4f2c8d7e1b5a3f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      # Production: set SPRING_PROFILES_ACTIVE=prod plus DB_URL/DB_USERNAME/DB_PASSWORD
+      # to switch to PostgreSQL (see backend/src/main/resources/application-prod.properties)
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api/v1}
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes: {}

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useAppStore, createFreshDeveloperProfile } from '../../stores/useAppStore';
+import { useAppStore } from '../../stores/useAppStore';
 import { Auth3DGlobe } from '../canvas/Auth3DGlobe';
 import { apiAuth } from '../../services/api';
 import {
@@ -157,17 +157,16 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const handleSignIn = useCallback(async () => {
+  const handleSignIn = useCallback(async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!email || !password) {
       addToast('Please enter your email and password.', 'warning');
       return;
     }
     setLoading(true);
     try {
-      const data = await apiAuth.login(email, password);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
-      // Load the authenticated user profile into the store
+      const data = await apiAuth.login(email, password, remember);
+      // apiAuth persists token/user into localStorage or sessionStorage per `remember`
       useAppStore.getState().initializeUserSession(data);
       if (data.isDemo) {
         addToast('Backend offline — signed in with demo mode (local mock data).', 'info');
@@ -178,10 +177,10 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
     } finally {
       setLoading(false);
     }
-  }, [email, password, addToast]);
+  }, [email, password, remember, addToast]);
 
   return (
-    <div className="space-y-5 text-left">
+    <form onSubmit={handleSignIn} className="space-y-5 text-left">
       <div className="space-y-1">
         <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
           Welcome Back 👋
@@ -235,7 +234,7 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
         </button>
         <button
           type="button"
-          onClick={() => addToast('Password reset email sent to your registered address.', 'info')}
+          onClick={() => addToast('Password reset is not available in this build yet — please reach out to support.', 'info')}
           className="text-blue-400 hover:text-blue-300 font-semibold transition"
         >
           Forgot password?
@@ -243,8 +242,7 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
       </div>
 
       <button
-        type="button"
-        onClick={handleSignIn}
+        type="submit"
         disabled={loading}
         className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60 hover:opacity-95 shadow-lg shadow-purple-600/30"
         style={{
@@ -295,9 +293,9 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         </svg>
-        <span>Secure login powered by enterprise-grade encryption</span>
+        <span>Session auth secured using JWT tokens</span>
       </div>
-    </div>
+    </form>
   );
 };
 
@@ -306,7 +304,7 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
-  const { setActiveTab, addToast, updateProfile } = useAppStore();
+  const { addToast } = useAppStore();
   const [fullName, setFullName]           = useState('');
   const [username, setUsername]           = useState('');
   const [emailAddr, setEmailAddr]         = useState('');
@@ -334,9 +332,20 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
     addToast('Demo signup credentials auto-filled!', 'info');
   }, [addToast]);
 
-  const handleCreate = useCallback(async () => {
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleCreate = useCallback(async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!fullName || !username || !emailAddr || !password) {
       addToast('Please fill in all required fields.', 'warning');
+      return;
+    }
+    if (!EMAIL_REGEX.test(emailAddr)) {
+      addToast('Please enter a valid email address.', 'warning');
+      return;
+    }
+    if (password.length < 8) {
+      addToast('Password must be at least 8 characters long.', 'warning');
       return;
     }
     if (password !== confirmPw) {
@@ -351,9 +360,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
     try {
       const data = await apiAuth.register(fullName, emailAddr, password, selectedRole.toUpperCase(), usn || username);
       data.isNewUser = true;
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
-      
+
       // Initialize unique isolated data space for the new session
       useAppStore.getState().initializeUserSession({ ...data, usn });
 
@@ -366,10 +373,10 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
     } finally {
       setLoading(false);
     }
-  }, [fullName, username, emailAddr, password, confirmPw, agreedTerms, selectedRole, usn, addToast, setActiveTab, updateProfile]);
+  }, [fullName, username, emailAddr, password, confirmPw, agreedTerms, selectedRole, usn, addToast]);
 
   return (
-    <div className="space-y-4 text-left">
+    <form onSubmit={handleCreate} className="space-y-4 text-left">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
@@ -556,8 +563,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       </button>
 
       <button
-        type="button"
-        onClick={handleCreate}
+        type="submit"
         disabled={loading}
         className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60 hover:opacity-95 shadow-lg shadow-purple-600/30"
         style={{
@@ -603,7 +609,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
           <span>LinkedIn</span>
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

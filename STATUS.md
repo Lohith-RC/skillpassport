@@ -44,3 +44,24 @@ npm run build
 cd backend
 mvn spring-boot:run
 ```
+
+---
+
+## 🚀 Deployment (Docker Compose)
+
+```bash
+# 1. Configure secrets & origins (optional — saner defaults provided)
+cp .env.example .env
+#    edit .env → JWT_SECRET, CORS_ALLOWED_ORIGINS, optionally Postgres vars
+
+# 2. Build & run full stack (frontend nginx :3000 → backend :8080)
+docker compose up -d --build
+
+# 3. Open http://localhost:3000  (healthcheck at http://localhost:8080/)
+```
+
+* **Frontend** — Vite build served by nginx (gzip, SPA hash-routing safe, `/api/v1` proxied to backend).
+* **Backend** — Spring Boot with env-driven config (`JWT_SECRET`, `CORS_ALLOWED_ORIGINS`, `DB_URL`); ships with `prod` profile (`application-prod.properties`) for PostgreSQL via `SPRING_PROFILES_ACTIVE=prod`.
+* **Production checklist** — set a strong `JWT_SECRET`, pin `CORS_ALLOWED_ORIGINS` to your domain, switch to PostgreSQL, terminate TLS at your reverse proxy (nginx/traefik/cloud load balancer).
+
+**Demo credentials (seeded):** `demo@skillpassport.ai` / `DemoPass!2026`

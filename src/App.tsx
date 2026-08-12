@@ -1,12 +1,12 @@
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, useRef, lazy, Suspense } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
-import { AuthView } from './components/features/AuthView';
-import { LandingPage } from './components/features/LandingPage';
+import { useAppStore } from './stores/useAppStore';
+import { LandingPage } from './components/features/LandingPage';  // regular import — entry point
 import { Modal } from './components/ui/Modal';
 import { ToastContainer } from './components/ui/ToastContainer';
-import { useAppStore } from './stores/useAppStore';
+import { apiAuth } from './services/api';
 
-// Lazy-loaded feature views for bundle optimization & code splitting
+// ─── Lazy-loaded feature views for bundle optimization & code splitting
 const Dashboard = lazy(() => import('./components/features/Dashboard').then(m => ({ default: m.Dashboard })));
 const SkillPassportView = lazy(() => import('./components/features/SkillPassportView').then(m => ({ default: m.SkillPassportView })));
 const ProjectsView = lazy(() => import('./components/features/ProjectsView').then(m => ({ default: m.ProjectsView })));
@@ -21,6 +21,13 @@ const PlatformSyncModal = lazy(() => import('./components/features/PlatformSyncM
 const ProjectInspectDrawer = lazy(() => import('./components/features/ProjectInspectDrawer').then(m => ({ default: m.ProjectInspectDrawer })));
 const InterviewModal = lazy(() => import('./components/features/InterviewModal').then(m => ({ default: m.InterviewModal })));
 
+// ─── Full-screen unauthenticated views (no AppLayout shell)
+const AuthView = lazy(() => import('./components/features/AuthView').then(m => ({ default: m.AuthView })));
+
+// ─── Protected tab set — requires user to be authenticated
+const PROTECTED_TABS = new Set(['dashboard', 'profile', 'timecapsule', 'heatmap', 'repos', 'leetcode', 'challenges', 'recruiter', 'university', 'investor']);
+
+// ─── ViewFallback component
 const ViewFallback: React.FC = () => (
   <div className="flex items-center justify-center min-h-[400px]">
     <div className="flex flex-col items-center gap-3">
@@ -31,13 +38,34 @@ const ViewFallback: React.FC = () => (
 );
 
 export const App: React.FC = () => {
-  const { activeTab, setSearchOpen, isDarkMode } = useAppStore();
+  const {
+    activeTab,
+    setActiveTab,
+    isDarkMode,
+    isAuthenticated,
+    pendingTab,
+    isSearchOpen,
+    setSearchOpen,
+    addToast,
+    purgeAndResetSession,
+    setPendingTab,
+  } = useAppStore();
 
   // ─── Sync dark/light class on <html> ───────────────────────────────────────
   useEffect(() => {
     const root = document.documentElement;
     isDarkMode ? root.classList.add('dark') : root.classList.remove('dark');
   }, [isDarkMode]);
+
+  // ─── Initialize from URL hash (deep-link support on cold load) ────────────
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && hash !== 'landing') {
+      useAppStore.getState().setActiveTab(hash as any);
+    } else if (window.location.hash !== '#landing') {
+      window.history.replaceState(null, '', '#landing');
+    }
+  }, []);
 
   // ─── Sync activeTab with URL Hash for Browser Back/Forward navigation ──────
   useEffect(() => {
@@ -52,12 +80,10 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [activeTab]);
 
+  // ─── Persist activeTab in history (replaceState — no duplicate history spam) ─
   useEffect(() => {
-    if (activeTab) {
-      const currentHash = window.location.hash.replace('#', '');
-      if (currentHash !== activeTab) {
-        window.history.replaceState(null, '', `#${activeTab}`);
-      }
+    if (activeTab && window.location.hash !== `#${activeTab}`) {
+      window.history.replaceState(null, '', `#${activeTab}`);
     }
   }, [activeTab]);
 
@@ -73,32 +99,77 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [setSearchOpen]);
 
-  // ─── Full-screen unauthenticated views (no AppLayout shell) ───────────────
-  if (activeTab === 'landing') {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] text-slate-900 dark:text-white">
-        <LandingPage />
-        <Modal />
-        <ToastContainer />
-      </div>
-    );
-  }
+  // ─── Remember deep-linked protected tabs & close global UI while logged out ─
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setSearchOpen(false);
+      if (PROTECTED_TABS.has(activeTab as any) && activeTab !== pendingTab) {
+        setPendingTab(activeTab as any);
+      }
+    }
+  }, [isAuthenticated, activeTab, pendingTab, setPendingTab, setSearchOpen]);
 
-  if (activeTab === 'login') {
-    return (
-      <>
-        <AuthView initialMode="login" />
-        <ToastContainer />
-      </>
-    );
-  }
+  // ─── Boot-time token validation ────────────────────────────────────────────
+  // A stored token is only "authenticated" if the backend still accepts it.
+  // The demo fallback token is exempt (offline demo mode).
+  const validationRan = useRef(false);
+  useEffect(() => {
+    if (!isAuthenticated || validationRan.current) return;
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (!token || token === 'demo-token') return;
 
-  if (activeTab === 'signup') {
+    validationRan.current = true;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const data = await apiAuth.getCurrentUser();
+        if (cancelled) return;
+        // /auth/me mints a fresh token — persist the rotation in the SAME
+        // storage the original session used (don't silently promote a
+        // sessionStorage "don't remember me" session to persistent storage).
+        if (localStorage.getItem('token')) {
+          localStorage.setItem('token', data.token);
+        } else {
+          sessionStorage.setItem('token', data.token);
+        }
+        useAppStore.getState().initializeUserSession({ ...data });
+      } catch {
+        if (cancelled) return;
+        useAppStore.getState().purgeAndResetSession();
+        addToast('Your session has expired. Please sign in again.', 'warning');
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [isAuthenticated, addToast]);
+
+  // ─── If user is not authenticated, gate protected tabs ─────────────────────
+  if (!isAuthenticated) {
+    const isAuthPage = activeTab === 'login' || activeTab === 'signup';
+    const effectiveTab = PROTECTED_TABS.has(activeTab as any)
+      ? activeTab
+      : pendingTab || (isAuthPage ? activeTab : 'landing');
+
+    if (effectiveTab === 'landing') {
+      // Render LandingPage directly (no Suspense needed — it's a regular import)
+      return (
+        <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] text-slate-900 dark:text-white">
+          <LandingPage />
+          <PlatformSyncModal />
+          <Modal />
+          <ToastContainer />
+        </div>
+      );
+    }
+
+    const initialMode = effectiveTab === 'signup' ? 'signup' : 'login';
     return (
-      <>
-        <AuthView initialMode="signup" />
+      <Suspense fallback={<ViewFallback />}>
+        <AuthView initialMode={initialMode} />
+        <PlatformSyncModal />
         <ToastContainer />
-      </>
+      </Suspense>
     );
   }
 
@@ -116,6 +187,8 @@ export const App: React.FC = () => {
         {activeTab === 'recruiter'   && <RecruiterPipeline />}
         {activeTab === 'university'  && <UniversityHub />}
         {activeTab === 'investor'    && <InvestorAnalytics />}
+        {activeTab === 'login' && <AuthView initialMode="login" />}
+        {activeTab === 'signup' && <AuthView initialMode="signup" />}
 
         {/* Global interactive modals & drawers */}
         <Modal />

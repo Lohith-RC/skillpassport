@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { mockUniversityStudents } from '../../services/api';
+import { mockUniversityStudents, fetchUniversityStudents } from '../../services/api';
 import { GraduationCap, ShieldCheck, CheckCircle2, Award, FileSpreadsheet, Send } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 
@@ -10,6 +10,16 @@ export const UniversityHub: React.FC = () => {
   const { addToast } = useAppStore();
   const [students, setStudents] = useState(mockUniversityStudents);
   const [sealHashes, setSealHashes] = useState<Record<string, string>>({});
+
+  // Load the live roster from the backend; the API layer falls back to the
+  // seeded mock list when the backend is offline (demo mode).
+  useEffect(() => {
+    let cancelled = false;
+    fetchUniversityStudents()
+      .then((data) => { if (!cancelled) setStudents(data); })
+      .catch(() => { /* keep seeded fallback on server errors */ });
+    return () => { cancelled = true; };
+  }, []);
 
   const deriveSealHash = (usn: string, name: string) => {
     let h = 2166136261;

@@ -25,13 +25,15 @@ interface AppState {
   isSettingsOpen: boolean;
   isNotificationsOpen: boolean;
   isTelemetryActive: boolean;
+  isAuthenticated: boolean;
+  isDemoMode: boolean;
+  pendingTab: TabType | null;
   inspectingRepo: Repository | null;
   selectedCandidate: RecruiterCandidate | null;
   heatmapFilter: 'all' | 'github' | 'gitlab' | 'leetcode' | 'hackerrank' | 'codeforces';
   toasts: Toast[];
   notifications: NotificationItem[];
   profile: DeveloperProfile;
-  isDemoMode: boolean;
 
   // Actions
   purgeAndResetSession: () => void;
@@ -44,6 +46,7 @@ interface AppState {
   setSettingsOpen: (open: boolean) => void;
   setNotificationsOpen: (open: boolean) => void;
   toggleTelemetry: () => void;
+  setPendingTab: (tab: TabType | null) => void;
   setInspectingRepo: (repo: Repository | null) => void;
   setSelectedCandidate: (candidate: RecruiterCandidate | null) => void;
   setHeatmapFilter: (filter: 'all' | 'github' | 'gitlab' | 'leetcode' | 'hackerrank' | 'codeforces') => void;
@@ -97,7 +100,9 @@ export const useAppStore = create<AppState>((set) => ({
   isSettingsOpen: false,
   isNotificationsOpen: false,
   isTelemetryActive: true,
+  isAuthenticated: !!(localStorage.getItem('token') || sessionStorage.getItem('token')),
   isDemoMode: false,
+  pendingTab: null,
   inspectingRepo: null,
   selectedCandidate: null,
   heatmapFilter: 'all',
@@ -118,12 +123,18 @@ export const useAppStore = create<AppState>((set) => ({
   })(),
   profile: (() => {
     try {
+      // 1) Active per-tab session slot (fast path)
       const activeSessionId = sessionStorage.getItem('sp_active_session_id');
       if (activeSessionId) {
         const sessionData = sessionStorage.getItem(`sp_session_${activeSessionId}`);
         if (sessionData) {
           return JSON.parse(sessionData);
         }
+      }
+      // 2) Cross-tab backup so edits survive in newly opened tabs
+      const backup = localStorage.getItem('sp_profile_backup');
+      if (backup) {
+        return JSON.parse(backup);
       }
       const stored = localStorage.getItem('user');
       if (stored) {
@@ -137,7 +148,8 @@ export const useAppStore = create<AppState>((set) => ({
             ...DEFAULT_PREDEFINED_PROFILE,
             name: parsed.name,
             avatar: initials || 'SP',
-            proofScore: parsed.proofScore || 85,
+            // `??` not `||` — a real proofScore of 0 must NOT become the seeded 85
+            proofScore: parsed.proofScore ?? 85,
           };
         }
       }
@@ -154,25 +166,64 @@ export const useAppStore = create<AppState>((set) => ({
       profile: DEFAULT_PREDEFINED_PROFILE,
       notifications: [],
       isDemoMode: false,
+      isAuthenticated: false,
+      pendingTab: null,
       toasts: [{ id: Math.random().toString(), message: 'Session data wiped clean. Reset to default environment.', type: 'info' }],
     });
   },
 
   initializeUserSession: (userData: any) => {
-    // New users get an isolated, zeroed-out identity space; returning/demo
-    // users resume the seeded demo persona (Rahul Sharma) with their own name.
-    const isolatedProfile = userData.isNewUser
-      ? createIsolatedUserSpace(userData)
-      : {
-          ...DEFAULT_PREDEFINED_PROFILE,
-          name: userData?.name || DEFAULT_PREDEFINED_PROFILE.name,
-        };
+    // Landing destination: honor a remembered deep link, otherwise go to Dashboard.
+    const remembered = useAppStore.getState().pendingTab;
+    const landingTab: TabType = (userData?.nextTab as TabType) || remembered || 'dashboard';
+
+    let isolatedProfile = null;
+
+    if (userData.isNewUser) {
+      // The store may already hold an isolated space created at boot —
+      // reuse it instead of leaking a second orphaned session slot.
+      const activeId = sessionStorage.getItem('sp_active_session_id');
+      const existing = activeId ? sessionStorage.getItem(`sp_session_${activeId}`) : null;
+      if (existing) {
+        const parsed = JSON.parse(existing);
+        if (parsed && typeof parsed.id === 'string' && parsed.id.startsWith('sp_user_')) {
+          isolatedProfile = {
+            ...parsed,
+            name: userData?.name || parsed.name,
+            avatar: (userData?.name || parsed.name).split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'SP',
+            degree: userData?.usn ? `Student USN: ${userData.usn}` : parsed.degree,
+          };
+        }
+      }
+      isolatedProfile = isolatedProfile || createIsolatedUserSpace(userData);
+    } else if (userData.isDemo) {
+      // Demo mode keeps the rich seeded persona (Rahul Sharma) so the product is
+      // fully explorable offline — this is an explicitly-labelled demo session.
+      isolatedProfile = {
+        ...DEFAULT_PREDEFINED_PROFILE,
+        name: userData?.name || DEFAULT_PREDEFINED_PROFILE.name,
+        proofScore: userData?.proofScore ?? DEFAULT_PREDEFINED_PROFILE.proofScore,
+        avatar: (userData?.name || DEFAULT_PREDEFINED_PROFILE.name).split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'RS',
+      };
+    } else {
+      // Real authenticated account: zeroed identity space — never inherit the
+      // seeded persona's stats, platforms, or history.
+      isolatedProfile = {
+        ...createIsolatedUserSpace(userData),
+        proofScore: userData?.proofScore ?? 0,
+        headline: `Verified ${userData?.role || 'Developer'} | SkillPassport Member`,
+      };
+    }
+
     saveSessionProfile(isolatedProfile);
     set({
       profile: isolatedProfile,
       notifications: [],
-      activeTab: 'dashboard',
+      activeTab: landingTab,
       isDemoMode: Boolean(userData?.isDemo),
+      isAuthenticated: true,
+      // Consume the pending deep link; it has now been applied.
+      pendingTab: null,
     });
   },
 
@@ -183,6 +234,7 @@ export const useAppStore = create<AppState>((set) => ({
   setInterviewModalOpen: (open, candidate = null) => set({ isInterviewModalOpen: open, selectedCandidate: candidate }),
   setSettingsOpen: (open) => set({ isSettingsOpen: open }),
   setNotificationsOpen: (open) => set({ isNotificationsOpen: open }),
+  setPendingTab: (tab: TabType | null) => set({ pendingTab: tab }),
   toggleTelemetry: () => set((state) => ({ isTelemetryActive: !state.isTelemetryActive })),
   setInspectingRepo: (repo) => set({ inspectingRepo: repo }),
   setSelectedCandidate: (candidate) => set({ selectedCandidate: candidate }),
@@ -219,9 +271,15 @@ export const useAppStore = create<AppState>((set) => ({
 
   clearNotifications: () => set({ notifications: [] }),
 
-  addToast: (message, type = 'success') => set((state) => ({
-    toasts: [...state.toasts, { id: Math.random().toString(), message, type }],
-  })),
+  addToast: (message, type = 'success') => set((state) => {
+    const id =
+      typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `toast_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    // Cap the stack to avoid covering the screen under rapid-fire notifications.
+    const toasts = [...state.toasts, { id, message, type }].slice(-5);
+    return { toasts };
+  }),
 
   removeToast: (id) => set((state) => ({
     toasts: state.toasts.filter((t) => t.id !== id),

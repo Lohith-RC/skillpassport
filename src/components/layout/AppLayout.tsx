@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { TabType } from '../../types';
 import { SettingsModal } from '../features/SettingsModal';
@@ -61,6 +61,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     isDemoMode,
   } = useAppStore();
 
+  const unreadCount = useMemo(
+    () => notifications.filter((n: { read: boolean }) => !n.read).length,
+    [notifications]
+  );
+
   // ── Navigation definitions ─────────────────────────────────────────────────
 
   const primaryNavItems: NavItem[] = [
@@ -85,9 +90,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       id: 'action',
       label: 'Messages',
       Icon: MessageSquare,
-      badge: 3,
-      badgeVariant: 'purple',
-      onClick: () => addToast('Opening instant recruiter chat…', 'info'),
+      onClick: () => addToast('Recruiter chat is coming in Stage 2 — invites will land here.', 'info'),
     },
     {
       key: 'net-settings',
@@ -224,7 +227,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               {/* Sign out */}
               <button
                 onClick={() => {
-                  useAppStore.getState().purgeAndResetSession();
+                  if (window.confirm('Sign out and wipe all local session data?')) {
+                    useAppStore.getState().purgeAndResetSession();
+                  }
                 }}
                 className="w-full flex items-center gap-2 pt-1 text-[11px] text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition cursor-pointer"
               >
@@ -279,9 +284,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                   aria-label="View notifications"
                 >
                   <Bell className="w-4 h-4" />
-                  {notifications.filter(n => !n.read).length > 0 && (
+                  {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-600 text-white font-mono text-[9px] font-bold flex items-center justify-center border-2 border-white dark:border-[#070A11]">
-                      {notifications.filter(n => !n.read).length}
+                      {unreadCount}
                     </span>
                   )}
                 </button>
@@ -291,7 +296,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
               {/* Messages */}
               <button
-                onClick={() => addToast('Opening instant recruiter chat…', 'info')}
+                onClick={() => addToast('Recruiter chat is coming in Stage 2 — invites will land here.', 'info')}
                 className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#13192B] border border-gray-200 dark:border-[#1C263B] transition"
                 aria-label="Open messages"
               >
@@ -324,6 +329,32 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <span>Demo mode — backend offline, running on local mock data. Everything you do is simulated and stored in your browser.</span>
             </div>
           )}
+
+          {/* MOBILE NAV — flexible tab strip under the header on screens < lg */}
+          <nav className="lg:hidden flex items-center gap-1 px-3 py-2 border-b border-gray-200 dark:border-[#161D2F] bg-white/85 dark:bg-[#090D17]/80 backdrop-blur-md overflow-x-auto no-scrollbar sticky top-16 z-20">
+            {[...primaryNavItems, ...identityNavItems, ...networkNavItems].map((item) => (
+              <button
+                key={`mobile-${item.key}`}
+                onClick={() => {
+                  if (item.onClick) item.onClick();
+                  else if (item.id !== 'action') setActiveTab(item.id as TabType);
+                }}
+                className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-semibold transition ${
+                  item.id !== 'action' && activeTab === (item.id as TabType)
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#13192B]'
+                }`}
+              >
+                <item.Icon className="w-3.5 h-3.5" />
+                <span>{item.label}</span>
+                {item.badge !== undefined && (
+                  <span className="px-1.5 py-0.5 rounded-full font-mono font-bold text-[9px] bg-blue-600/15 text-blue-500">
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </nav>
 
           {/* PAGE BODY */}
           <main className="p-4 md:p-8 space-y-6 max-w-[1600px] w-full mx-auto">

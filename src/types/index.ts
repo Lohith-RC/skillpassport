@@ -54,6 +54,12 @@ export interface DeveloperProfile {
   pipelinesPassed: number;
   leetcodeSolved: number;
   role?: UserRole;
+  socialLinks?: {
+    github?: string;
+    linkedin?: string;
+    twitter?: string;
+    portfolio?: string;
+  };
   platforms: Record<PlatformId, PlatformConnection>;
 }
 

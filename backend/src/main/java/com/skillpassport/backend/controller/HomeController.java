@@ -21,8 +21,7 @@ public class HomeController {
             "auth_register", "POST /api/v1/auth/register",
             "repositories", "GET /api/v1/repositories",
             "milestones", "GET /api/v1/milestones",
-            "students", "GET /api/v1/students",
-            "h2_console", "GET /h2-console"
+            "students", "GET /api/v1/students"
         ));
         return ResponseEntity.ok(status);
     }

@@ -177,7 +177,7 @@ export const Modal: React.FC = () => {
         {/* Footer Shortcut Legend */}
         <div className="pt-2 border-t border-slate-200 dark:border-border-subtle flex items-center justify-between text-[11px] text-slate-400 dark:text-gray-500 shrink-0 font-mono">
           <span>Tip: Use <kbd className="px-1 rounded bg-slate-200 dark:bg-bg-base text-slate-600 dark:text-gray-300">Cmd + K</kbd> anywhere</span>
-          <span>Profile: {profile.name} (Gold Tier {profile.proofScore}%)</span>
+          <span>Profile: {profile.name} ({profile.tier} Tier {profile.proofScore}%)</span>
         </div>
       </div>
     </div>

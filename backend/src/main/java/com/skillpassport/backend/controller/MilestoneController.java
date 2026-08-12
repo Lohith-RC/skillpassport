@@ -2,6 +2,7 @@ package com.skillpassport.backend.controller;
 
 import com.skillpassport.backend.entity.MilestoneEntity;
 import com.skillpassport.backend.repository.MilestoneRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,9 @@ public class MilestoneController {
 
     @PostMapping
     public ResponseEntity<MilestoneEntity> createMilestone(@RequestBody MilestoneEntity milestone) {
-        if (milestone.getId() == null || milestone.getId().isEmpty()) {
-            milestone.setId("m_" + UUID.randomUUID().toString().substring(0, 8));
-        }
+        // IDs are always server-generated: client-supplied IDs could overwrite seeded rows.
+        milestone.setId("m_" + UUID.randomUUID().toString().substring(0, 12));
         MilestoneEntity saved = milestoneRepository.save(milestone);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }

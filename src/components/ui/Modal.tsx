@@ -45,7 +45,7 @@ export const Modal: React.FC = () => {
   );
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-start justify-center pt-16 md:pt-24 px-4 animate-in fade-in duration-200">
+    <div role="dialog" aria-modal="true" aria-label="Command palette search" className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-start justify-center pt-16 md:pt-24 px-4 animate-in fade-in duration-200">
       <div className="glass-card max-w-2xl w-full rounded-2xl border border-slate-200 dark:border-border-default overflow-hidden shadow-2xl space-y-4 p-4 max-h-[80vh] flex flex-col">
         
         {/* Search Header */}

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '../../stores/useAppStore';
 import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
@@ -29,11 +30,13 @@ const ToastItem: React.FC<{ id: string; message: string; type: 'success' | 'info
   };
 
   return (
-    <div
-      className={`pointer-events-auto p-4 rounded-xl flex items-center justify-between animate-[slideIn_0.3s_ease-out] ${bgColors[type]}`}
-      style={{
-        animation: 'slideIn 0.3s ease-out',
-      }}
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: 80, scale: 0.95 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: 80, scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      className={`pointer-events-auto p-4 rounded-xl flex items-center justify-between ${bgColors[type]}`}
     >
       <div className="flex items-center text-xs font-semibold">
         {icons[type]}
@@ -45,20 +48,20 @@ const ToastItem: React.FC<{ id: string; message: string; type: 'success' | 'info
       >
         <X className="w-4 h-4" />
       </button>
-    </div>
+    </motion.div>
   );
 };
 
 export const ToastContainer: React.FC = () => {
   const { toasts } = useAppStore();
 
-  if (toasts.length === 0) return null;
-
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col space-y-2 max-w-sm w-full pointer-events-none">
-      {toasts.map((toast) => (
-        <ToastItem key={toast.id} id={toast.id} message={toast.message} type={toast.type} />
-      ))}
+      <AnimatePresence>
+        {toasts.map((toast) => (
+          <ToastItem key={toast.id} id={toast.id} message={toast.message} type={toast.type} />
+        ))}
+      </AnimatePresence>
     </div>
   );
 };

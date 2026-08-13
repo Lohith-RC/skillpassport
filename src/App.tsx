@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useEffect, useRef, lazy, Suspense, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { AppLayout } from './components/layout/AppLayout';
 import { useAppStore } from './stores/useAppStore';
 import { LandingPage } from './components/features/LandingPage';  // regular import — entry point
 import { Modal } from './components/ui/Modal';
 import { ToastContainer } from './components/ui/ToastContainer';
 import { apiAuth } from './services/api';
+import { DashboardSkeleton } from './components/skeletons/DashboardSkeleton';
+import { GenericSkeleton } from './components/skeletons/GenericSkeleton';
 
 // ─── Lazy-loaded feature views for bundle optimization & code splitting
 const Dashboard = lazy(() => import('./components/features/Dashboard').then(m => ({ default: m.Dashboard })));
@@ -27,14 +30,32 @@ const AuthView = lazy(() => import('./components/features/AuthView').then(m => (
 // ─── Protected tab set — requires user to be authenticated
 const PROTECTED_TABS = new Set(['dashboard', 'profile', 'timecapsule', 'heatmap', 'repos', 'leetcode', 'challenges', 'recruiter', 'university', 'investor']);
 
-// ─── ViewFallback component
-const ViewFallback: React.FC = () => (
-  <div className="flex items-center justify-center min-h-[400px]">
-    <div className="flex flex-col items-center gap-3">
-      <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
-      <span className="text-xs font-mono text-slate-400">Loading module...</span>
-    </div>
-  </div>
+// ─── Skeleton selector: show a relevant skeleton per view ─────────────────
+const getSkeletonForTab = (tab: string) => {
+  switch (tab) {
+    case 'dashboard': return <DashboardSkeleton />;
+    default: return <GenericSkeleton />;
+  }
+};
+
+// ─── Page transition wrapper ──────────────────────────────────────────────
+const PageTransition: React.FC<{ children: React.ReactNode; tabKey: string }> = ({ children, tabKey }) => (
+  <motion.div
+    key={tabKey}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -6 }}
+    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
+// ─── View with skeleton-aware Suspense ────────────────────────────────────
+const ViewWithSkeleton: React.FC<{ tab: string; children: React.ReactNode }> = ({ tab, children }) => (
+  <Suspense fallback={getSkeletonForTab(tab)}>
+    {children}
+  </Suspense>
 );
 
 export const App: React.FC = () => {
@@ -144,6 +165,33 @@ export const App: React.FC = () => {
     return () => { cancelled = true; };
   }, [isAuthenticated, addToast]);
 
+  // ─── View switcher with tab key for AnimatePresence ───────────────────────
+  const renderAuthenticatedView = () => {
+    const viewMap: Record<string, React.ReactNode> = {
+      dashboard:   <Dashboard />,
+      profile:     <SkillPassportView />,
+      timecapsule: <TimeCapsuleView />,
+      heatmap:     <ContributionMatrix />,
+      repos:       <ProjectsView />,
+      challenges:  <ChallengesView />,
+      leetcode:    <LeetCodeDashboard />,
+      recruiter:   <RecruiterPipeline />,
+      university:  <UniversityHub />,
+      investor:    <InvestorAnalytics />,
+      login:       <AuthView initialMode="login" />,
+      signup:      <AuthView initialMode="signup" />,
+    };
+
+    const currentView = viewMap[activeTab];
+    if (!currentView) return null;
+
+    return (
+      <ViewWithSkeleton tab={activeTab}>
+        {currentView}
+      </ViewWithSkeleton>
+    );
+  };
+
   // ─── If user is not authenticated, gate protected tabs ─────────────────────
   if (!isAuthenticated) {
     const isAuthPage = activeTab === 'login' || activeTab === 'signup';
@@ -152,7 +200,6 @@ export const App: React.FC = () => {
       : pendingTab || (isAuthPage ? activeTab : 'landing');
 
     if (effectiveTab === 'landing') {
-      // Render LandingPage directly (no Suspense needed — it's a regular import)
       return (
         <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] text-slate-900 dark:text-white">
           <LandingPage />
@@ -165,7 +212,7 @@ export const App: React.FC = () => {
 
     const initialMode = effectiveTab === 'signup' ? 'signup' : 'login';
     return (
-      <Suspense fallback={<ViewFallback />}>
+      <Suspense fallback={<GenericSkeleton />}>
         <AuthView initialMode={initialMode} />
         <PlatformSyncModal />
         <ToastContainer />
@@ -173,29 +220,20 @@ export const App: React.FC = () => {
     );
   }
 
-  // ─── Authenticated views wrapped in AppLayout shell ───────────────────────
+  // ─── Authenticated views wrapped in AppLayout with page transitions ──────
   return (
     <AppLayout>
-      <Suspense fallback={<ViewFallback />}>
-        {activeTab === 'dashboard'   && <Dashboard />}
-        {activeTab === 'profile'     && <SkillPassportView />}
-        {activeTab === 'timecapsule' && <TimeCapsuleView />}
-        {activeTab === 'heatmap'     && <ContributionMatrix />}
-        {activeTab === 'repos'       && <ProjectsView />}
-        {activeTab === 'challenges'  && <ChallengesView />}
-        {activeTab === 'leetcode'    && <LeetCodeDashboard />}
-        {activeTab === 'recruiter'   && <RecruiterPipeline />}
-        {activeTab === 'university'  && <UniversityHub />}
-        {activeTab === 'investor'    && <InvestorAnalytics />}
-        {activeTab === 'login' && <AuthView initialMode="login" />}
-        {activeTab === 'signup' && <AuthView initialMode="signup" />}
+      <AnimatePresence mode="sync">
+        <PageTransition tabKey={activeTab}>
+          {renderAuthenticatedView()}
+        </PageTransition>
+      </AnimatePresence>
 
-        {/* Global interactive modals & drawers */}
-        <Modal />
-        <PlatformSyncModal />
-        <ProjectInspectDrawer />
-        <InterviewModal />
-      </Suspense>
+      {/* Global interactive modals & drawers */}
+      <Modal />
+      <PlatformSyncModal />
+      <ProjectInspectDrawer />
+      <InterviewModal />
       <ToastContainer />
     </AppLayout>
   );

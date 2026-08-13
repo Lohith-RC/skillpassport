@@ -54,7 +54,7 @@ export const NotificationsDropdown: React.FC = () => {
   };
 
   return (
-    <div ref={panelRef} className="absolute right-12 top-16 z-50 w-80 sm:w-96 bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
+    <div ref={panelRef} className="absolute right-0 sm:right-12 top-16 z-50 w-[calc(100vw-2rem)] max-w-96 min-w-[280px] bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-[#161D2F] bg-gray-50 dark:bg-[#0F1626]">
         <div className="flex items-center space-x-2">

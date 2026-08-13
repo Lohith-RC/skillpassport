@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
+import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { 
   LayoutDashboard, 
   UserCheck, 
@@ -75,7 +76,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.proofScore}
+                  <AnimatedNumber value={profile.proofScore} duration={1.0} />
                 </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
                   <span>{profile.proofScore > 0 ? '↑ 12.5% this month' : 'New Account'}</span>
@@ -91,7 +92,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.totalContributions > 0 ? Math.floor(profile.totalContributions / 35) : 0}
+                  <AnimatedNumber value={profile.totalContributions > 0 ? Math.floor(profile.totalContributions / 35) : 0} duration={1.1} />
                 </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
                   <span>{profile.totalContributions > 0 ? '↑ Active Repos' : '0 Repositories'}</span>
@@ -107,7 +108,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.pipelinesPassed}
+                  <AnimatedNumber value={profile.pipelinesPassed} duration={1.2} />
                 </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
                   <span>{profile.pipelinesPassed > 0 ? '↑ Verified Pipelines' : '0 Pipelines'}</span>
@@ -123,7 +124,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.proofScore > 0 ? Math.floor(profile.proofScore * 14.2) : 0}
+                  <AnimatedNumber value={profile.proofScore > 0 ? Math.floor(profile.proofScore * 14.2) : 0} duration={1.3} />
                 </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
                   <span>{profile.proofScore > 0 ? '↑ Active Recruiter Views' : '0 Views'}</span>
@@ -139,7 +140,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.proofScore > 0 ? Math.floor(profile.proofScore * 3.6) : 0}
+                  <AnimatedNumber value={profile.proofScore > 0 ? Math.floor(profile.proofScore * 3.6) : 0} duration={1.4} />
                 </div>
                 <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
                   <span>{profile.proofScore > 0 ? '↑ Verified Network' : '0 Connections'}</span>
@@ -155,7 +156,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  {profile.proofScore > 0 ? Math.floor(profile.proofScore / 5) : 0}
+                  <AnimatedNumber value={profile.proofScore > 0 ? Math.floor(profile.proofScore / 5) : 0} duration={1.5} />
                 </div>
                 <button onClick={() => setActiveTab('profile')} className="text-[10px] font-semibold text-blue-400 hover:underline block">
                   View all

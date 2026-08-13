@@ -115,6 +115,8 @@ export const purgeSessionData = (): void => {
     localStorage.removeItem('user');
     localStorage.removeItem('sp_profile_backup');
     localStorage.removeItem('sp_notification_prefs');
+    localStorage.removeItem('sp_interview_invites');
+    localStorage.removeItem('sp_challenge_enrollments');
   } catch (e) {
     console.warn('Error purging session storage');
   }

@@ -36,6 +36,9 @@ export const PlatformSyncModal: React.FC = () => {
 
   return (
     <div 
+      role="dialog"
+      aria-modal="true"
+      aria-label="Platform sync settings"
       onClick={() => setSyncModalOpen(false)}
       className="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
     >

@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useRef, useId } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '../../stores/useAppStore';
 import { TabType } from '../../types';
 import { SettingsModal } from '../features/SettingsModal';
@@ -22,6 +23,20 @@ import {
   Sun,
   Moon,
 } from 'lucide-react';
+
+// ─── Lazy imports for hover-prefetching ─────────────────────────────────────
+const viewImports: Record<string, () => Promise<any>> = {
+  dashboard: () => import('../features/Dashboard'),
+  profile: () => import('../features/SkillPassportView'),
+  repos: () => import('../features/ProjectsView'),
+  heatmap: () => import('../features/ContributionMatrix'),
+  challenges: () => import('../features/ChallengesView'),
+  leetcode: () => import('../features/LeetCodeDashboard'),
+  timecapsule: () => import('../features/TimeCapsuleView'),
+  university: () => import('../features/UniversityHub'),
+  recruiter: () => import('../features/RecruiterPipeline'),
+  investor: () => import('../features/InvestorAnalytics'),
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -60,6 +75,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     profile,
     isDemoMode,
   } = useAppStore();
+  const sparklineId = useId();
 
   const unreadCount = useMemo(
     () => notifications.filter((n: { read: boolean }) => !n.read).length,
@@ -101,6 +117,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     },
   ];
 
+  // ── Prefetch views on hover ────────────────────────────────────────────────
+  const prefetchView = useCallback((tabId: string) => {
+    if (tabId !== 'action' && viewImports[tabId]) {
+      viewImports[tabId]().catch(() => {}); // silent fail — just warming the cache
+    }
+  }, []);
+
   // ── Nav item renderer ──────────────────────────────────────────────────────
 
   const renderNavItem = (item: NavItem) => {
@@ -123,20 +146,26 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       <button
         key={key}
         onClick={handleClick}
-        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
-          isActive
-            ? 'bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/25'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#13192B]'
-        }`}
+        onMouseEnter={() => prefetchView(id)}
+        className="relative w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#13192B]"
       >
-        <span className="flex items-center space-x-3 min-w-0">
+        {/* Animated active pill indicator */}
+        {isActive && (
+          <motion.div
+            layoutId="sidebar-active-pill"
+            className="absolute inset-0 bg-blue-600 rounded-xl shadow-lg shadow-blue-600/25"
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+          />
+        )}
+
+        <span className="relative z-10 flex items-center space-x-3 min-w-0">
           <Icon className="w-4 h-4 shrink-0" />
-          <span className="truncate">{label}</span>
+          <span className={`truncate ${isActive ? 'text-white font-semibold' : ''}`}>{label}</span>
         </span>
 
         {badge !== undefined && (
           <span
-            className={`px-1.5 py-0.5 rounded-full font-mono font-bold text-[9px] shrink-0 ${
+            className={`relative z-10 px-1.5 py-0.5 rounded-full font-mono font-bold text-[9px] shrink-0 ${
               badgeVariant ? badgeStyles[badgeVariant] : badgeStyles.blue
             } ${isActive ? '!bg-white/20 !text-white !border-transparent' : ''}`}
           >
@@ -215,12 +244,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               {/* Sparkline */}
               <svg className="w-full h-8 overflow-visible no-transition" viewBox="0 0 100 30">
                 <defs>
-                  <linearGradient id="scoreSparkGrad" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id={`scoreSparkGrad-${sparklineId}`} x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.4" />
                     <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0" />
                   </linearGradient>
                 </defs>
-                <path d="M 0 25 Q 25 20, 50 15 T 100 5 L 100 30 L 0 30 Z" fill="url(#scoreSparkGrad)" />
+                <path d="M 0 25 Q 25 20, 50 15 T 100 5 L 100 30 L 0 30 Z" fill={`url(#scoreSparkGrad-${sparklineId})`} />
                 <path d="M 0 25 Q 25 20, 50 15 T 100 5" fill="none" stroke="#8B5CF6" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
 
@@ -330,15 +359,16 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             </div>
           )}
 
-          {/* MOBILE NAV — flexible tab strip under the header on screens < lg */}
-          <nav className="lg:hidden flex items-center gap-1 px-3 py-2 border-b border-gray-200 dark:border-[#161D2F] bg-white/85 dark:bg-[#090D17]/80 backdrop-blur-md overflow-x-auto no-scrollbar sticky top-16 z-20">
-            {[...primaryNavItems, ...identityNavItems, ...networkNavItems].map((item) => (
+          {/* MOBILE NAV — horizontal scroll strip under header on very small screens */}
+          <nav className="md:hidden flex items-center gap-1 px-3 py-2 border-b border-gray-200 dark:border-[#161D2F] bg-white/85 dark:bg-[#090D17]/80 backdrop-blur-md overflow-x-auto no-scrollbar sticky top-16 z-20">
+            {primaryNavItems.map((item) => (
               <button
                 key={`mobile-${item.key}`}
                 onClick={() => {
                   if (item.onClick) item.onClick();
                   else if (item.id !== 'action') setActiveTab(item.id as TabType);
                 }}
+                onMouseEnter={() => prefetchView(item.id)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-semibold transition ${
                   item.id !== 'action' && activeTab === (item.id as TabType)
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
@@ -347,11 +377,6 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               >
                 <item.Icon className="w-3.5 h-3.5" />
                 <span>{item.label}</span>
-                {item.badge !== undefined && (
-                  <span className="px-1.5 py-0.5 rounded-full font-mono font-bold text-[9px] bg-blue-600/15 text-blue-500">
-                    {item.badge}
-                  </span>
-                )}
               </button>
             ))}
           </nav>
@@ -362,6 +387,35 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </main>
         </div>
       </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* MOBILE BOTTOM TAB BAR — fixed on md+ screens < lg                */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      <nav className="hidden md:flex lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-xl border-t border-gray-200 dark:border-[#161D2F] px-2 py-1 safe-area-bottom">
+        <div className="flex items-center justify-around w-full">
+          {primaryNavItems.map((item) => {
+            const isActive = activeTab === (item.id as TabType);
+            return (
+              <button
+                key={`bottom-${item.key}`}
+                onClick={() => setActiveTab(item.id as TabType)}
+                onMouseEnter={() => prefetchView(item.id)}
+                className="relative flex flex-col items-center gap-0.5 py-1.5 px-3 text-slate-500 dark:text-slate-400"
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="mobile-tab-indicator"
+                    className="absolute -top-1 w-8 h-0.5 bg-blue-600 rounded-full"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
+                <item.Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : ''}`} />
+                <span className={`text-[9px] font-medium ${isActive ? 'text-blue-600' : ''}`}>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
 
       <SettingsModal />
     </div>

@@ -37,7 +37,7 @@ export const InterviewModal: React.FC = () => {
       return;
     }
     try {
-      const invites = JSON.parse(localStorage.getItem('sp_interview_invites') || '[]');
+      const invites: any[] = (() => { try { return JSON.parse(localStorage.getItem('sp_interview_invites') || '[]'); } catch { return []; } })();
       invites.push({
         candidate: selectedCandidate.name,
         candidateId: selectedCandidate.id,
@@ -57,6 +57,9 @@ export const InterviewModal: React.FC = () => {
 
   return (
     <div 
+      role="dialog"
+      aria-modal="true"
+      aria-label="Schedule candidate interview"
       onClick={() => setInterviewModalOpen(false)}
       className="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
     >

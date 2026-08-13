@@ -76,7 +76,6 @@
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, sans-serif;
     overflow-x: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -88,24 +87,12 @@
   border: 1px solid var(--border-card);
   border-radius: 16px;
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dark .glass-card {
   background: rgba(11, 15, 25, 0.85);
   border-color: var(--border-card);
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-}
-
-.glass-card-hover:hover {
-  transform: translateY(-3px);
-  border-color: rgba(37, 99, 235, 0.4);
-  box-shadow: 0 10px 30px -4px rgba(37, 99, 235, 0.15), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
-}
-
-.dark .glass-card-hover:hover {
-  border-color: rgba(37, 99, 235, 0.4);
-  box-shadow: 0 0 25px rgba(37, 99, 235, 0.25);
 }
 
 /* ─── Skeleton Loading Shimmer ─── */
@@ -126,7 +113,6 @@
   width: 13px;
   height: 13px;
   border-radius: 3px;
-  transition: transform 0.15s ease, filter 0.15s ease;
   cursor: pointer;
 }
 
@@ -155,16 +141,13 @@
 .gl-lvl-3 { background-color: #F97316; }
 .lc-lvl-3 { background-color: #F59E0B; }
 
-/* ─── Smooth Theme Transition ─── */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 0.15s;
-  transition-timing-function: ease;
-}
+/* ─── FIX: No global transition rule ─── */
+/* Elements are static by default. Use Tailwind transition-* utilities */
+/* or explicit .transition-all class to opt into transitions. This      */
+/* prevents the old rule from silently breaking opacity/transform       */
+/* animations managed by Framer Motion.                                 */
 
-/* Exclude transitions that would interfere with animations */
+/* Exclude transitions that would interfere with canvas/SVG rendering */
 .no-transition,
 .no-transition *,
 canvas,
@@ -183,7 +166,7 @@ svg rect {
   display: none;
 }
 
-/* ─── Scroll Reveal Animations (keyframe-based to avoid transition conflicts) ─── */
+/* ─── Scroll Reveal Animations (keyframe-based) ─── */
 .scroll-hidden {
   opacity: 0;
   transform: translateY(32px);
@@ -222,4 +205,9 @@ svg rect {
 
 .animate-float-delay {
   animation: floatY 5s ease-in-out 1s infinite;
+}
+
+/* ─── Safe area for mobile bottom bar ─── */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }

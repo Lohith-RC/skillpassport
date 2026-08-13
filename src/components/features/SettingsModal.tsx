@@ -80,7 +80,7 @@ export const SettingsModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div role="dialog" aria-modal="true" aria-label="Platform settings" className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-white dark:bg-[#0B0F19] max-w-2xl w-full rounded-3xl border border-gray-200 dark:border-[#161D2F] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}

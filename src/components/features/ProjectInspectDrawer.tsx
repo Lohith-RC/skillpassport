@@ -9,6 +9,7 @@ export const ProjectInspectDrawer: React.FC = () => {
   const { inspectingRepo, setInspectingRepo, addToast } = useAppStore();
   const [activeTab, setActiveTab] = useState<'overview' | 'logs' | 'security'>('overview');
   const [isExecuting, setIsExecuting] = useState(false);
+  const pipelineTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -17,7 +18,10 @@ export const ProjectInspectDrawer: React.FC = () => {
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (pipelineTimerRef.current) clearTimeout(pipelineTimerRef.current);
+    };
   }, [inspectingRepo, setInspectingRepo]);
 
   if (!inspectingRepo) return null;
@@ -25,7 +29,7 @@ export const ProjectInspectDrawer: React.FC = () => {
   const handleRunPipeline = () => {
     setIsExecuting(true);
     addToast(`Triggered live re-run of CI/CD runner for ${inspectingRepo.name}...`, 'info');
-    setTimeout(() => {
+    pipelineTimerRef.current = setTimeout(() => {
       setIsExecuting(false);
       addToast(`CI/CD Runner completed successfully! 100% tests passed.`, 'success');
     }, 2000);
@@ -33,6 +37,9 @@ export const ProjectInspectDrawer: React.FC = () => {
 
   return (
     <div 
+      role="dialog"
+      aria-modal="true"
+      aria-label="Project inspection drawer"
       onClick={() => setInspectingRepo(null)}
       className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md flex justify-end animate-in fade-in duration-200"
     >

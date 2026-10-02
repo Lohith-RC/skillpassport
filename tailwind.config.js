@@ -40,6 +40,8 @@ export default {
         /* ── Single accent + semantic states ── */
         accent: 'var(--accent)',
         'accent-hover': 'var(--accent-hover)',
+        'accent-fill': 'var(--accent-fill)',
+        'accent-fill-hover': 'var(--accent-fill-hover)',
         'accent-soft': 'var(--accent-soft)',
         'accent-fg': 'var(--accent-fg)',
         success: 'var(--success)',

@@ -51,6 +51,9 @@
     /* ── Single accent + semantics ── */
     --accent: #5E6AD2;
     --accent-hover: #4E59C0;
+    /* Fill used behind white text — kept dark enough for 4.5:1 in light. */
+    --accent-fill: #5E6AD2;
+    --accent-fill-hover: #4E59C0;
     --accent-soft: rgba(94, 106, 210, 0.10);
     --accent-fg: #FFFFFF;
     --success: #15803D;
@@ -117,6 +120,10 @@
     /* ── Single accent + semantics ── */
     --accent: #6B78E0;
     --accent-hover: #7C89E8;
+    /* Dark accent-as-text must stay ≥4.5:1 on #0A0A0A, while a white label
+       on top must also clear 4.5:1 — one colour can't do both, hence a fill. */
+    --accent-fill: #5B67D4;
+    --accent-fill-hover: #656FDD;
     --accent-soft: rgba(107, 120, 224, 0.16);
     --accent-fg: #FFFFFF;
     --success: #22C55E;

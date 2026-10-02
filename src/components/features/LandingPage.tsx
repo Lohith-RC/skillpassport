@@ -3,22 +3,10 @@ import { useAppStore } from '../../stores/useAppStore';
 import { Landing3DCanvas } from '../canvas/Landing3DCanvas';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Tabs } from '../ui/Tabs';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
 import {
   Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Link2, Fingerprint,
-  Globe, Copy, Check, Sliders, Github, GraduationCap, Users, TrendingUp,
+  Globe, Copy, Check, Sliders, GraduationCap, Users, Sun, Moon,
 } from 'lucide-react';
-
-const Reveal: React.FC<{
-  children: React.ReactNode;
-  delay?: number;
-  threshold?: number;
-  className?: string;
-}> = ({ children, delay = 0, threshold, className = '' }) => {
-  const ref = useScrollReveal({ delay, ...(threshold !== undefined ? { threshold } : {}) });
-  return <div ref={ref} className={className}>{children}</div>;
-};
 
 /** The 3D canvas is the one place allowed to fail — WebGL may be absent. */
 class CanvasErrorBoundary extends React.Component<
@@ -74,13 +62,17 @@ const FeatureCopy: Record<'proof' | 'zk' | 'recruiter' | 'academic', {
   },
 };
 
-export const LandingPage: React.FC = () => {
-  const { setActiveTab, setSyncModalOpen, addToast } = useAppStore();
+// One card, one message — the skill's feature-grid rule (4–6 cards, clear
+// hierarchy, CTA repeated on every card).
+const FEATURES: { id: keyof typeof FeatureCopy; Icon: React.FC<{ className?: string }> }[] = [
+  { id: 'proof', Icon: Fingerprint },
+  { id: 'zk', Icon: ShieldCheck },
+  { id: 'recruiter', Icon: Users },
+  { id: 'academic', Icon: GraduationCap },
+];
 
-  const statsReveal = useScrollReveal({ threshold: 0.2 });
-  const how1Reveal = useScrollReveal({ delay: 0 });
-  const how2Reveal = useScrollReveal({ delay: 120 });
-  const how3Reveal = useScrollReveal({ delay: 240 });
+export const LandingPage: React.FC = () => {
+  const { setActiveTab, setSyncModalOpen, addToast, isDarkMode, toggleTheme } = useAppStore();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -106,7 +98,6 @@ export const LandingPage: React.FC = () => {
   /* ── Interactive proof-score simulator ───────────────────────────────── */
   const [selected, setSelected] = useState<string[]>(['github', 'leetcode', 'gitlab']);
   const [copied, setCopied] = useState(false);
-  const [featureTab, setFeatureTab] = useState('proof');
 
   const platformScores: Record<string, { name: string; score: number; label: string }> = {
     github: { name: 'GitHub', score: 35, label: '840 commits' },
@@ -137,7 +128,6 @@ export const LandingPage: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const feature = FeatureCopy[featureTab as keyof typeof FeatureCopy];
 
   const fadeIn = (delayMs: number) =>
     `transition-all duration-700 ease-out ${
@@ -159,6 +149,14 @@ export const LandingPage: React.FC = () => {
           </button>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="w-9 h-9 rounded-xl text-fg-muted hover:text-fg hover:bg-interactive border border-hairline transition-colors flex items-center justify-center"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <Button variant="ghost" size="sm" onClick={() => setActiveTab('login')}>Sign in</Button>
             <Button variant="primary" size="sm" onClick={() => setActiveTab('signup')}>
               Get started <ArrowRight className="w-3.5 h-3.5" />
@@ -297,7 +295,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Stats strip ────────────────────────────────────────────────── */}
-      <section ref={statsReveal} className="border-b border-hairline bg-surface">
+      <section className="border-b border-hairline bg-surface">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <dl className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-hairline">
             {[
@@ -317,59 +315,54 @@ export const LandingPage: React.FC = () => {
 
       {/* ── Feature inspector ──────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <Reveal className="text-center space-y-2 mb-8">
-          <p className="eyebrow">Product tour</p>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Inspect the modules</h2>
+        <div className="text-center space-y-2 mb-10">
+          <p className="eyebrow">What you get</p>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Four modules, one passport</h2>
           <p className="text-sm text-fg-muted max-w-lg mx-auto">
-            Preview each part of the passport before you create an account.
+            Each module answers a question a recruiter actually asks.
           </p>
-        </Reveal>
-
-        <div className="flex justify-center mb-6">
-          <Tabs
-            value={featureTab}
-            onChange={setFeatureTab}
-            items={[
-              { id: 'proof', label: 'Proof engine' },
-              { id: 'zk', label: 'Seals' },
-              { id: 'recruiter', label: 'Recruiting' },
-              { id: 'academic', label: 'Academic' },
-            ]}
-          />
         </div>
 
-        <Reveal className="panel p-6 sm:p-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            <div className="space-y-3">
-              <Badge variant="accent">{feature.badge}</Badge>
-              <h3 className="text-lg font-semibold tracking-tight">{feature.title}</h3>
-              <p className="text-sm text-fg-muted leading-relaxed">{feature.body}</p>
-              <Button variant="secondary" size="sm" onClick={() => setActiveTab(feature.to as any)}>
-                {feature.cta} <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </div>
-            <pre className="p-4 rounded-xl bg-inset border border-hairline font-mono text-2xs leading-relaxed text-fg-muted overflow-x-auto">
-              {feature.code.join('\n')}
-            </pre>
-          </div>
-        </Reveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {FEATURES.map(({ id, Icon }) => {
+            const f = FeatureCopy[id];
+            return (
+              <article key={id} className="panel p-5 flex flex-col gap-3 transition-colors duration-200 hover:border-strong">
+                <span className="w-9 h-9 rounded-xl bg-inset border border-hairline flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-accent" />
+                </span>
+                <Badge variant="accent" className="self-start">{f.badge}</Badge>
+                <h3 className="font-semibold tracking-tight text-sm">{f.title}</h3>
+                <p className="text-xs text-fg-muted leading-relaxed flex-1">{f.body}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="justify-start px-0 text-accent hover:text-accent"
+                  onClick={() => setActiveTab(f.to as any)}
+                >
+                  {f.cta} <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </article>
+            );
+          })}
+        </div>
       </section>
 
       {/* ── Three steps ────────────────────────────────────────────────── */}
       <section className="border-t border-hairline bg-surface">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <Reveal className="text-center space-y-2 mb-10">
+          <div className="text-center space-y-2 mb-10">
             <p className="eyebrow">How it works</p>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Three steps to a portable identity</h2>
-          </Reveal>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { ref: how1Reveal, Icon: Link2, n: '01', title: 'Connect platforms', body: 'Link GitHub, LeetCode, GitLab, Kaggle and six more accounts to aggregate your activity trail.', to: () => setSyncModalOpen(true) },
-              { ref: how2Reveal, Icon: Fingerprint, n: '02', title: 'Generate seals', body: 'Content hashes are produced for repositories and milestones so any claim stays checkable.', to: () => setActiveTab('repos') },
-              { ref: how3Reveal, Icon: Globe, n: '03', title: 'Share the passport', body: 'Hand recruiters, universities or investors a link instead of a document to trust.', to: () => setActiveTab('recruiter') },
+              { Icon: Link2, n: '01', title: 'Connect platforms', body: 'Link GitHub, LeetCode, GitLab, Kaggle and six more accounts to aggregate your activity trail.', to: () => setSyncModalOpen(true) },
+              { Icon: Fingerprint, n: '02', title: 'Generate seals', body: 'Content hashes are produced for repositories and milestones so any claim stays checkable.', to: () => setActiveTab('repos') },
+              { Icon: Globe, n: '03', title: 'Share the passport', body: 'Hand recruiters, universities or investors a link instead of a document to trust.', to: () => setActiveTab('recruiter') },
             ].map((step) => (
-              <div key={step.n} ref={step.ref}>
+              <div key={step.n}>
                 <button
                   onClick={step.to}
                   className="w-full h-full text-left panel p-6 space-y-3 transition-colors duration-150 hover:border-strong group"
@@ -389,7 +382,39 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Closing CTA ────────────────────────────────────────────────── */}
+      {/* ── Who it's for — qualitative proof (no invented metrics) ─── */}
+      <section className="border-t border-hairline bg-surface">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+          <div className="text-center space-y-2 mb-10">
+            <p className="eyebrow">Who it's for</p>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Three sides of every hiring decision
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { Icon: Fingerprint, role: 'Developers', line: 'Collect proof of work from ten platforms into one link you control — no CV to keep updating.' },
+              { Icon: Users, role: 'Recruiters', line: 'Open a passport and see the evidence behind the claim, with scores you can re-check yourself.' },
+              { Icon: GraduationCap, role: 'Universities', line: 'Attest transcripts and milestones once; students carry the seal with them.' },
+            ].map((who) => (
+              <div key={who.role} className="panel p-5 space-y-2.5">
+                <span className="w-9 h-9 rounded-xl bg-inset border border-hairline flex items-center justify-center">
+                  <who.Icon className="w-4 h-4 text-accent" />
+                </span>
+                <h3 className="font-semibold tracking-tight text-sm">{who.role}</h3>
+                <p className="text-xs text-fg-muted leading-relaxed">{who.line}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-2xs text-fg-subtle">
+            Explore the full product in demo mode — every screen works without an account.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Closing CTA ────────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="panel p-8 sm:p-12 text-center space-y-5 relative overflow-hidden">
           <div className="absolute inset-0 blueprint-grid opacity-60 pointer-events-none" aria-hidden="true" />

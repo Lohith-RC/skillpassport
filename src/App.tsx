@@ -76,7 +76,21 @@ export const App: React.FC = () => {
   useEffect(() => {
     const root = document.documentElement;
     isDarkMode ? root.classList.add('dark') : root.classList.remove('dark');
+    try { localStorage.setItem('sp_theme', isDarkMode ? 'dark' : 'light'); } catch { /* ignore */ }
   }, [isDarkMode]);
+
+  // First visit: follow the OS preference instead of forcing dark. A stored
+  // choice always wins so the toggle behaves predictably.
+  useEffect(() => {
+    let stored: string | null = null;
+    try { stored = localStorage.getItem('sp_theme'); } catch { /* ignore */ }
+    if (stored) return;
+    if (typeof window.matchMedia !== 'function') return;
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (prefersLight && useAppStore.getState().isDarkMode) {
+      useAppStore.getState().toggleTheme();
+    }
+  }, []);
 
   // ─── Initialize from URL hash (deep-link support on cold load) ────────────
   useEffect(() => {

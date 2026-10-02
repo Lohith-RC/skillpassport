@@ -21,6 +21,12 @@ export const Landing3DCanvas: React.FC = () => {
     let disposed = false;
     let frameId: number;
 
+    // UX rule: hero parallax must render its static final state when the user
+    // prefers reduced motion — no scroll-jacking, no auto-rotation loop.
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // ── Scene / Camera / Renderer ───────────────────────────────────────────
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -159,7 +165,7 @@ export const Landing3DCanvas: React.FC = () => {
       mouse.tx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
       mouse.ty = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    if (!prefersReducedMotion) window.addEventListener('mousemove', handleMouseMove);
 
     // ── Scroll depth tracking ───────────────────────────────────────────────
     let scrollProgress = 0;
@@ -167,13 +173,18 @@ export const Landing3DCanvas: React.FC = () => {
       const vh = window.innerHeight;
       scrollProgress = Math.min(1, window.scrollY / vh);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    if (!prefersReducedMotion) window.addEventListener('scroll', handleScroll, { passive: true });
 
     // ── Animation loop ──────────────────────────────────────────────────────
     const clock = new THREE.Clock();
 
     const animate = () => {
       if (disposed) return;
+      // Reduced motion: draw one static frame at the final pose and stop.
+      if (prefersReducedMotion) {
+        renderer.render(scene, camera);
+        return;
+      }
       frameId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
@@ -215,6 +226,7 @@ export const Landing3DCanvas: React.FC = () => {
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
+      if (prefersReducedMotion) renderer.render(scene, camera);
     };
     window.addEventListener('resize', handleResize);
 

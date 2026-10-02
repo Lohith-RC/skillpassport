@@ -95,7 +95,11 @@ export const createFreshDeveloperProfile = (user: { name: string; email?: string
 export const useAppStore = create<AppState>((set) => ({
   activeTab: 'landing',
   isSearchOpen: false,
-  isDarkMode: true,
+  // Restore the visitor's last theme choice; default to dark on first visit
+  // (App.tsx applies prefers-color-scheme when nothing has been stored yet).
+  isDarkMode: (() => {
+    try { return localStorage.getItem('sp_theme') !== 'light'; } catch { return true; }
+  })(),
   isSyncModalOpen: false,
   isInterviewModalOpen: false,
   isSettingsOpen: false,

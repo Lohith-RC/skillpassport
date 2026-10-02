@@ -27,7 +27,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants: Record<string, string> = {
       primary:
-        'bg-accent text-accent-fg border border-transparent shadow-card hover:bg-accent-hover active:translate-y-px',
+        'bg-accent-fill text-accent-fg border border-transparent shadow-card hover:bg-accent-fill-hover active:translate-y-px',
       secondary:
         'bg-surface text-fg border border-line shadow-card hover:bg-interactive hover:border-strong active:translate-y-px',
       outline:
@@ -37,7 +37,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       danger:
         'bg-danger text-white border border-transparent shadow-card hover:opacity-90 active:translate-y-px',
       // Legacy aliases
-      purple: 'bg-accent text-accent-fg border border-transparent shadow-card hover:bg-accent-hover active:translate-y-px',
+      purple: 'bg-accent-fill text-accent-fg border border-transparent shadow-card hover:bg-accent-fill-hover active:translate-y-px',
       emerald: 'bg-surface text-fg border border-line shadow-card hover:bg-interactive hover:border-strong active:translate-y-px',
     };
 

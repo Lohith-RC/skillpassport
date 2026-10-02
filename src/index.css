@@ -69,6 +69,12 @@
     --warning-border: rgba(180, 83, 9, 0.28);
     --danger-border: rgba(220, 38, 38, 0.28);
 
+    /* ── Scroll-driven background video ──
+       Light theme runs the clip at half strength behind a heavy scrim so dark
+       headline text keeps 4.5:1 over the footage. */
+    --video-strength: 0.5;
+    --video-scrim: rgba(250, 250, 250, 0.72);
+
     /* ── Decorative detail ── */
     --grid-line: rgba(9, 9, 11, 0.055);
 
@@ -137,6 +143,9 @@
     --info-soft: rgba(96, 165, 250, 0.14);
     --warning-border: rgba(245, 158, 11, 0.30);
     --danger-border: rgba(239, 68, 68, 0.30);
+
+    --video-strength: 1;
+    --video-scrim: rgba(10, 10, 10, 0.55);
 
     --grid-line: rgba(255, 255, 255, 0.055);
 
@@ -409,6 +418,42 @@ svg rect {
 .dark [class*="bg-white"] .text-black,
 .dark [class*="bg-white"] .text-slate-900,
 .dark [class*="bg-white"] .text-gray-900 { color: var(--text-primary); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   SCROLL-DRIVEN BACKGROUND VIDEO
+   The component writes --video-fade (1 → 0 as the hero exits); strength is
+   the theme token above. Kept out of Tailwind so no per-frame JIT work.
+   ════════════════════════════════════════════════════════════════════════ */
+.video-layer {
+  opacity: calc(var(--video-strength, 1) * var(--video-fade, 1));
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.video-scrim { background: var(--video-scrim); }
+
+.video-dissolve {
+  background: linear-gradient(to top, var(--bg-canvas) 0%, transparent 100%);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   WORD REVEAL (React Bits ScrollReveal pattern)
+   ════════════════════════════════════════════════════════════════════════ */
+.rb-word {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(0.35em);
+  transition:
+    opacity 0.7s var(--ease-out),
+    filter 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
+}
+
+.rb-word-in {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
 
 /* ─── Motion is infrastructure, not decoration: respect the OS setting ─── */
 @media (prefers-reduced-motion: reduce) {

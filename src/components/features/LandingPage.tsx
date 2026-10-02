@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
 import { Landing3DCanvas } from '../canvas/Landing3DCanvas';
+import { ScrollVideoBackdrop } from '../canvas/ScrollVideoBackdrop';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
+import { AnimatedContent } from '../ui/AnimatedContent';
+import { ScrollRevealText } from '../ui/ScrollRevealText';
 import {
   Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Link2, Fingerprint,
   Globe, Copy, Check, Sliders, GraduationCap, Users, Sun, Moon,
@@ -71,6 +74,45 @@ const FEATURES: { id: keyof typeof FeatureCopy; Icon: React.FC<{ className?: str
   { id: 'academic', Icon: GraduationCap },
 ];
 
+/**
+ * Scroll progress hairline — the cheapest possible signal that the page is
+ * scroll-driven, and it doubles as a position indicator on a long page.
+ * Writes a transform directly so no React state updates per frame.
+ */
+const ScrollProgressBar: React.FC = () => {
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.transform = `scaleX(${p.toFixed(4)})`;
+    };
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(update); };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div className="fixed top-0 inset-x-0 h-0.5 z-[60] pointer-events-none" aria-hidden="true">
+      <div ref={barRef} className="h-full bg-accent origin-left scale-x-0 will-change-transform" />
+    </div>
+  );
+};
+
 export const LandingPage: React.FC = () => {
   const { setActiveTab, setSyncModalOpen, addToast, isDarkMode, toggleTheme } = useAppStore();
 
@@ -136,6 +178,9 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-canvas text-fg overflow-x-hidden font-sans">
+      <ScrollVideoBackdrop src="/video/hero-particles.mp4" />
+      <ScrollProgressBar />
+
 
       {/* ── Navigation ─────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-header backdrop-blur-xl border-b border-hairline">
@@ -317,17 +362,18 @@ export const LandingPage: React.FC = () => {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="text-center space-y-2 mb-10">
           <p className="eyebrow">What you get</p>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Four modules, one passport</h2>
+          <ScrollRevealText as="h2" text="Four modules, one passport" className="text-2xl sm:text-3xl font-bold tracking-tight" />
           <p className="text-sm text-fg-muted max-w-lg mx-auto">
             Each module answers a question a recruiter actually asks.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {FEATURES.map(({ id, Icon }) => {
+          {FEATURES.map(({ id, Icon }, index) => {
             const f = FeatureCopy[id];
             return (
-              <article key={id} className="panel p-5 flex flex-col gap-3 transition-colors duration-200 hover:border-strong">
+              <AnimatedContent key={id} delay={index * 0.08} className="h-full">
+              <article className="h-full panel p-5 flex flex-col gap-3 transition-colors duration-200 hover:border-strong">
                 <span className="w-9 h-9 rounded-xl bg-inset border border-hairline flex items-center justify-center">
                   <Icon className="w-4 h-4 text-accent" />
                 </span>
@@ -343,6 +389,7 @@ export const LandingPage: React.FC = () => {
                   {f.cta} <ArrowRight className="w-3.5 h-3.5" />
                 </Button>
               </article>
+              </AnimatedContent>
             );
           })}
         </div>
@@ -353,7 +400,7 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="text-center space-y-2 mb-10">
             <p className="eyebrow">How it works</p>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Three steps to a portable identity</h2>
+          <ScrollRevealText as="h2" text="Three steps to a portable identity" className="text-2xl sm:text-3xl font-bold tracking-tight" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -362,7 +409,7 @@ export const LandingPage: React.FC = () => {
               { Icon: Fingerprint, n: '02', title: 'Generate seals', body: 'Content hashes are produced for repositories and milestones so any claim stays checkable.', to: () => setActiveTab('repos') },
               { Icon: Globe, n: '03', title: 'Share the passport', body: 'Hand recruiters, universities or investors a link instead of a document to trust.', to: () => setActiveTab('recruiter') },
             ].map((step) => (
-              <div key={step.n}>
+              <AnimatedContent key={step.n} className="h-full">
                 <button
                   onClick={step.to}
                   className="w-full h-full text-left panel p-6 space-y-3 transition-colors duration-150 hover:border-strong group"
@@ -376,7 +423,7 @@ export const LandingPage: React.FC = () => {
                   <h3 className="font-semibold tracking-tight">{step.title}</h3>
                   <p className="text-xs text-fg-muted leading-relaxed">{step.body}</p>
                 </button>
-              </div>
+              </AnimatedContent>
             ))}
           </div>
         </div>
@@ -387,9 +434,11 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="text-center space-y-2 mb-10">
             <p className="eyebrow">Who it's for</p>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Three sides of every hiring decision
-            </h2>
+            <ScrollRevealText
+              as="h2"
+              text="Three sides of every hiring decision"
+              className="text-2xl sm:text-3xl font-bold tracking-tight"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -398,13 +447,13 @@ export const LandingPage: React.FC = () => {
               { Icon: Users, role: 'Recruiters', line: 'Open a passport and see the evidence behind the claim, with scores you can re-check yourself.' },
               { Icon: GraduationCap, role: 'Universities', line: 'Attest transcripts and milestones once; students carry the seal with them.' },
             ].map((who) => (
-              <div key={who.role} className="panel p-5 space-y-2.5">
+              <AnimatedContent key={who.role} className="panel p-5 space-y-2.5 h-full">
                 <span className="w-9 h-9 rounded-xl bg-inset border border-hairline flex items-center justify-center">
                   <who.Icon className="w-4 h-4 text-accent" />
                 </span>
                 <h3 className="font-semibold tracking-tight text-sm">{who.role}</h3>
                 <p className="text-xs text-fg-muted leading-relaxed">{who.line}</p>
-              </div>
+              </AnimatedContent>
             ))}
           </div>
 
@@ -419,9 +468,11 @@ export const LandingPage: React.FC = () => {
         <div className="panel p-8 sm:p-12 text-center space-y-5 relative overflow-hidden">
           <div className="absolute inset-0 blueprint-grid opacity-60 pointer-events-none" aria-hidden="true" />
           <div className="relative space-y-3">
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-[-0.03em]">
-              Claim your verified passport
-            </h2>
+            <ScrollRevealText
+              as="h2"
+              text="Claim your verified passport"
+              className="text-2xl sm:text-4xl font-extrabold tracking-[-0.03em]"
+            />
             <p className="text-sm text-fg-muted max-w-xl mx-auto">
               Start empty, connect one platform, and every number on your profile becomes
               something a stranger can check.

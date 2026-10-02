@@ -1,3 +1,4 @@
+import { startTransition } from 'react';
 import { create } from 'zustand';
 import { TabType, DeveloperProfile, PlatformId, RecruiterCandidate, Repository } from '../types';
 import { DEFAULT_PREDEFINED_PROFILE, createIsolatedUserSpace, purgeSessionData, saveSessionProfile } from '../utils/sessionManager';
@@ -161,14 +162,19 @@ export const useAppStore = create<AppState>((set) => ({
 
   purgeAndResetSession: () => {
     purgeSessionData();
-    set({
-      activeTab: 'landing',
-      profile: DEFAULT_PREDEFINED_PROFILE,
-      notifications: [],
-      isDemoMode: false,
-      isAuthenticated: false,
-      pendingTab: null,
-      toasts: [{ id: Math.random().toString(), message: 'Session data wiped clean. Reset to default environment.', type: 'info' }],
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', '#landing');
+    }
+    startTransition(() => {
+      set({
+        activeTab: 'landing',
+        profile: DEFAULT_PREDEFINED_PROFILE,
+        notifications: [],
+        isDemoMode: false,
+        isAuthenticated: false,
+        pendingTab: null,
+        toasts: [{ id: Math.random().toString(), message: 'Signed out successfully. Session data reset to default.', type: 'info' }],
+      });
     });
   },
 
@@ -227,14 +233,22 @@ export const useAppStore = create<AppState>((set) => ({
     });
   },
 
-  setActiveTab: (tab) => set({ activeTab: tab }),
+  setActiveTab: (tab) => {
+    startTransition(() => {
+      set({ activeTab: tab });
+    });
+  },
   setSearchOpen: (open) => set({ isSearchOpen: open }),
   toggleTheme: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
   setSyncModalOpen: (open) => set({ isSyncModalOpen: open }),
   setInterviewModalOpen: (open, candidate = null) => set({ isInterviewModalOpen: open, selectedCandidate: candidate }),
   setSettingsOpen: (open) => set({ isSettingsOpen: open }),
   setNotificationsOpen: (open) => set({ isNotificationsOpen: open }),
-  setPendingTab: (tab: TabType | null) => set({ pendingTab: tab }),
+  setPendingTab: (tab: TabType | null) => {
+    startTransition(() => {
+      set({ pendingTab: tab });
+    });
+  },
   toggleTelemetry: () => set((state) => ({ isTelemetryActive: !state.isTelemetryActive })),
   setInspectingRepo: (repo) => set({ inspectingRepo: repo }),
   setSelectedCandidate: (candidate) => set({ selectedCandidate: candidate }),

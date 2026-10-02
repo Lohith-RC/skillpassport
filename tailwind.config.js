@@ -29,25 +29,33 @@ export default {
           100: '#EDE9FE',
           200: '#DDD6FE',
           500: '#8B5CF6',
-          600: '#7C3AED', /* Primary Royal Purple Accent */
+          600: '#7C3AED', /* Primary Electric Purple Accent */
           700: '#6D28D9',
           800: '#5B21B6',
+          900: '#4C1D95',
+          950: '#2E1065',
         },
-        emerald: {
-          50: '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          500: '#10B981', /* Green Contribution Graph Accent */
-          600: '#059669',
-          700: '#047857',
+        cyan: {
+          50: '#ECFEFF',
+          100: '#CFFAFE',
+          200: '#A5F3FC',
+          400: '#22D3EE',
+          500: '#06B6D4', /* Electric Cyan Accent */
+          600: '#0891B2',
+          700: '#0E7490',
         },
-        slate: {
-          900: '#0F172A',
-          800: '#1E293B',
-          600: '#475569',
-          400: '#94A3B8',
-          200: '#E2E8F0',
-          100: '#F1F5F9',
+        zinc: {
+          50: '#FAFAFA',
+          100: '#F4F4F5',
+          200: '#E4E4E7',
+          300: '#D4D4D8',
+          400: '#A1A1AA',
+          500: '#71717A',
+          600: '#52525B',
+          700: '#3F3F46',
+          800: '#27272A',
+          900: '#18181B',
+          950: '#09090B',
         },
       },
       fontFamily: {
@@ -60,10 +68,10 @@ export default {
         '3xl': '24px',
       },
       boxShadow: {
-        'purple-glow': '0 0 25px -5px rgba(124, 58, 237, 0.35)',
-        'emerald-glow': '0 0 25px -5px rgba(16, 185, 129, 0.35)',
-        'light-card': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02)',
-        'light-card-hover': '0 10px 30px -4px rgba(124, 58, 237, 0.15), 0 4px 10px -2px rgba(15, 23, 42, 0.04)',
+        'purple-glow': '0 0 25px -5px rgba(124, 58, 237, 0.4)',
+        'cyan-glow': '0 0 25px -5px rgba(6, 182, 212, 0.4)',
+        'zinc-card': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
+        'zinc-card-hover': '0 10px 25px -5px rgba(124, 58, 237, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.04)',
       },
     },
   },

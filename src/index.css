@@ -9,27 +9,27 @@
     --bg-sidebar: #FFFFFF;
     --bg-header: rgba(255,255,255,0.85);
     --bg-card: #FFFFFF;
-    --bg-card-nested: #F8FAFC;
-    --bg-input: #F1F5F9;
-    --bg-hover: #F1F5F9;
-    --bg-muted: #F8FAFC;
+    --bg-card-nested: #F4F4F5;
+    --bg-input: #F4F4F5;
+    --bg-hover: #F4F4F5;
+    --bg-muted: #F4F4F5;
 
     /* ─── Borders ─── */
-    --border-card: #E2E8F0;
-    --border-input: #CBD5E1;
-    --border-subtle: #E2E8F0;
-    --border-default: #CBD5E1;
-    --border-focus: #2563EB;
+    --border-card: #E4E4E7;
+    --border-input: #D4D4D8;
+    --border-subtle: #E4E4E7;
+    --border-default: #E4E4E7;
+    --border-focus: #7C3AED;
 
     /* ─── Text ─── */
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #94A3B8;
+    --text-primary: #09090B;
+    --text-secondary: #52525B;
+    --text-muted: #A1A1AA;
     --text-inverse: #FFFFFF;
 
     /* ─── Accents ─── */
     --accent-purple: #7C3AED;
-    --accent-blue: #2563EB;
+    --accent-cyan: #06B6D4;
     --accent-emerald: #10B981;
     --accent-amber: #F59E0B;
     --accent-red: #EF4444;
@@ -37,31 +37,31 @@
 
   .dark {
     /* ─── Page Canvas ─── */
-    --bg-canvas: #070A11;
-    --bg-sidebar: #0B0F19;
-    --bg-header: rgba(9,13,23,0.80);
-    --bg-card: #0B0F19;
-    --bg-card-nested: #0F1626;
-    --bg-input: #0F1626;
-    --bg-hover: #13192B;
-    --bg-muted: #161D2F;
+    --bg-canvas: #09090B;
+    --bg-sidebar: #18181B;
+    --bg-header: rgba(24,24,27,0.85);
+    --bg-card: #18181B;
+    --bg-card-nested: #27272A;
+    --bg-input: #27272A;
+    --bg-hover: #27272A;
+    --bg-muted: #27272A;
 
     /* ─── Borders ─── */
-    --border-card: #161D2F;
-    --border-input: #1C263B;
-    --border-subtle: #161D2F;
-    --border-default: #1C263B;
-    --border-focus: #2563EB;
+    --border-card: #27272A;
+    --border-input: #3F3F46;
+    --border-subtle: #27272A;
+    --border-default: #27272A;
+    --border-focus: #7C3AED;
 
     /* ─── Text ─── */
-    --text-primary: #FFFFFF;
-    --text-secondary: #D1D5DB;
-    --text-muted: #94A3B8;
-    --text-inverse: #0F172A;
+    --text-primary: #FAFAFA;
+    --text-secondary: #A1A1AA;
+    --text-muted: #71717A;
+    --text-inverse: #09090B;
 
     /* ─── Accents ─── */
     --accent-purple: #8B5CF6;
-    --accent-blue: #2563EB;
+    --accent-cyan: #22D3EE;
     --accent-emerald: #10B981;
     --accent-amber: #F59E0B;
     --accent-red: #EF4444;

@@ -10,20 +10,18 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
-  Code,
   Award,
   CheckCircle2,
-  Shield,
   Fingerprint,
   Link2,
-  Lock,
   Globe,
   ChevronRight,
+  Copy,
+  Check,
+  Sliders,
+  Activity,
 } from 'lucide-react';
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * RevealDiv — lightweight wrapper that applies scroll-reveal to its children
- * ═══════════════════════════════════════════════════════════════════════════ */
 const RevealDiv: React.FC<{
   children: React.ReactNode;
   delay?: number;
@@ -38,9 +36,6 @@ const RevealDiv: React.FC<{
   );
 };
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * CanvasErrorBoundary — catches WebGL / render failures in the 3D canvas
- * ═══════════════════════════════════════════════════════════════════════════ */
 class CanvasErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback: React.ReactNode },
   { hasError: boolean }
@@ -57,31 +52,27 @@ class CanvasErrorBoundary extends React.Component<
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
- * LandingPage — Immersive, scroll-driven, 3D-oriented landing experience
- * ═══════════════════════════════════════════════════════════════════════════ */
 export const LandingPage: React.FC = () => {
-  const { setActiveTab, setSyncModalOpen } = useAppStore();
+  const { setActiveTab, setSyncModalOpen, addToast } = useAppStore();
 
-  // ── Scroll Reveal Refs (each call is a separate hook — Rules of Hooks) ──
+  // ── Scroll Reveal Hooks ──────────────────────────────────────────────────
   const statsReveal = useScrollReveal({ threshold: 0.2 });
   const how1Reveal = useScrollReveal({ delay: 0 });
   const how2Reveal = useScrollReveal({ delay: 120 });
   const how3Reveal = useScrollReveal({ delay: 240 });
-  const mod1Reveal = useScrollReveal({ delay: 0 });
-  const mod2Reveal = useScrollReveal({ delay: 100 });
-  const mod3Reveal = useScrollReveal({ delay: 200 });
-  const trustReveal = useScrollReveal({ threshold: 0.12 });
-  const ctaReveal = useScrollReveal({ threshold: 0.2 });
 
-  // ── Mount-triggered hero entrance animation ─────────────────────────────
+  // ── Entrance Mount Animation ─────────────────────────────────────────────
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
+    const fallback = window.setTimeout(() => setMounted(true), 150);
+    return () => {
+      cancelAnimationFrame(id);
+      clearTimeout(fallback);
+    };
   }, []);
 
-  // ── WebGL support detection (graceful fallback) ─────────────────────────
+  // ── WebGL Detection ───────────────────────────────────────────────────────
   const [webglOk, setWebglOk] = useState(true);
   useEffect(() => {
     try {
@@ -93,132 +84,208 @@ export const LandingPage: React.FC = () => {
     }
   }, []);
 
-  /* ── Shared animation class builder ──────────────────────────────────── */
+  // ── INTERACTIVE WIDGET 1: Hero Identity Proof Simulator ────────────────────
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['github', 'leetcode', 'gitlab']);
+  const [copiedSha, setCopiedSha] = useState(false);
+
+  const platformScores: Record<string, { name: string; score: number; label: string }> = {
+    github: { name: 'GitHub', score: 35, label: '840 Commits' },
+    leetcode: { name: 'LeetCode', score: 28, label: '264 Solved' },
+    gitlab: { name: 'GitLab', score: 18, label: '412 MRs' },
+    kaggle: { name: 'Kaggle', score: 14, label: '340 Upvotes' },
+  };
+
+  const calculatedProofScore = selectedPlatforms.reduce((acc, id) => acc + (platformScores[id]?.score || 0), 0);
+  const currentShaSeal = `SHA256:${selectedPlatforms.join('_')}_${calculatedProofScore}_8f92a1c4b789`;
+
+  const togglePlatformInSimulator = (id: string) => {
+    if (selectedPlatforms.includes(id)) {
+      if (selectedPlatforms.length === 1) {
+        addToast('At least 1 platform must remain selected.', 'warning');
+        return;
+      }
+      setSelectedPlatforms(selectedPlatforms.filter(p => p !== id));
+    } else {
+      setSelectedPlatforms([...selectedPlatforms, id]);
+    }
+  };
+
+  const copyShaToClipboard = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(currentShaSeal);
+    }
+    setCopiedSha(true);
+    addToast('Zero-Knowledge SHA-256 seal copied to clipboard!', 'success');
+    setTimeout(() => setCopiedSha(false), 2000);
+  };
+
+  // ── INTERACTIVE WIDGET 2: Core Feature Showcase Tab Switcher ───────────────
+  const [activeFeatureTab, setActiveFeatureTab] = useState<'proof' | 'zk' | 'recruiter' | 'academic'>('proof');
+
   const heroAnim = (delayMs: number) =>
     `transition-all duration-700 ease-out ${
       mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
     }`.replace('duration-700', `duration-700 delay-[${delayMs}ms]`);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden selection:bg-white selection:text-black font-sans">
 
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      {/* Ambient Depth — fixed gradient orbs for atmospheric layering        */}
+      {/* PURE MONOCHROME BLACK NAVIGATION HEADER                            */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
-      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-600/[0.04] dark:bg-purple-600/[0.07] blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-emerald-500/[0.04] dark:bg-emerald-500/[0.06] blur-[100px]" />
-        <div className="absolute top-[40%] left-[50%] w-[400px] h-[400px] rounded-full bg-blue-500/[0.03] dark:bg-blue-500/[0.04] blur-[80px]" />
-      </div>
+      <nav className="sticky top-0 z-50 backdrop-blur-2xl bg-black/95 border-b border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className="flex items-center gap-3 hover:opacity-90 transition group"
+            aria-label="Go to dashboard"
+          >
+            <img
+              src="/logo.png"
+              alt="SkillPassport AI Logo"
+              className="w-9 h-9 rounded-xl object-cover shadow-md border border-zinc-700 group-hover:scale-105 transition-transform duration-200"
+            />
+            <div className="hidden sm:block text-left">
+              <span className="font-extrabold text-sm text-white tracking-tight">
+                SkillPassport <span className="text-zinc-400">AI</span>
+              </span>
+              <p className="text-[10px] text-zinc-400 font-mono leading-none">
+                Verified Identity Protocol
+              </p>
+            </div>
+          </button>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveTab('login')}
+              className="px-4 py-2 text-xs font-semibold text-zinc-300 hover:text-white transition rounded-xl hover:bg-zinc-900 border border-transparent hover:border-zinc-800"
+            >
+              Sign In
+            </button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setActiveTab('signup')}
+            >
+              Get Started
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Button>
+          </div>
+        </div>
+      </nav>
 
       <div className="relative z-10">
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* NAVIGATION BAR — glassmorphic sticky nav                           */}
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 dark:bg-[#070A11]/80 border-b border-slate-200/50 dark:border-white/[0.06]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className="flex items-center gap-3 hover:opacity-80 transition group"
-              aria-label="Go to dashboard"
-            >
-              <img
-                src="/logo.png"
-                alt="SkillPassport AI Logo"
-                className="w-9 h-9 rounded-xl object-cover shadow-lg shadow-blue-600/20 border border-blue-500/20 group-hover:scale-105 transition-transform duration-200"
-              />
-              <div className="hidden sm:block">
-                <span className="font-extrabold text-sm text-slate-900 dark:text-white">
-                  SkillPassport <span className="text-blue-600 dark:text-blue-500">AI</span>
-                </span>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">
-                  One Identity. Endless Opportunities.
-                </p>
-              </div>
-            </button>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <button
-                onClick={() => setActiveTab('login')}
-                className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition rounded-xl hover:bg-slate-100 dark:hover:bg-white/5"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setActiveTab('signup')}
-                className="px-4 py-2 text-xs sm:text-sm font-bold text-white rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 hover:scale-[1.02] active:scale-[0.98]"
-                style={{ background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)' }}
-              >
-                Get Started
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* HERO SECTION — staggered mount entrance + 3D canvas                */}
+        {/* HERO SECTION — STARK MONOCHROME BLACK & WHITE                      */}
         {/* ═══════════════════════════════════════════════════════════════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16 pb-12 sm:pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
-            {/* ── Left: Hero Text Content ──────────────────────────────── */}
+            {/* ── Left: Hero Content ────────────────────────────────────────── */}
             <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
 
               {/* Badge */}
               <div className={heroAnim(0)}>
-                <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40 text-xs font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                  <span>SkillPassport AI — Interactive Product Demo</span>
+                <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-zinc-900 text-white border border-zinc-700 text-xs font-mono font-bold">
+                  <Sparkles className="w-3.5 h-3.5 text-white animate-pulse" />
+                  <span>Monochrome Zero-Knowledge Proof Protocol</span>
                 </div>
               </div>
 
-              {/* Heading */}
+              {/* Headline */}
               <h1 className={heroAnim(100)}>
-                <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1]">
+                <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-white tracking-tight leading-[1.1]">
                   Verified Work Replaces
                 </span>
-                <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight leading-[1.1] mt-1 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-500">
+                <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight leading-[1.1] mt-1 text-zinc-300">
                   Traditional Resumes.
                 </span>
               </h1>
 
-              {/* Subheading */}
-              <p className={`text-sm sm:text-base text-slate-600 dark:text-gray-300 leading-relaxed max-w-xl mx-auto lg:mx-0 ${heroAnim(200)}`}>
-                SkillPassport AI builds the trusted digital identity and infrastructure
-                for technical talent, connecting developers, companies, universities,
-                and investors through zero-knowledge proof verification.
+              <p className={`text-sm sm:text-base text-zinc-400 leading-relaxed max-w-xl mx-auto lg:mx-0 ${heroAnim(200)}`}>
+                SkillPassport AI aggregates live commit telemetry, algorithmic contest benchmarks,
+                and academic seals into a single tamper-proof cryptographic developer passport.
               </p>
+
+              {/* INTERACTIVE HERO PROOF SIMULATOR WIDGET (MONOCHROME) */}
+              <div className={`p-4 sm:p-5 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl space-y-4 text-left ${heroAnim(250)}`}>
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+                  <span className="text-xs font-bold text-white flex items-center">
+                    <Sliders className="w-3.5 h-3.5 text-white mr-2" />
+                    Interactive Proof Score Simulator (Toggle platforms)
+                  </span>
+                  <span className="text-xs font-mono font-bold text-white bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700">
+                    {calculatedProofScore}% Proof Score
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {Object.entries(platformScores).map(([key, data]) => {
+                    const isSelected = selectedPlatforms.includes(key);
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => togglePlatformInSimulator(key)}
+                        className={`p-2.5 rounded-xl border text-left transition-all ${
+                          isSelected
+                            ? 'bg-white text-black font-bold border-white shadow-sm'
+                            : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span>{data.name}</span>
+                          {isSelected && <Check className="w-3 h-3 text-black stroke-[3]" />}
+                        </div>
+                        <div className="text-[10px] font-mono opacity-80 mt-1">{data.label}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* SHA Seal Copy Line */}
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-black border border-zinc-800 font-mono text-[11px]">
+                  <span className="text-zinc-400 truncate mr-2">{currentShaSeal}</span>
+                  <button
+                    onClick={copyShaToClipboard}
+                    className="px-3 py-1 rounded-lg bg-white hover:bg-zinc-200 text-black font-sans text-xs font-bold flex items-center shrink-0 transition"
+                  >
+                    {copiedSha ? <Check className="w-3.5 h-3.5 mr-1" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
+                    {copiedSha ? 'Copied' : 'Copy Seal'}
+                  </button>
+                </div>
+              </div>
 
               {/* CTA Buttons */}
               <div className={`flex flex-wrap gap-4 justify-center lg:justify-start ${heroAnim(300)}`}>
-                <Button variant="purple" size="lg" onClick={() => setActiveTab('profile')}>
-                  <span>Explore Passport Dashboard</span>
+                <Button variant="primary" size="lg" onClick={() => setActiveTab('profile')}>
+                  Explore Passport Dashboard
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
                 <Button variant="secondary" size="lg" onClick={() => setSyncModalOpen(true)}>
-                  <ShieldCheck className="w-4 h-4 mr-2 text-emerald-500" />
+                  <ShieldCheck className="w-4 h-4 mr-2 text-white" />
                   Sync 10 Platforms
                 </Button>
               </div>
 
               {/* Social Proof Pills */}
-              <div className={`pt-4 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-500 dark:text-gray-400 font-mono ${heroAnim(400)}`}>
+              <div className={`pt-2 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-zinc-400 font-mono ${heroAnim(400)}`}>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <CheckCircle2 className="w-4 h-4 text-white" />
                   10 Connected Services
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-purple-600" />
+                  <CheckCircle2 className="w-4 h-4 text-white" />
                   Zero-Knowledge SHA Seals
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-amber-500" />
+                  <CheckCircle2 className="w-4 h-4 text-white" />
                   42ms Response Latency
                 </span>
               </div>
             </div>
 
-            {/* ── Right: 3D WebGL Canvas with Error Boundary ────────────── */}
+            {/* ── Right: 3D Interactive WebGL Mesh Scene ───────────────────────── */}
             <div
               className={`relative transition-all duration-1000 ease-out ${
                 mounted ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
@@ -228,43 +295,24 @@ export const LandingPage: React.FC = () => {
               {webglOk ? (
                 <CanvasErrorBoundary
                   fallback={
-                    <div className="min-h-[380px] md:min-h-[440px] flex items-center justify-center glass-card rounded-2xl border border-border-default">
-                      <div className="text-center space-y-3 p-8">
-                        <div className="w-16 h-16 rounded-2xl bg-purple-100 dark:bg-purple-950/60 flex items-center justify-center mx-auto">
-                          <Sparkles className="w-8 h-8 text-purple-600" />
-                        </div>
-                        <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                          Interactive 3D Experience
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          Enable WebGL for the full immersive demo
-                        </p>
-                      </div>
+                    <div className="min-h-[380px] md:min-h-[440px] flex items-center justify-center rounded-2xl bg-zinc-950 border border-zinc-800 p-8">
+                      <p className="text-sm font-semibold text-white">Interactive 3D Experience</p>
                     </div>
                   }
                 >
-                  <Card className="relative overflow-hidden p-2 min-h-[380px] md:min-h-[440px] flex items-center justify-center border-slate-200 dark:border-border-default shadow-2xl shadow-purple-600/5 dark:shadow-purple-600/10">
-                    <div className="absolute top-4 left-4 z-10">
-                      <Badge variant="emerald">Live WebGL 3D Node Mesh</Badge>
+                  <Card className="relative overflow-hidden p-2 min-h-[380px] md:min-h-[440px] flex items-center justify-center bg-zinc-950 border-zinc-800 shadow-2xl">
+                    <div className="absolute top-4 left-4 z-10 flex items-center space-x-2">
+                      <Badge variant="blue">Live WebGL 3D Node Mesh</Badge>
+                      <span className="text-[10px] font-mono text-white bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                        Mouse Reactive
+                      </span>
                     </div>
                     <Landing3DCanvas />
                   </Card>
                 </CanvasErrorBoundary>
               ) : (
-                /* WebGL not supported — static fallback */
-                <div className="min-h-[380px] md:min-h-[440px] flex items-center justify-center glass-card rounded-2xl border border-border-default">
-                  <div className="text-center space-y-4 p-8">
-                    <div className="w-16 h-16 rounded-2xl bg-purple-100 dark:bg-purple-950/60 flex items-center justify-center mx-auto animate-float">
-                      <Sparkles className="w-8 h-8 text-purple-600" />
-                    </div>
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                      3D Interactive Demo
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
-                      Enable hardware acceleration and WebGL in your browser for the full immersive experience.
-                    </p>
-                    <Badge variant="purple">WebGL Required</Badge>
-                  </div>
+                <div className="min-h-[380px] md:min-h-[440px] flex items-center justify-center bg-zinc-950 rounded-2xl border border-zinc-800">
+                  <Badge variant="neutral">WebGL Required</Badge>
                 </div>
               )}
             </div>
@@ -272,27 +320,25 @@ export const LandingPage: React.FC = () => {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* SOCIAL PROOF STATS BAR — scroll-revealed                           */}
+        {/* STATS STRIP                                                        */}
         {/* ═══════════════════════════════════════════════════════════════════ */}
         <section
           ref={statsReveal}
-          className="relative py-8 sm:py-12 border-y border-slate-200/50 dark:border-white/[0.06] bg-white/50 dark:bg-white/[0.02] backdrop-blur-sm"
+          className="relative py-8 sm:py-12 border-y border-zinc-800 bg-zinc-950"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
               {[
-                { value: '10K+', label: 'Verified Developers', color: 'text-purple-600 dark:text-purple-400' },
-                { value: '42ms', label: 'Avg. Verification', color: 'text-emerald-600 dark:text-emerald-400' },
-                { value: '10', label: 'Platform Integrations', color: 'text-blue-600 dark:text-blue-400' },
-                { value: '99.9%', label: 'Uptime SLA', color: 'text-amber-600 dark:text-amber-400' },
+                { value: '10K+', label: 'Verified Developers' },
+                { value: '42ms', label: 'Avg. Verification' },
+                { value: '10', label: 'Platform Integrations' },
+                { value: '99.9%', label: 'Uptime SLA' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center space-y-1">
-                  <div className={`text-2xl sm:text-3xl font-extrabold font-mono ${stat.color}`}>
+                  <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white">
                     {stat.value}
                   </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                    {stat.label}
-                  </div>
+                  <div className="text-xs text-zinc-400 font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -300,351 +346,213 @@ export const LandingPage: React.FC = () => {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* HOW IT WORKS — 3-step process with staggered scroll reveal         */}
+        {/* INTERACTIVE FEATURE SHOWCASE TAB STRIP (MONOCHROME)                 */}
         {/* ═══════════════════════════════════════════════════════════════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-          <RevealDiv className="text-center space-y-3 mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-              How SkillPassport Works
+          <RevealDiv className="text-center space-y-3 mb-12">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+              Interactive Feature Inspector
             </h2>
-            <p className="text-sm text-slate-500 dark:text-gray-400 max-w-lg mx-auto">
-              Three steps to a verified, portable professional identity
+            <p className="text-sm text-zinc-400 max-w-lg mx-auto">
+              Select a module below to preview live telemetry data and zero-knowledge seals
             </p>
           </RevealDiv>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {/* Step 1 */}
-            <div ref={how1Reveal}>
-              <Card hoverable className="p-6 sm:p-8 space-y-4 h-full relative overflow-hidden group">
-                <div className="absolute top-4 right-4 text-6xl font-extrabold text-slate-100 dark:text-white/[0.03] select-none pointer-events-none">
-                  01
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Link2 className="w-6 h-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">
-                  Connect Your Platforms
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
-                  Link GitHub, LeetCode, Kaggle, and 7 more coding platforms to
-                  aggregate your verified activity trail.
-                </p>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400">
-                  Learn more <ChevronRight className="w-3.5 h-3.5" />
-                </div>
-              </Card>
-            </div>
-
-            {/* Step 2 */}
-            <div ref={how2Reveal}>
-              <Card hoverable className="p-6 sm:p-8 space-y-4 h-full relative overflow-hidden group">
-                <div className="absolute top-4 right-4 text-6xl font-extrabold text-slate-100 dark:text-white/[0.03] select-none pointer-events-none">
-                  02
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Fingerprint className="w-6 h-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">
-                  Generate Zero-Knowledge Proof
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
-                  Our SHA-256 verification engine creates cryptographic seals of your
-                  skills, contributions, and achievements.
-                </p>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  Learn more <ChevronRight className="w-3.5 h-3.5" />
-                </div>
-              </Card>
-            </div>
-
-            {/* Step 3 */}
-            <div ref={how3Reveal}>
-              <Card hoverable className="p-6 sm:p-8 space-y-4 h-full relative overflow-hidden group">
-                <div className="absolute top-4 right-4 text-6xl font-extrabold text-slate-100 dark:text-white/[0.03] select-none pointer-events-none">
-                  03
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Globe className="w-6 h-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">
-                  Share Verified Identity
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
-                  Present your tamper-proof SkillPassport to recruiters, universities,
-                  and investors — no resume needed.
-                </p>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400">
-                  Learn more <ChevronRight className="w-3.5 h-3.5" />
-                </div>
-              </Card>
+          {/* Tab Selector */}
+          <div className="flex justify-center mb-8">
+            <div className="flex flex-wrap bg-zinc-950 p-1.5 rounded-2xl border border-zinc-800 text-xs font-semibold gap-1">
+              {[
+                { id: 'proof', label: '⚡ Proof Engine' },
+                { id: 'zk', label: '🛡️ ZK SHA Seals' },
+                { id: 'recruiter', label: '👥 Talent Sourcing' },
+                { id: 'academic', label: '🎓 Academic Registries' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveFeatureTab(tab.id as any)}
+                  className={`px-4 py-2 rounded-xl transition-all ${
+                    activeFeatureTab === tab.id
+                      ? 'bg-white text-black font-bold shadow-md'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
+
+          {/* Tab Content Display Card */}
+          <Card className="p-6 sm:p-8 bg-zinc-950 border-zinc-800 space-y-6">
+            {activeFeatureTab === 'proof' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div className="space-y-4">
+                  <Badge variant="blue">Live Commit Telemetry</Badge>
+                  <h3 className="text-xl font-bold text-white">Automated Cross-Platform Aggregation</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    SkillPassport continuously polls connected platform webhooks to compile a 52-week activity graph. Every commit, pull request, and contest round is verified.
+                  </p>
+                  <Button variant="primary" size="sm" onClick={() => setActiveTab('heatmap')}>
+                    View Contribution Heatmap &rarr;
+                  </Button>
+                </div>
+                <div className="p-4 bg-black rounded-xl border border-zinc-800 font-mono text-xs space-y-2 text-zinc-300">
+                  <div className="text-white font-bold">// Live Telemetry Payload</div>
+                  <div>&#123; "user": "rahul.sharma", "proofScore": 88, "platforms": 10 &#125;</div>
+                  <div className="text-zinc-400 font-bold">// 52-Week Heatmap: 840 Verified Commits</div>
+                  <div className="text-white">// Status: 200 OK (Latency 42ms)</div>
+                </div>
+              </div>
+            )}
+
+            {activeFeatureTab === 'zk' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div className="space-y-4">
+                  <Badge variant="blue">Cryptographic Integrity</Badge>
+                  <h3 className="text-xl font-bold text-white">Zero-Knowledge Identity Seals</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Share your verified skill score without revealing raw source code or private company repos. Every seal is SHA-256 signed.
+                  </p>
+                  <Button variant="primary" size="sm" onClick={() => setActiveTab('timecapsule')}>
+                    Explore Time Capsule Seals &rarr;
+                  </Button>
+                </div>
+                <div className="p-4 bg-black rounded-xl border border-zinc-800 font-mono text-xs space-y-2">
+                  <div className="text-white">SHA256: 8f92a1c4b78912e...e45a901</div>
+                  <div className="text-zinc-400">Issuer: VTU Registrar &amp; Acme Corp CTO</div>
+                  <div className="text-white font-bold">Status: VERIFIED &amp; UNTAMPERED</div>
+                </div>
+              </div>
+            )}
+
+            {activeFeatureTab === 'recruiter' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div className="space-y-4">
+                  <Badge variant="blue">Zero-Resume Evidence Hiring</Badge>
+                  <h3 className="text-xl font-bold text-white">Enterprise Talent Sourcing Portal</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Search developers by verified proof score, live production apps, and institutional seals with 2-candidate side-by-side comparisons.
+                  </p>
+                  <Button variant="primary" size="sm" onClick={() => setActiveTab('recruiter')}>
+                    Open Recruiter Pipeline &rarr;
+                  </Button>
+                </div>
+                <div className="p-4 bg-black rounded-xl border border-zinc-800 text-xs space-y-2">
+                  <div className="font-bold text-white flex justify-between">
+                    <span>Ananya Gupta (96% Proof Score)</span>
+                    <span className="text-zinc-300 font-mono">PLATINUM</span>
+                  </div>
+                  <div className="text-zinc-400 text-[11px]">Verified Skills: PyTorch, Rust, vLLM, CUDA</div>
+                  <div className="text-white font-mono text-[11px]">22 Live Production Deployed Apps</div>
+                </div>
+              </div>
+            )}
+
+            {activeFeatureTab === 'academic' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div className="space-y-4">
+                  <Badge variant="blue">Institutional Trust</Badge>
+                  <h3 className="text-xl font-bold text-white">University Registrar Verifications</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Official digital degree transcript seals verified with CGPA ratings directly from university registrars.
+                  </p>
+                  <Button variant="primary" size="sm" onClick={() => setActiveTab('university')}>
+                    View University Hub &rarr;
+                  </Button>
+                </div>
+                <div className="p-4 bg-black rounded-xl border border-zinc-800 text-xs space-y-2 font-mono">
+                  <div className="text-white font-bold">VTU Academic Registrar Seal</div>
+                  <div className="text-zinc-300">Degree: Computer Science (9.42 CGPA)</div>
+                  <div className="text-white">Cryptographically Signed &amp; Timestamped</div>
+                </div>
+              </div>
+            )}
+          </Card>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* CORE PRODUCT MODULES — staggered scroll reveal                      */}
+        {/* HOW IT WORKS 3-STEP PROCESS                                        */}
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-          <RevealDiv className="text-center space-y-3 mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-              Core Product Modules
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+          <RevealDiv className="text-center space-y-3 mb-12">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+              3 Steps to a Portable Identity
             </h2>
-            <p className="text-sm text-slate-500 dark:text-gray-400 max-w-lg mx-auto">
-              Explore the verified-talent identity stack — click any module to jump in
-            </p>
           </RevealDiv>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {/* Module 1 */}
-            <div ref={mod1Reveal}>
+            <div ref={how1Reveal}>
               <Card
                 hoverable
-                onClick={() => setActiveTab('profile')}
-                className="p-6 sm:p-8 space-y-4 cursor-pointer h-full group"
+                onClick={() => setSyncModalOpen(true)}
+                className="p-6 sm:p-8 space-y-4 h-full bg-zinc-950 border-zinc-800 group cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Award className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-2xl bg-zinc-900 text-white border border-zinc-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Link2 className="w-6 h-6" />
                 </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">
-                  Module 1: 10-Platform Passport
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
-                  52-week green activity heatmap aggregating GitHub, GitLab, LeetCode,
-                  HackerRank, Codeforces, and Kaggle.
+                <h3 className="font-extrabold text-white text-base sm:text-lg">01. Connect Platforms</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Link GitHub, LeetCode, GitLab, Kaggle, and 6 more platforms to aggregate your activity trail.
                 </p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400">
-                  Explore Passport <ArrowRight className="w-3.5 h-3.5" />
-                </span>
               </Card>
             </div>
 
-            {/* Module 2 */}
-            <div ref={mod2Reveal}>
+            <div ref={how2Reveal}>
               <Card
                 hoverable
                 onClick={() => setActiveTab('repos')}
-                className="p-6 sm:p-8 space-y-4 cursor-pointer h-full group"
+                className="p-6 sm:p-8 space-y-4 h-full bg-zinc-950 border-zinc-800 group cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Zap className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-2xl bg-zinc-900 text-white border border-zinc-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Fingerprint className="w-6 h-6" />
                 </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">
-                  Module 2: Code Telemetry Vault
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
-                  Empirical runtime telemetry displaying 42ms response latency, CI build
-                  runners, and cryptographic SHA seals.
+                <h3 className="font-extrabold text-white text-base sm:text-lg">02. Generate SHA Seals</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  SHA-256 verification engine creates cryptographic proof seals for all your repositories and achievements.
                 </p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  Inspect Telemetry <ArrowRight className="w-3.5 h-3.5" />
-                </span>
               </Card>
             </div>
 
-            {/* Module 3 */}
-            <div ref={mod3Reveal}>
+            <div ref={how3Reveal}>
               <Card
                 hoverable
                 onClick={() => setActiveTab('recruiter')}
-                className="p-6 sm:p-8 space-y-4 cursor-pointer h-full group"
+                className="p-6 sm:p-8 space-y-4 h-full bg-zinc-950 border-zinc-800 group cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <ShieldCheck className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-2xl bg-zinc-900 text-white border border-zinc-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Globe className="w-6 h-6" />
                 </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">
-                  Module 3: Recruiter Sourcing Portal
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed">
-                  Zero-resume evidence hiring pipeline with candidate comparison matrix
-                  and direct interview scheduling.
+                <h3 className="font-extrabold text-white text-base sm:text-lg">03. Share Verified Identity</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Present your tamper-proof SkillPassport to recruiters, universities, and investors — zero resume needed.
                 </p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                  Open Portal <ArrowRight className="w-3.5 h-3.5" />
-                </span>
               </Card>
             </div>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* TRUST & SECURITY — depth-stacked card layout                        */}
+        {/* BOTTOM CALL TO ACTION BANNER                                       */}
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        <section ref={trustReveal} className="relative py-16 sm:py-20 lg:py-24 overflow-hidden">
-          {/* Subtle gradient wash */}
-          <div
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-600/[0.03] to-transparent pointer-events-none"
-            aria-hidden="true"
-          />
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-              {/* Left: Copy */}
-              <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 text-xs font-semibold">
-                  <Lock className="w-3.5 h-3.5" />
-                  Enterprise-Grade Security
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
-                  Your Skills,{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">
-                    Cryptographically Sealed
-                  </span>
-                </h2>
-                <p className="text-sm sm:text-base text-slate-600 dark:text-gray-300 leading-relaxed">
-                  Every contribution, achievement, and skill verification is sealed with
-                  SHA-256 cryptographic proofs. Tamper-proof, portable, and instantly
-                  verifiable by any employer or institution.
-                </p>
-                <div className="space-y-3">
-                  {[
-                    'Zero-knowledge proofs preserve privacy while proving competence',
-                    'Real-time verification — no manual resume review needed',
-                    'Cross-platform aggregation from 10+ coding ecosystems',
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                      <span className="text-xs sm:text-sm text-slate-600 dark:text-gray-300">
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right: Depth-stacked verification card */}
-              <div className="relative">
-                {/* Primary card */}
-                <div className="relative z-10 glass-card rounded-2xl border border-slate-200 dark:border-border-default p-6 space-y-4 shadow-xl shadow-purple-600/5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center">
-                      <Shield className="w-5 h-5 text-emerald-600" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-900 dark:text-white">
-                        SHA-256 Verification Seal
-                      </div>
-                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
-                        0x7f3a...e2d1
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { label: 'Proofs Generated', value: '2,847' },
-                      { label: 'Avg Latency', value: '42ms' },
-                      { label: 'Success Rate', value: '99.9%' },
-                    ].map((m) => (
-                      <div
-                        key={m.label}
-                        className="p-3 bg-slate-50 dark:bg-bg-base rounded-xl border border-slate-200 dark:border-border-subtle text-center"
-                      >
-                        <div className="text-[10px] text-slate-500">{m.label}</div>
-                        <div className="text-base font-bold font-mono text-purple-600 dark:text-purple-400">
-                          {m.value}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-3 bg-slate-50 dark:bg-bg-base rounded-xl border border-slate-200 dark:border-border-subtle">
-                    <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 space-y-1">
-                      <div className="flex justify-between">
-                        <span>Runner Status</span>
-                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
-                          ACTIVE
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Cluster</span>
-                        <span>AWS ap-south-1</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Failures</span>
-                        <span className="text-emerald-600 dark:text-emerald-400">0</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Depth layers — stacked behind for 3D feel */}
-                <div
-                  className="absolute -bottom-3 left-4 right-4 h-full glass-card rounded-2xl border border-slate-200/30 dark:border-white/5 -z-10 opacity-50"
-                  aria-hidden="true"
-                />
-                <div
-                  className="absolute -bottom-6 left-8 right-8 h-full glass-card rounded-2xl border border-slate-200/20 dark:border-white/[0.03] -z-20 opacity-25"
-                  aria-hidden="true"
-                />
-              </div>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <Card className="p-8 sm:p-12 bg-zinc-950 border-zinc-800 text-center space-y-6">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+              Ready to Claim Your Verified Passport?
+            </h2>
+            <p className="text-sm text-zinc-400 max-w-xl mx-auto">
+              Join 10,000+ developers replacing traditional resumes with cryptographic proof.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button variant="primary" size="lg" onClick={() => setActiveTab('signup')}>
+                Create Free Account &rarr;
+              </Button>
             </div>
-          </div>
+          </Card>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* FINAL CTA — gradient banner                                         */}
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        <section ref={ctaReveal} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-          <div className="relative rounded-3xl overflow-hidden">
-            {/* Gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600" />
-            {/* Dot pattern overlay */}
-            <div
-              className="absolute inset-0 opacity-[0.06]"
-              aria-hidden="true"
-              style={{
-                backgroundImage:
-                  'radial-gradient(circle, white 1px, transparent 1px)',
-                backgroundSize: '24px 24px',
-              }}
-            />
-
-            <div className="relative px-6 sm:px-12 py-12 sm:py-16 lg:py-20 text-center space-y-6">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                Ready to Build Your Verified Identity?
-              </h2>
-              <p className="text-sm sm:text-base text-white/80 max-w-xl mx-auto">
-                Join thousands of developers who replaced resumes with cryptographically
-                verified proof of their skills and contributions.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center pt-2">
-                <button
-                  onClick={() => setActiveTab('signup')}
-                  className="px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-purple-700 bg-white rounded-xl shadow-xl shadow-black/10 hover:shadow-black/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                >
-                  Create Your SkillPassport
-                </button>
-                <button
-                  onClick={() => setActiveTab('login')}
-                  className="px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white border-2 border-white/30 rounded-xl hover:bg-white/10 hover:border-white/50 transition-all"
-                >
-                  Sign In to Dashboard
-                </button>
-              </div>
-              <p className="text-[11px] text-white/50 font-mono pt-2">
-                Free for developers · No credit card required · Enterprise plans available
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* FOOTER                                                              */}
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        <footer className="border-t border-slate-200/50 dark:border-white/[0.06] py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-500">
-            <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="" className="w-5 h-5 rounded-lg" aria-hidden="true" />
-              <span className="font-semibold">SkillPassport AI</span>
-              <span>© {new Date().getFullYear()}</span>
-            </div>
-            <div className="flex items-center gap-4 font-mono">
-              <span>v1.0.0</span>
-              <span aria-hidden="true">·</span>
-              <span>Built with zero-knowledge proofs</span>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
   );
 };
+
+export default LandingPage;

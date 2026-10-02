@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../../stores/useAppStore';
-import { AnimatedNumber } from '../ui/AnimatedNumber';
-import { 
-  LayoutDashboard, 
-  UserCheck, 
-  Clock, 
-  ShieldCheck, 
-  FolderGit2, 
-  Rocket, 
-  Briefcase, 
-  Trophy, 
-  Building2, 
-  GraduationCap, 
-  BookOpen, 
-  Award, 
-  Users, 
-  Search, 
-  Bell, 
-  MessageSquare, 
-  SlidersHorizontal, 
-  Shield, 
-  Eye, 
-  Star, 
-  Bookmark, 
-  Calendar, 
-  ChevronRight, 
-  ChevronDown, 
-  ArrowUpRight, 
-  CheckCircle2, 
-  Code, 
-  Plus
+import { MetricCard } from '../ui/MetricCard';
+import {
+  LayoutDashboard,
+  UserCheck,
+  Clock,
+  ShieldCheck,
+  FolderGit2,
+  Rocket,
+  Briefcase,
+  Trophy,
+  Building2,
+  GraduationCap,
+  BookOpen,
+  Award,
+  Users,
+  Search,
+  Bell,
+  MessageSquare,
+  SlidersHorizontal,
+  Shield,
+  Eye,
+  Star,
+  Bookmark,
+  Calendar,
+  ChevronRight,
+  ChevronDown,
+  ArrowUpRight,
+  CheckCircle2,
+  Code,
+  Plus,
+  MapPin,
+  GitFork
 } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
@@ -45,7 +47,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center">
-                  Welcome back, {profile.name.split(' ')[0]}! <span className="ml-2 text-2xl">👋</span>
+                  Welcome back, {profile.name.split(' ')[0]}!
                 </h1>
                 <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">
                   Your journey continues. Keep building, keep growing.
@@ -66,103 +68,59 @@ export const Dashboard: React.FC = () => {
             {/* TOP 6 METRICS CARDS ROW                                                   */}
             {/* ========================================================================= */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              
-              {/* Card 1 */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-2 hover:border-blue-500/40 transition">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium truncate">Professional Score</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500 shrink-0">
-                    <Shield className="w-3.5 h-3.5 fill-current" />
-                  </div>
-                </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  <AnimatedNumber value={profile.proofScore} duration={1.0} />
-                </div>
-                <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>{profile.proofScore > 0 ? '↑ 12.5% this month' : 'New Account'}</span>
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-2 hover:border-blue-500/40 transition">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium truncate">Projects</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500 shrink-0">
-                    <FolderGit2 className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  <AnimatedNumber value={profile.totalContributions > 0 ? Math.floor(profile.totalContributions / 35) : 0} duration={1.1} />
-                </div>
-                <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>{profile.totalContributions > 0 ? '↑ Active Repos' : '0 Repositories'}</span>
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-2 hover:border-blue-500/40 transition">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium truncate">Deployments</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500 shrink-0">
-                    <Rocket className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  <AnimatedNumber value={profile.pipelinesPassed} duration={1.2} />
-                </div>
-                <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>{profile.pipelinesPassed > 0 ? '↑ Verified Pipelines' : '0 Pipelines'}</span>
-                </div>
-              </div>
-
-              {/* Card 4 */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-2 hover:border-blue-500/40 transition">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium truncate">Profile Views</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500 shrink-0">
-                    <Eye className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  <AnimatedNumber value={profile.proofScore > 0 ? Math.floor(profile.proofScore * 14.2) : 0} duration={1.3} />
-                </div>
-                <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>{profile.proofScore > 0 ? '↑ Active Recruiter Views' : '0 Views'}</span>
-                </div>
-              </div>
-
-              {/* Card 5 */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-2 hover:border-blue-500/40 transition">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium truncate">Connections</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500 shrink-0">
-                    <Users className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  <AnimatedNumber value={profile.proofScore > 0 ? Math.floor(profile.proofScore * 3.6) : 0} duration={1.4} />
-                </div>
-                <div className="text-[10px] font-semibold text-emerald-400 flex items-center">
-                  <span>{profile.proofScore > 0 ? '↑ Verified Network' : '0 Connections'}</span>
-                </div>
-              </div>
-
-              {/* Card 6 */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-gray-200 dark:border-[#161D2F] space-y-2 hover:border-blue-500/40 transition">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium truncate">Badges</span>
-                  <div className="w-7 h-7 rounded-lg bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-500 shrink-0">
-                    <Award className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-                <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
-                  <AnimatedNumber value={profile.proofScore > 0 ? Math.floor(profile.proofScore / 5) : 0} duration={1.5} />
-                </div>
-                <button onClick={() => setActiveTab('profile')} className="text-[10px] font-semibold text-blue-400 hover:underline block">
-                  View all
-                </button>
-              </div>
-
+              <MetricCard
+                label="Professional Score"
+                value={profile.proofScore}
+                Icon={Shield}
+                accent="blue"
+                duration={1.0}
+                footer={profile.proofScore > 0 ? '↑ 12.5% this month' : 'New Account'}
+              />
+              <MetricCard
+                label="Projects"
+                value={profile.totalContributions > 0 ? Math.floor(profile.totalContributions / 35) : 0}
+                Icon={FolderGit2}
+                accent="purple"
+                duration={1.1}
+                footer={profile.totalContributions > 0 ? '↑ Active Repos' : '0 Repositories'}
+              />
+              <MetricCard
+                label="Deployments"
+                value={profile.pipelinesPassed}
+                Icon={Rocket}
+                accent="emerald"
+                duration={1.2}
+                footer={profile.pipelinesPassed > 0 ? '↑ Verified Pipelines' : '0 Pipelines'}
+              />
+              <MetricCard
+                label="Profile Views"
+                value={profile.proofScore > 0 ? Math.floor(profile.proofScore * 14.2) : 0}
+                Icon={Eye}
+                accent="amber"
+                duration={1.3}
+                footer={profile.proofScore > 0 ? '↑ Active Recruiter Views' : '0 Views'}
+              />
+              <MetricCard
+                label="Connections"
+                value={profile.proofScore > 0 ? Math.floor(profile.proofScore * 3.6) : 0}
+                Icon={Users}
+                accent="rose"
+                duration={1.4}
+                footer={profile.proofScore > 0 ? '↑ Verified Network' : '0 Connections'}
+              />
+              <MetricCard
+                label="Badges"
+                value={profile.proofScore > 0 ? Math.floor(profile.proofScore / 5) : 0}
+                Icon={Award}
+                accent="blue"
+                duration={1.5}
+                footer={null}
+                action={
+                  <button onClick={() => setActiveTab('profile')} className="text-[10px] font-semibold text-blue-500 hover:underline block">
+                    View all
+                  </button>
+                }
+              />
             </div>
 
 
@@ -193,7 +151,7 @@ export const Dashboard: React.FC = () => {
                         {profile.verified ? 'Verified' : 'New Member'}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-300 max-w-sm leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
                       Your professional identity that grows with every contribution and achievement.
                     </p>
                     <button
@@ -246,23 +204,23 @@ export const Dashboard: React.FC = () => {
 
                   {/* Checklist Items */}
                   <div className="space-y-1.5 text-xs">
-                    <div className="flex items-center space-x-2 text-slate-300 font-medium">
+                    <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>Basic Information</span>
                     </div>
-                    <div className="flex items-center space-x-2 text-slate-300 font-medium">
+                    <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>Skills &amp; Expertise</span>
                     </div>
-                    <div className="flex items-center space-x-2 text-slate-300 font-medium">
+                    <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>{isDemoMode ? 'Projects (24/25)' : 'Projects (0)'}</span>
                     </div>
-                    <div className="flex items-center space-x-2 text-slate-300 font-medium">
+                    <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>{isDemoMode ? 'Certifications (8/10)' : 'Certifications (0)'}</span>
                     </div>
-                    <div className="flex items-center space-x-2 text-slate-300 font-medium">
+                    <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-300 font-medium">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       <span>{isDemoMode ? 'Experience (4/5)' : 'Experience (0)'}</span>
                     </div>
@@ -294,7 +252,7 @@ export const Dashboard: React.FC = () => {
                         <Code className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-200">Project 'AI Code Reviewer' deployed</div>
+                        <div className="font-semibold text-slate-700 dark:text-slate-200">Project 'AI Code Reviewer' deployed</div>
                         <div className="text-[10px] text-slate-500">2 hours ago</div>
                       </div>
                     </div>
@@ -308,7 +266,7 @@ export const Dashboard: React.FC = () => {
                         <Award className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-200">AWS Certification verified</div>
+                        <div className="font-semibold text-slate-700 dark:text-slate-200">AWS Certification verified</div>
                         <div className="text-[10px] text-slate-500">5 hours ago</div>
                       </div>
                     </div>
@@ -322,7 +280,7 @@ export const Dashboard: React.FC = () => {
                         <UserCheck className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-200">John Doe viewed your profile</div>
+                        <div className="font-semibold text-slate-700 dark:text-slate-200">John Doe viewed your profile</div>
                         <div className="text-[10px] text-slate-500">1 day ago</div>
                       </div>
                     </div>
@@ -336,7 +294,7 @@ export const Dashboard: React.FC = () => {
                         <Trophy className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-200">You completed 'React Advanced' challenge</div>
+                        <div className="font-semibold text-slate-700 dark:text-slate-200">You completed 'React Advanced' challenge</div>
                         <div className="text-[10px] text-slate-500">2 days ago</div>
                       </div>
                     </div>
@@ -350,7 +308,7 @@ export const Dashboard: React.FC = () => {
                         <Calendar className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-200">Interview scheduled with TechNova</div>
+                        <div className="font-semibold text-slate-700 dark:text-slate-200">Interview scheduled with TechNova</div>
                         <div className="text-[10px] text-slate-500">3 days ago</div>
                       </div>
                     </div>
@@ -410,9 +368,9 @@ export const Dashboard: React.FC = () => {
                           </div>
                           <p className="text-[11px] text-slate-400 line-clamp-1">AI-Powered code analysis...</p>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">React</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">Node.js</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">AI</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">React</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">Node.js</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">AI</span>
                           </div>
                           {/* App Screenshot Preview Placeholder */}
                           <div className="w-full h-20 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] p-2 flex flex-col justify-between overflow-hidden relative group cursor-pointer" onClick={() => setActiveTab('repos')}>
@@ -427,10 +385,10 @@ export const Dashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-2 border-t border-gray-300 dark:border-[#1C263B]">
-                          <span className="text-emerald-400 font-semibold flex items-center">🟢 Live</span>
+                          <span className="text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />Live</span>
                           <div className="flex items-center space-x-2">
-                            <span>☆ 128</span>
-                            <span>⑂ 24</span>
+                            <span className="flex items-center gap-1"><Star className="w-3 h-3 fill-current" />128</span>
+                            <span className="flex items-center gap-1"><GitFork className="w-3 h-3" />24</span>
                           </div>
                         </div>
                       </div>
@@ -441,9 +399,9 @@ export const Dashboard: React.FC = () => {
                           <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">DevConnect</h4>
                           <p className="text-[11px] text-slate-400 line-clamp-1">Developer social platform</p>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">Next.js</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">Tailwind</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">PostgreSQL</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">Next.js</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">Tailwind</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">PostgreSQL</span>
                           </div>
                           {/* App Screenshot Preview Placeholder */}
                           <div className="w-full h-20 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] p-2 flex flex-col justify-between overflow-hidden relative group cursor-pointer" onClick={() => setActiveTab('repos')}>
@@ -458,10 +416,10 @@ export const Dashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-2 border-t border-gray-300 dark:border-[#1C263B]">
-                          <span className="text-emerald-400 font-semibold flex items-center">🟢 Live</span>
+                          <span className="text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />Live</span>
                           <div className="flex items-center space-x-2">
-                            <span>☆ 96</span>
-                            <span>⑂ 18</span>
+                            <span className="flex items-center gap-1"><Star className="w-3 h-3 fill-current" />96</span>
+                            <span className="flex items-center gap-1"><GitFork className="w-3 h-3" />18</span>
                           </div>
                         </div>
                       </div>
@@ -472,9 +430,9 @@ export const Dashboard: React.FC = () => {
                           <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">CloudDeploy Pro</h4>
                           <p className="text-[11px] text-slate-400 line-clamp-1">Automated deployment...</p>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">Docker</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">AWS</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">TypeScript</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">Docker</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">AWS</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">TypeScript</span>
                           </div>
                           {/* App Screenshot Preview Placeholder */}
                           <div className="w-full h-20 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] p-2 flex flex-col justify-between overflow-hidden relative group cursor-pointer" onClick={() => setActiveTab('repos')}>
@@ -489,10 +447,10 @@ export const Dashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-2 border-t border-gray-300 dark:border-[#1C263B]">
-                          <span className="text-emerald-400 font-semibold flex items-center">🟢 Live</span>
+                          <span className="text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />Live</span>
                           <div className="flex items-center space-x-2">
-                            <span>☆ 78</span>
-                            <span>⑂ 15</span>
+                            <span className="flex items-center gap-1"><Star className="w-3 h-3 fill-current" />78</span>
+                            <span className="flex items-center gap-1"><GitFork className="w-3 h-3" />15</span>
                           </div>
                         </div>
                       </div>
@@ -503,9 +461,9 @@ export const Dashboard: React.FC = () => {
                           <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">CodeQuest</h4>
                           <p className="text-[11px] text-slate-400 line-clamp-1">Gamified learning platform</p>
                           <div className="flex flex-wrap gap-1">
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">React</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">Firebase</span>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-300 border border-gray-300 dark:border-[#232F48]">TS</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">React</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">Firebase</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-gray-100 dark:bg-[#172033] text-slate-600 dark:text-slate-300 border border-gray-300 dark:border-[#232F48]">TS</span>
                           </div>
                           {/* App Screenshot Preview Placeholder */}
                           <div className="w-full h-20 rounded-lg bg-slate-900 border border-gray-300 dark:border-[#232F48] p-2 flex flex-col justify-between overflow-hidden relative group cursor-pointer" onClick={() => setActiveTab('repos')}>
@@ -520,10 +478,10 @@ export const Dashboard: React.FC = () => {
                         </div>
 
                         <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-2 border-t border-gray-300 dark:border-[#1C263B]">
-                          <span className="text-emerald-400 font-semibold flex items-center">🟢 Live</span>
+                          <span className="text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />Live</span>
                           <div className="flex items-center space-x-2">
-                            <span>☆ 64</span>
-                            <span>⑂ 12</span>
+                            <span className="flex items-center gap-1"><Star className="w-3 h-3 fill-current" />64</span>
+                            <span className="flex items-center gap-1"><GitFork className="w-3 h-3" />12</span>
                           </div>
                         </div>
                       </div>
@@ -584,7 +542,7 @@ export const Dashboard: React.FC = () => {
                       </div>
 
                       {/* Period Dropdown */}
-                      <button className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-xs text-slate-300 font-medium">
+                      <button className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] text-xs text-slate-600 dark:text-slate-300 font-medium">
                         <span>Last 6 months</span>
                         <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                       </button>
@@ -680,7 +638,7 @@ export const Dashboard: React.FC = () => {
                         </button>
                       </div>
                       <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
-                        <span>📍 Remote</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3 shrink-0" /> Remote</span>
                         <span className="text-emerald-400 font-bold">₹18 - 25 LPA</span>
                         <span className="text-slate-500">2h ago</span>
                       </div>
@@ -703,7 +661,7 @@ export const Dashboard: React.FC = () => {
                         </button>
                       </div>
                       <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
-                        <span>📍 Bangalore</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3 shrink-0" /> Bangalore</span>
                         <span className="text-emerald-400 font-bold">₹12 - 18 LPA</span>
                         <span className="text-slate-500">5h ago</span>
                       </div>
@@ -726,7 +684,7 @@ export const Dashboard: React.FC = () => {
                         </button>
                       </div>
                       <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
-                        <span>📍 Remote</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3 shrink-0" /> Remote</span>
                         <span className="text-emerald-400 font-bold">₹25K - 40K / month</span>
                         <span className="text-slate-500">1d ago</span>
                       </div>

@@ -48,52 +48,52 @@ export const Landing3DCanvas: React.FC = () => {
     renderer.domElement.addEventListener('webglcontextlost', handleContextLoss);
     renderer.domElement.addEventListener('webglcontextrestored', handleContextRestore);
 
-    // ── Lighting ────────────────────────────────────────────────────────────
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    // ── Lighting (Monochrome White & Silver) ───────────────────────────────
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
-    const purpleLight = new THREE.DirectionalLight(0x7c3aed, 2.8);
-    purpleLight.position.set(5, 5, 5);
-    scene.add(purpleLight);
+    const whiteLight1 = new THREE.DirectionalLight(0xffffff, 3.0);
+    whiteLight1.position.set(5, 5, 5);
+    scene.add(whiteLight1);
 
-    const emeraldLight = new THREE.DirectionalLight(0x10b981, 2.4);
-    emeraldLight.position.set(-5, -3, 5);
-    scene.add(emeraldLight);
+    const whiteLight2 = new THREE.DirectionalLight(0xaaaaaa, 2.0);
+    whiteLight2.position.set(-5, -3, 5);
+    scene.add(whiteLight2);
 
-    const bluePoint = new THREE.PointLight(0x3b82f6, 3, 25);
-    bluePoint.position.set(0, 4, 3);
-    scene.add(bluePoint);
+    const whitePoint = new THREE.PointLight(0xffffff, 3, 25);
+    whitePoint.position.set(0, 4, 3);
+    scene.add(whitePoint);
 
     // ── Core Group ──────────────────────────────────────────────────────────
     const group = new THREE.Group();
     scene.add(group);
 
-    // 1. Metallic torus ring
+    // 1. Metallic silver/chrome torus ring
     const torusGeo = new THREE.TorusGeometry(2.4, 0.55, 32, 100);
     const torusMat = new THREE.MeshStandardMaterial({
-      color: 0x7c3aed,
-      metalness: 0.88,
-      roughness: 0.12,
-      emissive: 0x4c1d95,
-      emissiveIntensity: 0.15,
+      color: 0xdddddd,
+      metalness: 0.95,
+      roughness: 0.05,
+      emissive: 0x222222,
+      emissiveIntensity: 0.2,
     });
     const torusMesh = new THREE.Mesh(torusGeo, torusMat);
     group.add(torusMesh);
 
-    // 2. Inner wireframe icosahedron crystal
+    // 2. Inner wireframe icosahedron crystal (Monochrome White Wireframe)
     const innerGeo = new THREE.IcosahedronGeometry(1.2, 1);
     const innerMat = new THREE.MeshStandardMaterial({
-      color: 0x10b981,
-      metalness: 0.9,
-      roughness: 0.08,
+      color: 0xffffff,
+      metalness: 0.95,
+      roughness: 0.05,
       wireframe: true,
-      emissive: 0x064e3b,
-      emissiveIntensity: 0.3,
+      emissive: 0x444444,
+      emissiveIntensity: 0.5,
     });
     const innerMesh = new THREE.Mesh(innerGeo, innerMat);
     group.add(innerMesh);
 
-    // 3. Orbiting constellation nodes
+    // 3. Orbiting constellation nodes (Pure White)
     const nodeCount = 14;
     const nodesGroup = new THREE.Group();
     const sphereGeo = new THREE.SphereGeometry(0.18, 16, 16);
@@ -101,8 +101,8 @@ export const Landing3DCanvas: React.FC = () => {
       color: 0xffffff,
       metalness: 0.9,
       roughness: 0.1,
-      emissive: 0x818cf8,
-      emissiveIntensity: 0.5,
+      emissive: 0xffffff,
+      emissiveIntensity: 0.8,
     });
 
     for (let i = 0; i < nodeCount; i++) {
@@ -118,16 +118,16 @@ export const Landing3DCanvas: React.FC = () => {
     }
     group.add(nodesGroup);
 
-    // 4. Particle field — floating dust motes for depth
+    // 4. Particle field — monochrome white dust motes
     const particleCount = 120;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const pColors = new Float32Array(particleCount * 3);
     const particlePalette = [
-      new THREE.Color(0x7c3aed),
-      new THREE.Color(0x10b981),
-      new THREE.Color(0x3b82f6),
       new THREE.Color(0xffffff),
+      new THREE.Color(0xdddddd),
+      new THREE.Color(0xaaaaaa),
+      new THREE.Color(0x888888),
     ];
 
     for (let i = 0; i < particleCount; i++) {
@@ -202,8 +202,8 @@ export const Landing3DCanvas: React.FC = () => {
       camera.position.y = scrollProgress * -1.5;
 
       // Dynamic lighting position following mouse
-      bluePoint.position.x = mouse.x * 3;
-      bluePoint.position.y = 4 - mouse.y * 2;
+      whitePoint.position.x = mouse.x * 3;
+      whitePoint.position.y = 4 - mouse.y * 2;
 
       renderer.render(scene, camera);
     };

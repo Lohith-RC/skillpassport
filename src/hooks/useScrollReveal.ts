@@ -28,13 +28,13 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   } = options;
 
   const nodeRef = useRef<T | null>(null);
-  const isVisibleRef = useRef(false);
 
   const setRef = useCallback(
     (node: T | null) => {
       // Disconnect any previous observer (e.g. during fast re-renders)
       if (nodeRef.current) {
         (nodeRef.current as any)._scrollObs?.disconnect();
+        clearTimeout((nodeRef.current as any)._revealTimer);
       }
       nodeRef.current = node;
       if (!node) return;
@@ -44,18 +44,34 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
         node.style.setProperty('--reveal-delay', `${delay}ms`);
       }
 
-      // ── BUG FIX: apply initial hidden state so the element starts invisible ──
-      node.classList.add('scroll-hidden');
+      // ── Robust visibility ────────────────────────────────────────────────
+      // Content must never be left invisible. Reveal immediately if the
+      // element is already in the initial viewport, and fall back to a timed
+      // reveal if IntersectionObserver is unavailable or never fires.
+      const revealNow = () => {
+        node.classList.remove('scroll-hidden');
+        node.classList.add('scroll-visible');
+      };
+
+      if (typeof IntersectionObserver === 'undefined') {
+        revealNow();
+        return;
+      }
+
+      const rect = node.getBoundingClientRect();
+      const inInitialViewport = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inInitialViewport) {
+        revealNow();
+      } else {
+        node.classList.add('scroll-hidden');
+      }
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting && !isVisibleRef.current) {
-            isVisibleRef.current = true;
-            node.classList.add('scroll-visible');
-            node.classList.remove('scroll-hidden');
+          if (entry.isIntersecting) {
+            revealNow();
             if (once) observer.disconnect();
-          } else if (!once && !entry.isIntersecting) {
-            isVisibleRef.current = false;
+          } else if (!once) {
             node.classList.remove('scroll-visible');
             node.classList.add('scroll-hidden');
           }
@@ -65,6 +81,14 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
 
       (node as any)._scrollObs = observer;
       observer.observe(node);
+
+      // Safety net: never leave content permanently hidden (e.g. observer
+      // misfires or the node is off-screen at mount). Reveal within a short
+      // window so the page can never render as a black/blank screen.
+      const timer = window.setTimeout(() => {
+        if (node.classList.contains('scroll-hidden')) revealNow();
+      }, 2500);
+      (node as any)._revealTimer = timer;
     },
     [threshold, rootMargin, once, delay]
   );
@@ -73,6 +97,7 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   useEffect(() => {
     return () => {
       (nodeRef.current as any)?._scrollObs?.disconnect();
+      clearTimeout((nodeRef.current as any)?._revealTimer);
     };
   }, []);
 

@@ -192,23 +192,30 @@ export const App: React.FC = () => {
     );
   };
 
+  // ─── Landing page renders first, regardless of auth state ─────────────────
+  // The store boots with activeTab = 'landing'. Gate it here (before the
+  // authenticated branch) so a returning user with a stored token never falls
+  // through to the authenticated view map — which has no 'landing' entry and
+  // would otherwise render a blank screen.
+  if (activeTab === 'landing') {
+    return (
+      <Suspense fallback={<GenericSkeleton />}>
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
+          <LandingPage />
+          <PlatformSyncModal />
+          <Modal />
+          <ToastContainer />
+        </div>
+      </Suspense>
+    );
+  }
+
   // ─── If user is not authenticated, gate protected tabs ─────────────────────
   if (!isAuthenticated) {
     const isAuthPage = activeTab === 'login' || activeTab === 'signup';
     const effectiveTab = PROTECTED_TABS.has(activeTab as any)
       ? activeTab
       : pendingTab || (isAuthPage ? activeTab : 'landing');
-
-    if (effectiveTab === 'landing') {
-      return (
-        <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] text-slate-900 dark:text-white">
-          <LandingPage />
-          <PlatformSyncModal />
-          <Modal />
-          <ToastContainer />
-        </div>
-      );
-    }
 
     const initialMode = effectiveTab === 'signup' ? 'signup' : 'login';
     return (
@@ -230,10 +237,12 @@ export const App: React.FC = () => {
       </AnimatePresence>
 
       {/* Global interactive modals & drawers */}
-      <Modal />
-      <PlatformSyncModal />
-      <ProjectInspectDrawer />
-      <InterviewModal />
+      <Suspense fallback={null}>
+        <Modal />
+        <PlatformSyncModal />
+        <ProjectInspectDrawer />
+        <InterviewModal />
+      </Suspense>
       <ToastContainer />
     </AppLayout>
   );

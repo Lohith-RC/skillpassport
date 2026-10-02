@@ -507,7 +507,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       {/* Role selector - 4 items in 1 row */}
       <div className="space-y-1.5">
         <p className="text-[11px] font-semibold text-slate-300">I am a</p>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {ROLE_OPTIONS.map(({ id, label, sublabel, Icon }) => {
             const isSelected = selectedRole === id;
             return (
@@ -624,7 +624,7 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
   const isLogin = mode === 'login';
 
   return (
-    <div className="min-h-screen bg-[#070A11] text-white flex flex-col justify-between relative overflow-hidden select-none font-sans">
+    <div className="min-h-screen bg-[#070A11] text-white flex flex-col justify-between relative overflow-y-auto font-sans">
       
       {/* 3D WebGL Globe Canvas Background */}
       <Auth3DGlobe />
@@ -639,7 +639,7 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
       />
 
       {/* Floating Vertical Node Stack on Left (matching screenshot curve) */}
-      <div className="absolute left-[5%] top-1/2 -translate-y-1/2 flex flex-col justify-center space-y-7 z-10 pointer-events-none hidden md:flex">
+      <div className="absolute left-[5%] top-1/2 -translate-y-1/2 flex flex-col justify-center space-y-7 z-10 pointer-events-none hidden lg:flex">
         {SIDEBAR_NODES.map(({ Icon, label }) => (
           <div key={label} className="flex items-center space-x-3 group pointer-events-auto">
             <div className="w-12 h-12 rounded-2xl bg-[#0F1626]/80 border border-[#1C263B] flex items-center justify-center backdrop-blur-md shadow-lg shadow-black/40 hover:border-purple-500/50 hover:bg-[#13192B] transition-all cursor-pointer">
@@ -651,7 +651,7 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
       </div>
 
       {/* TOP HEADER */}
-      <header className="relative z-20 flex items-center justify-between px-6 md:px-12 py-6">
+      <header className="relative z-20 flex items-center justify-between px-6 md:px-12 py-5 shrink-0">
         {/* Brand Logo Header */}
         <button
           onClick={() => setActiveTab('landing')}
@@ -668,28 +668,49 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
           </div>
         </button>
 
-        {/* Right Auth Switch Link */}
-        <div className="flex items-center space-x-1.5 text-xs text-slate-400">
-          <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
-          <button
-            onClick={() => setMode(isLogin ? 'signup' : 'login')}
-            className="text-purple-400 hover:text-purple-300 font-bold transition ml-1"
-          >
-            {isLogin ? 'Sign up' : 'Sign in'}
-          </button>
-        </div>
+        {/* Back to landing link */}
+        <button
+          onClick={() => setActiveTab('landing')}
+          className="text-xs text-slate-400 hover:text-white transition font-medium underline-offset-4 hover:underline"
+        >
+          ← Back to Home
+        </button>
       </header>
 
       {/* MAIN CONTENT — FLOATING AUTH CARD */}
-      <main className="relative z-20 flex-1 flex items-center justify-center md:justify-end px-4 md:px-16 lg:px-24 py-6">
+      <main className="relative z-20 flex-1 flex items-center justify-center lg:justify-end px-4 md:px-12 lg:px-24 py-4 md:py-8 my-auto">
         <div
           className={`w-full ${
             isLogin ? 'max-w-[440px]' : 'max-w-[560px]'
-          } bg-[#0B0F19]/90 border border-[#161D2F] rounded-3xl p-6 md:p-8 backdrop-blur-xl shadow-2xl transition-all duration-300`}
+          } bg-[#0B0F19]/95 border border-[#161D2F] rounded-3xl p-5 sm:p-7 backdrop-blur-xl shadow-2xl transition-all duration-300 space-y-5`}
           style={{
             boxShadow: '0 25px 60px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(139,92,246,0.15)',
           }}
         >
+          {/* Top Auth Mode Toggle Bar */}
+          <div className="grid grid-cols-2 p-1 bg-[#0F1626] border border-[#1C263B] rounded-2xl">
+            <button
+              onClick={() => setMode('login')}
+              className={`py-2 text-xs font-bold rounded-xl transition ${
+                isLogin
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => setMode('signup')}
+              className={`py-2 text-xs font-bold rounded-xl transition ${
+                !isLogin
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Create Account
+            </button>
+          </div>
+
           {isLogin ? (
             <LoginForm onSwitchMode={() => setMode('signup')} />
           ) : (
@@ -699,7 +720,7 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
       </main>
 
       {/* FOOTER */}
-      <footer className="relative z-20 text-center py-4">
+      <footer className="relative z-20 text-center py-4 shrink-0">
         <p className="text-[11px] text-slate-500 font-medium">
           © 2025 SkillPassport AI. All rights reserved.
         </p>

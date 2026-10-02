@@ -117,6 +117,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     },
   ];
 
+  // All navigable destinations, in order — used by the responsive mobile
+  // nav so Identity & Network sections remain reachable when the sidebar
+  // is hidden (below the `lg` breakpoint).
+  const allNavItems: NavItem[] = [...primaryNavItems, ...identityNavItems, ...networkNavItems];
+
   // ── Prefetch views on hover ────────────────────────────────────────────────
   const prefetchView = useCallback((tabId: string) => {
     if (tabId !== 'action' && viewImports[tabId]) {
@@ -131,10 +136,10 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     const isActive = id !== 'action' && activeTab === (id as TabType);
 
     const badgeStyles: Record<string, string> = {
-      blue:    'bg-blue-100 dark:bg-[#172033] text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-[#232F48]',
-      purple:  'bg-purple-600 text-white',
-      emerald: 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30',
-      amber:   'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30',
+      blue:    'bg-zinc-900 text-white border border-zinc-700 font-mono',
+      purple:  'bg-white text-black font-bold',
+      emerald: 'bg-zinc-900 text-zinc-300 border border-zinc-700 font-mono',
+      amber:   'bg-zinc-900 text-zinc-300 border border-zinc-700 font-mono',
     };
 
     const handleClick = () => {
@@ -147,27 +152,27 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         key={key}
         onClick={handleClick}
         onMouseEnter={() => prefetchView(id)}
-        className="relative w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#13192B]"
+        className="relative w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-zinc-400 hover:text-white hover:bg-zinc-900"
       >
         {/* Animated active pill indicator */}
         {isActive && (
           <motion.div
             layoutId="sidebar-active-pill"
-            className="absolute inset-0 bg-blue-600 rounded-xl shadow-lg shadow-blue-600/25"
+            className="absolute inset-0 bg-white rounded-xl shadow-md"
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           />
         )}
 
         <span className="relative z-10 flex items-center space-x-3 min-w-0">
-          <Icon className="w-4 h-4 shrink-0" />
-          <span className={`truncate ${isActive ? 'text-white font-semibold' : ''}`}>{label}</span>
+          <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-black' : ''}`} />
+          <span className={`truncate ${isActive ? 'text-black font-bold' : ''}`}>{label}</span>
         </span>
 
         {badge !== undefined && (
           <span
             className={`relative z-10 px-1.5 py-0.5 rounded-full font-mono font-bold text-[9px] shrink-0 ${
               badgeVariant ? badgeStyles[badgeVariant] : badgeStyles.blue
-            } ${isActive ? '!bg-white/20 !text-white !border-transparent' : ''}`}
+            } ${isActive ? '!bg-black !text-white !border-transparent' : ''}`}
           >
             {badge}
           </span>
@@ -179,7 +184,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   // ── Section label ──────────────────────────────────────────────────────────
 
   const SectionLabel: React.FC<{ label: string }> = ({ label }) => (
-    <p className="px-3.5 pt-3 pb-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-600">
+    <p className="px-3.5 pt-3 pb-1 text-[9px] font-extrabold uppercase tracking-widest text-zinc-500">
       {label}
     </p>
   );
@@ -187,13 +192,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#070A11] text-slate-900 dark:text-white flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black">
       <div className="flex flex-1 w-full min-h-screen">
 
         {/* ================================================================= */}
         {/* LEFT SIDEBAR                                                       */}
         {/* ================================================================= */}
-        <aside className="w-64 bg-white dark:bg-[#0B0F19] border-r border-gray-200 dark:border-[#161D2F] flex flex-col justify-between shrink-0 hidden lg:flex overflow-y-auto">
+        <aside className="w-64 bg-black border-r border-zinc-800 flex flex-col justify-between shrink-0 hidden lg:flex overflow-y-auto">
           <div className="p-4 space-y-1">
 
             {/* Brand Logo */}
@@ -204,13 +209,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <img
                 src="/logo.png"
                 alt="SkillPassport AI"
-                className="w-10 h-10 rounded-xl object-cover shadow-md shadow-blue-600/30 shrink-0 border border-blue-500/30 group-hover:scale-105 transition-transform duration-200"
+                className="w-10 h-10 rounded-xl object-cover shadow-md shrink-0 border border-zinc-700 group-hover:scale-105 transition-transform duration-200"
               />
               <div>
-                <h1 className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white leading-tight">
-                  SkillPassport <span className="text-blue-600 dark:text-blue-500">AI</span>
+                <h1 className="font-extrabold text-sm tracking-tight text-white leading-tight">
+                  SkillPassport <span className="text-zinc-400">AI</span>
                 </h1>
-                <p className="text-[10px] text-slate-500">One Identity. Endless Opportunities.</p>
+                <p className="text-[10px] text-zinc-500 font-mono">Verified Developer Protocol</p>
               </div>
             </button>
 
@@ -255,15 +260,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 
               {/* Sign out */}
               <button
-                onClick={() => {
-                  if (window.confirm('Sign out and wipe all local session data?')) {
-                    useAppStore.getState().purgeAndResetSession();
-                  }
-                }}
-                className="w-full flex items-center gap-2 pt-1 text-[11px] text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition cursor-pointer"
+                onClick={() => useAppStore.getState().purgeAndResetSession()}
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition cursor-pointer"
               >
-                <LogOut className="w-3 h-3" />
-                <span>Sign out & Wipe Session</span>
+                <span className="flex items-center space-x-3">
+                  <LogOut className="w-4 h-4 shrink-0" />
+                  <span>Sign Out</span>
+                </span>
+                <span className="text-[10px] font-mono opacity-60">Reset</span>
               </button>
             </div>
           </div>
@@ -272,22 +276,22 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         {/* ================================================================= */}
         {/* MAIN CONTENT                                                       */}
         {/* ================================================================= */}
-        <div className="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-[#070A11]">
+        <div className="flex-1 flex flex-col min-w-0 bg-black">
 
           {/* TOP HEADER */}
-          <header className="h-16 border-b border-gray-200 dark:border-[#161D2F] px-4 md:px-8 flex items-center justify-between gap-4 bg-white/85 dark:bg-[#090D17]/80 backdrop-blur-md sticky top-0 z-30">
+          <header className="h-16 border-b border-zinc-800 px-4 md:px-8 flex items-center justify-between gap-4 bg-black/90 backdrop-blur-md sticky top-0 z-30">
 
             {/* Global search */}
             <div className="relative max-w-md w-full">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search developers, projects, companies…"
                 onClick={() => setSearchOpen(true)}
                 readOnly
-                className="w-full pl-10 pr-14 py-2.5 bg-gray-100 dark:bg-[#0F1626] border border-gray-300 dark:border-[#1C263B] rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 placeholder:text-slate-400 dark:placeholder:text-slate-500 cursor-pointer transition"
+                className="w-full pl-10 pr-14 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-white focus:outline-none focus:border-white placeholder:text-zinc-500 cursor-pointer transition font-sans"
               />
-              <kbd className="absolute right-3 top-2.5 px-1.5 py-0.5 text-[10px] bg-white dark:bg-[#172033] border border-gray-200 dark:border-[#232F48] rounded text-slate-500 dark:text-slate-400 font-mono">
+              <kbd className="absolute right-3 top-2.5 px-1.5 py-0.5 text-[10px] bg-zinc-900 border border-zinc-800 rounded text-zinc-400 font-mono">
                 ⌘K
               </kbd>
             </div>
@@ -298,23 +302,23 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#13192B] border border-gray-200 dark:border-[#1C263B] transition"
+                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-800 transition"
                 aria-label="Toggle theme"
                 title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
-                {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+                {isDarkMode ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-white" />}
               </button>
 
               {/* Notifications */}
               <div className="relative">
                 <button
                   onClick={() => setNotificationsOpen(!isNotificationsOpen)}
-                  className="relative p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#13192B] border border-gray-200 dark:border-[#1C263B] transition"
+                  className="relative p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-800 transition"
                   aria-label="View notifications"
                 >
                   <Bell className="w-4 h-4" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-600 text-white font-mono text-[9px] font-bold flex items-center justify-center border-2 border-white dark:border-[#070A11]">
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white text-black font-mono text-[9px] font-bold flex items-center justify-center border-2 border-black">
                       {unreadCount}
                     </span>
                   )}
@@ -326,28 +330,39 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               {/* Messages */}
               <button
                 onClick={() => addToast('Recruiter chat is coming in Stage 2 — invites will land here.', 'info')}
-                className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#13192B] border border-gray-200 dark:border-[#1C263B] transition"
+                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-800 transition"
                 aria-label="Open messages"
               >
                 <MessageSquare className="w-4 h-4" />
               </button>
 
-              {/* User profile chip */}
-              <button
-                onClick={() => setActiveTab('profile')}
-                className="flex items-center space-x-2.5 pl-3 border-l border-gray-200 dark:border-[#161D2F] hover:opacity-90 transition"
-              >
-                <div className="relative">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-xs font-extrabold text-white shadow-sm border border-blue-400/40">
-                    {profile.avatar}
+              {/* User profile chip & Sign out */}
+              <div className="flex items-center space-x-2 pl-3 border-l border-zinc-800">
+                <button
+                  onClick={() => setActiveTab('profile')}
+                  className="flex items-center space-x-2.5 hover:opacity-90 transition text-left"
+                  title="View Profile"
+                >
+                  <div className="relative">
+                    <div className="w-8 h-8 rounded-full bg-white text-black font-extrabold flex items-center justify-center text-xs shadow-sm border border-white">
+                      {profile.avatar}
+                    </div>
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-white border-2 border-black" />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#070A11]" />
-                </div>
-                <div className="hidden sm:block text-left">
-                  <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{profile.name}</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">Verified Developer</div>
-                </div>
-              </button>
+                  <div className="hidden sm:block">
+                    <div className="text-xs font-bold text-white leading-tight">{profile.name}</div>
+                    <div className="text-[10px] text-zinc-400">Verified Developer</div>
+                  </div>
+                </button>
+                <button
+                  onClick={() => useAppStore.getState().purgeAndResetSession()}
+                  className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-800 transition"
+                  title="Sign out"
+                  aria-label="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </header>
 
@@ -360,8 +375,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           )}
 
           {/* MOBILE NAV — horizontal scroll strip under header on very small screens */}
-          <nav className="md:hidden flex items-center gap-1 px-3 py-2 border-b border-gray-200 dark:border-[#161D2F] bg-white/85 dark:bg-[#090D17]/80 backdrop-blur-md overflow-x-auto no-scrollbar sticky top-16 z-20">
-            {primaryNavItems.map((item) => (
+          <nav className="md:hidden flex items-center gap-1 px-3 py-2 border-b border-gray-200 dark:border-[#161D2F] bg-white/85 dark:bg-[#090D17]/80 backdrop-blur-md overflow-x-auto no-scrollbar sticky top-16 z-20" aria-label="Primary">
+            {allNavItems.map((item) => (
               <button
                 key={`mobile-${item.key}`}
                 onClick={() => {
@@ -392,15 +407,18 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       {/* MOBILE BOTTOM TAB BAR — fixed on md+ screens < lg                */}
       {/* ═══════════════════════════════════════════════════════════════════ */}
       <nav className="hidden md:flex lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-xl border-t border-gray-200 dark:border-[#161D2F] px-2 py-1 safe-area-bottom">
-        <div className="flex items-center justify-around w-full">
-          {primaryNavItems.map((item) => {
-            const isActive = activeTab === (item.id as TabType);
+        <div className="flex items-center justify-start gap-1 w-full overflow-x-auto no-scrollbar">
+          {allNavItems.map((item) => {
+            const isActive = item.id !== 'action' && activeTab === (item.id as TabType);
             return (
               <button
                 key={`bottom-${item.key}`}
-                onClick={() => setActiveTab(item.id as TabType)}
+                onClick={() => {
+                  if (item.onClick) item.onClick();
+                  else if (item.id !== 'action') setActiveTab(item.id as TabType);
+                }}
                 onMouseEnter={() => prefetchView(item.id)}
-                className="relative flex flex-col items-center gap-0.5 py-1.5 px-3 text-slate-500 dark:text-slate-400"
+                className="relative flex flex-col items-center gap-0.5 py-1.5 px-3 text-slate-500 dark:text-slate-400 shrink-0"
               >
                 {isActive && (
                   <motion.div

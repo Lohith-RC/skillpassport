@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { fetchRepositories, fetchCareerMilestones, fetchUniversityStudents, apiAuth } from '../services/api';
+import { fetchRepositories, fetchCareerMilestones, fetchUniversityStudents, fetchLeetCodeStats, apiAuth } from '../services/api';
 
 describe('API Service Layer & Fallbacks', () => {
   afterEach(() => {
@@ -81,5 +81,22 @@ describe('API Service Layer & Fallbacks', () => {
     expect(user.isDemo).toBe(true);
     expect(user.role).toBe('UNIVERSITY');
     expect(user.name).toBe('Kavya Nair');
+  });
+
+  it('returns leetcode stats with expected structure', async () => {
+    const stats = await fetchLeetCodeStats();
+
+    expect(stats).toBeDefined();
+    expect(stats.solved.total).toBe(264);
+    expect(stats.solved.easy).toBe(142);
+    expect(stats.solved.medium).toBe(98);
+    expect(stats.solved.hard).toBe(24);
+    expect(stats.contestRating).toBe(1942);
+    expect(stats.badgeName).toBe('Knight Badge');
+    expect(Array.isArray(stats.topics)).toBe(true);
+    expect(stats.topics.length).toBe(6);
+    expect(Array.isArray(stats.recentSubmissions)).toBe(true);
+    expect(stats.recentSubmissions.length).toBe(4);
+    expect(stats.reviewDate).toBeDefined(); // This will FAIL → RED
   });
 });

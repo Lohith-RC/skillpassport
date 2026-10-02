@@ -111,6 +111,7 @@ export interface LeetCodeStats {
   contestRating: number;
   contestPercentile: string;
   badgeName: string;
+  reviewDate: Date;
   topics: { name: string; score: number }[];
   recentSubmissions: {
     id: string;

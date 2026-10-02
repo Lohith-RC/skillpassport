@@ -131,6 +131,7 @@ export const mockLeetCodeStats: LeetCodeStats = {
   contestRating: 1942,
   contestPercentile: 'Top 3.8%',
   badgeName: 'Knight Badge',
+  reviewDate: new Date(),
   topics: [
     { name: 'Dynamic Programming', score: 92 },
     { name: 'Graph Theory', score: 88 },

@@ -123,12 +123,12 @@ const InputField: React.FC<InputFieldProps> = ({
   trailing,
 }) => (
   <div className="space-y-1 text-left">
-    <label htmlFor={id} className="block text-xs font-semibold text-slate-300">
+    <label htmlFor={id} className="block text-xs font-semibold text-fg-muted">
       {label}
     </label>
     <div className="relative flex items-center">
       {IconLeft && (
-        <IconLeft className="absolute left-3.5 w-4 h-4 text-slate-500 pointer-events-none" />
+        <IconLeft className="absolute left-3.5 w-4 h-4 text-fg-subtle pointer-events-none" />
       )}
       <input
         id={id}
@@ -136,7 +136,7 @@ const InputField: React.FC<InputFieldProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full bg-[#0F1626] border border-[#1C263B] rounded-xl py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 transition ${
+        className={`w-full bg-inset border border-hairline rounded-xl py-2.5 text-xs text-fg placeholder:text-fg-subtle focus:outline-none focus:border-focusring focus:ring-1 focus:ring-focusring transition ${
           IconLeft ? 'pl-10' : 'pl-3.5'
         } ${trailing ? 'pr-10' : 'pr-3.5'}`}
       />
@@ -182,10 +182,10 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
   return (
     <form onSubmit={handleSignIn} className="space-y-5 text-left">
       <div className="space-y-1">
-        <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-fg tracking-tight flex items-center gap-2">
           Welcome Back 👋
         </h2>
-        <p className="text-xs text-slate-400">Sign in to continue your journey</p>
+        <p className="text-xs text-fg-muted">Sign in to continue your journey</p>
       </div>
 
       <div className="space-y-4">
@@ -210,7 +210,7 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
             <button
               type="button"
               onClick={() => setShowPassword((s) => !s)}
-              className="text-slate-500 hover:text-slate-300 transition"
+              className="text-fg-subtle hover:text-fg-muted transition"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -223,12 +223,12 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
         <button
           type="button"
           onClick={() => setRemember((r) => !r)}
-          className="flex items-center gap-2 text-slate-400 hover:text-white transition"
+          className="flex items-center gap-2 text-fg-muted hover:text-fg transition"
         >
           {remember ? (
             <CheckSquare className="w-4 h-4 text-blue-500" />
           ) : (
-            <Square className="w-4 h-4 text-slate-500" />
+            <Square className="w-4 h-4 text-fg-subtle" />
           )}
           <span>Remember me</span>
         </button>
@@ -244,27 +244,27 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60 hover:opacity-95 shadow-lg shadow-purple-600/30"
+        className="w-full py-3 rounded-xl text-sm font-semibold text-accent-fg transition-all disabled:opacity-60 hover:opacity-95 shadow-card"
         style={{
           background: loading
             ? '#1D4ED8'
-            : 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
+            : 'var(--accent)',
         }}
       >
         {loading ? 'Signing In…' : 'Sign In'}
       </button>
 
       <div className="relative flex items-center gap-3 py-1">
-        <div className="flex-1 h-px bg-[#1C263B]" />
-        <span className="text-[11px] text-slate-500 font-medium shrink-0">or continue with</span>
-        <div className="flex-1 h-px bg-[#1C263B]" />
+        <div className="flex-1 h-px bg-inset" />
+        <span className="text-[11px] text-fg-subtle font-medium shrink-0">or continue with</span>
+        <div className="flex-1 h-px bg-inset" />
       </div>
 
       <div className="space-y-2.5">
         <button
           type="button"
           disabled
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-inset border border-hairline rounded-xl text-xs font-medium text-fg-muted cursor-not-allowed opacity-60"
         >
           <Github className="w-4 h-4" />
           <span>GitHub OAuth (Coming Soon)</span>
@@ -273,7 +273,7 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
         <button
           type="button"
           disabled
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-inset border border-hairline rounded-xl text-xs font-medium text-fg-muted cursor-not-allowed opacity-60"
         >
           <Chrome className="w-4 h-4 text-rose-500/50" />
           <span>Google OAuth (Coming Soon)</span>
@@ -282,14 +282,14 @@ const LoginForm: React.FC<{ onSwitchMode: () => void }> = () => {
         <button
           type="button"
           disabled
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-inset border border-hairline rounded-xl text-xs font-medium text-fg-muted cursor-not-allowed opacity-60"
         >
           <Linkedin className="w-4 h-4 text-blue-400/50" />
           <span>LinkedIn OAuth (Coming Soon)</span>
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-1.5 pt-2 text-[11px] text-slate-500">
+      <div className="flex items-center justify-center gap-1.5 pt-2 text-[11px] text-fg-subtle">
         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         </svg>
@@ -379,10 +379,10 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
     <form onSubmit={handleCreate} className="space-y-4 text-left">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-fg tracking-tight flex items-center gap-2">
             Create Account <Sparkles className="w-5 h-5 text-indigo-400 fill-indigo-400" />
           </h2>
-          <p className="text-xs text-slate-400">Start building your verified professional identity</p>
+          <p className="text-xs text-fg-muted">Start building your verified professional identity</p>
         </div>
         <button
           type="button"
@@ -445,7 +445,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
             <button
               type="button"
               onClick={() => setShowPw((s) => !s)}
-              className="text-slate-500 hover:text-slate-300 transition"
+              className="text-fg-subtle hover:text-fg-muted transition"
               aria-label={showPw ? 'Hide password' : 'Show password'}
             >
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -469,7 +469,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
                 />
               );
             })}
-            <span className="text-[10px] font-semibold text-slate-400 shrink-0 ml-1">
+            <span className="text-[10px] font-semibold text-fg-muted shrink-0 ml-1">
               Strength: <span style={{ color: strength.color || '#EF4444' }}>{strength.label || 'Weak'}</span>
             </span>
           </div>
@@ -489,7 +489,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
             <button
               type="button"
               onClick={() => setShowConfirm((s) => !s)}
-              className="text-slate-500 hover:text-slate-300 transition"
+              className="text-fg-subtle hover:text-fg-muted transition"
               aria-label={showConfirm ? 'Hide password' : 'Show password'}
             >
               {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -506,7 +506,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
 
       {/* Role selector - 4 items in 1 row */}
       <div className="space-y-1.5">
-        <p className="text-[11px] font-semibold text-slate-300">I am a</p>
+        <p className="text-[11px] font-semibold text-fg-muted">I am a</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {ROLE_OPTIONS.map(({ id, label, sublabel, Icon }) => {
             const isSelected = selectedRole === id;
@@ -517,8 +517,8 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
                 onClick={() => setSelectedRole(id)}
                 className={`relative flex flex-col items-center justify-between p-3 rounded-xl border text-center transition ${
                   isSelected
-                    ? 'border-purple-600 bg-purple-950/20 shadow-md shadow-purple-900/20'
-                    : 'border-[#1C263B] bg-[#0F1626] hover:bg-[#13192B]'
+                    ? 'border-accent bg-accent-soft shadow-sm'
+                    : 'border-hairline bg-inset hover:bg-interactive'
                 }`}
               >
                 {isSelected && (
@@ -528,9 +528,9 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
                     </svg>
                   </span>
                 )}
-                <Icon className={`w-5 h-5 mb-1 ${isSelected ? 'text-purple-400' : 'text-slate-400'}`} />
-                <span className="text-[11px] font-bold text-white leading-tight">{label}</span>
-                <span className="text-[9px] text-slate-400 leading-tight mt-0.5 line-clamp-2">{sublabel}</span>
+                <Icon className={`w-5 h-5 mb-1 ${isSelected ? 'text-accent' : 'text-fg-muted'}`} />
+                <span className="text-[11px] font-semibold text-fg leading-tight">{label}</span>
+                <span className="text-[9px] text-fg-muted leading-tight mt-0.5 line-clamp-2">{sublabel}</span>
               </button>
             );
           })}
@@ -547,10 +547,10 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
           {agreedTerms ? (
             <CheckSquare className="w-4 h-4 text-blue-500" />
           ) : (
-            <Square className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition" />
+            <Square className="w-4 h-4 text-fg-subtle group-hover:text-fg-muted transition" />
           )}
         </span>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-fg-muted">
           I agree to the{' '}
           <span className="text-purple-400 hover:text-purple-300 font-semibold cursor-pointer">
             Terms of Service
@@ -565,27 +565,27 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60 hover:opacity-95 shadow-lg shadow-purple-600/30"
+        className="w-full py-3 rounded-xl text-sm font-semibold text-accent-fg transition-all disabled:opacity-60 hover:opacity-95 shadow-card"
         style={{
           background: loading
             ? '#1D4ED8'
-            : 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
+            : 'var(--accent)',
         }}
       >
         {loading ? 'Creating Account…' : 'Create Account'}
       </button>
 
       <div className="relative flex items-center gap-3 py-1">
-        <div className="flex-1 h-px bg-[#1C263B]" />
-        <span className="text-[11px] text-slate-500 font-medium shrink-0">or continue with</span>
-        <div className="flex-1 h-px bg-[#1C263B]" />
+        <div className="flex-1 h-px bg-inset" />
+        <span className="text-[11px] text-fg-subtle font-medium shrink-0">or continue with</span>
+        <div className="flex-1 h-px bg-inset" />
       </div>
 
       <div className="grid grid-cols-3 gap-2">
         <button
           type="button"
           disabled
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-inset border border-hairline rounded-xl text-xs font-medium text-fg-muted cursor-not-allowed opacity-60"
         >
           <Github className="w-3.5 h-3.5" />
           <span>GitHub</span>
@@ -594,7 +594,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
         <button
           type="button"
           disabled
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-inset border border-hairline rounded-xl text-xs font-medium text-fg-muted cursor-not-allowed opacity-60"
         >
           <Chrome className="w-3.5 h-3.5 text-rose-500/50" />
           <span>Google</span>
@@ -603,7 +603,7 @@ const SignupForm: React.FC<{ onSwitchMode: () => void }> = () => {
         <button
           type="button"
           disabled
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-[#0F1626] border border-[#1C263B] rounded-xl text-xs font-medium text-slate-400 cursor-not-allowed opacity-60"
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-inset border border-hairline rounded-xl text-xs font-medium text-fg-muted cursor-not-allowed opacity-60"
         >
           <Linkedin className="w-3.5 h-3.5 text-blue-400/50" />
           <span>LinkedIn</span>
@@ -624,7 +624,7 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
   const isLogin = mode === 'login';
 
   return (
-    <div className="min-h-screen bg-[#070A11] text-white flex flex-col justify-between relative overflow-y-auto font-sans">
+    <div className="min-h-screen bg-canvas text-fg flex flex-col justify-between relative overflow-y-auto font-sans">
       
       {/* 3D WebGL Globe Canvas Background */}
       <Auth3DGlobe />
@@ -634,7 +634,7 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           background:
-            'radial-gradient(circle 600px at 20% 50%, rgba(59,130,246,0.12) 0%, transparent 70%), radial-gradient(circle 500px at 80% 50%, rgba(139,92,246,0.10) 0%, transparent 60%), #070A11',
+            'radial-gradient(circle 620px at 18% 50%, var(--accent-soft) 0%, transparent 70%), radial-gradient(circle 520px at 82% 50%, var(--accent-soft) 0%, transparent 62%)',
         }}
       />
 
@@ -642,10 +642,10 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
       <div className="absolute left-[5%] top-1/2 -translate-y-1/2 flex flex-col justify-center space-y-7 z-10 pointer-events-none hidden lg:flex">
         {SIDEBAR_NODES.map(({ Icon, label }) => (
           <div key={label} className="flex items-center space-x-3 group pointer-events-auto">
-            <div className="w-12 h-12 rounded-2xl bg-[#0F1626]/80 border border-[#1C263B] flex items-center justify-center backdrop-blur-md shadow-lg shadow-black/40 hover:border-purple-500/50 hover:bg-[#13192B] transition-all cursor-pointer">
-              <Icon className="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform" />
+            <div className="w-12 h-12 rounded-2xl bg-surface border border-hairline flex items-center justify-center backdrop-blur-md shadow-lg shadow-black/40 hover:border-strong hover:bg-interactive transition-all cursor-pointer">
+              <Icon className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
             </div>
-            <span className="text-[11px] font-semibold text-slate-300 tracking-wide drop-shadow">{label}</span>
+            <span className="text-[11px] font-semibold text-fg-muted tracking-wide drop-shadow">{label}</span>
           </div>
         ))}
       </div>
@@ -657,21 +657,19 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
           onClick={() => setActiveTab('landing')}
           className="flex items-center space-x-3 hover:opacity-90 transition group text-left"
         >
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-600/30 shrink-0 border border-purple-400/30">
-            <span className="font-extrabold text-white text-lg font-mono">✦</span>
-          </div>
+          <img src="/logo.png" alt="" className="w-10 h-10 rounded-xl object-cover border border-hairline shrink-0" />
           <div>
-            <h1 className="font-extrabold text-base tracking-tight text-white leading-tight">
-              SkillPassport <span className="text-blue-500">AI</span>
+            <h1 className="font-bold text-base tracking-tight text-fg leading-tight">
+              SkillPassport <span className="text-fg-muted">AI</span>
             </h1>
-            <p className="text-[10px] text-slate-400 font-medium">One Identity. Endless Opportunities.</p>
+            <p className="text-[10px] text-fg-subtle font-medium">Verified Developer Identity</p>
           </div>
         </button>
 
         {/* Back to landing link */}
         <button
           onClick={() => setActiveTab('landing')}
-          className="text-xs text-slate-400 hover:text-white transition font-medium underline-offset-4 hover:underline"
+          className="text-xs text-fg-muted hover:text-fg transition font-medium underline-offset-4 hover:underline"
         >
           ← Back to Home
         </button>
@@ -682,19 +680,16 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
         <div
           className={`w-full ${
             isLogin ? 'max-w-[440px]' : 'max-w-[560px]'
-          } bg-[#0B0F19]/95 border border-[#161D2F] rounded-3xl p-5 sm:p-7 backdrop-blur-xl shadow-2xl transition-all duration-300 space-y-5`}
-          style={{
-            boxShadow: '0 25px 60px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(139,92,246,0.15)',
-          }}
+          } bg-raised border border-hairline rounded-3xl p-5 sm:p-7 backdrop-blur-xl shadow-pop transition-all duration-300 space-y-5`}
         >
           {/* Top Auth Mode Toggle Bar */}
-          <div className="grid grid-cols-2 p-1 bg-[#0F1626] border border-[#1C263B] rounded-2xl">
+          <div className="grid grid-cols-2 p-1 bg-inset border border-hairline rounded-2xl">
             <button
               onClick={() => setMode('login')}
               className={`py-2 text-xs font-bold rounded-xl transition ${
                 isLogin
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-accent text-accent-fg shadow-sm'
+                  : 'text-fg-muted hover:text-fg'
               }`}
             >
               Sign In
@@ -703,8 +698,8 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
               onClick={() => setMode('signup')}
               className={`py-2 text-xs font-bold rounded-xl transition ${
                 !isLogin
-                  ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-accent text-accent-fg shadow-sm'
+                  : 'text-fg-muted hover:text-fg'
               }`}
             >
               Create Account
@@ -721,8 +716,8 @@ export const AuthView: React.FC<{ initialMode?: AuthMode }> = ({ initialMode = '
 
       {/* FOOTER */}
       <footer className="relative z-20 text-center py-4 shrink-0">
-        <p className="text-[11px] text-slate-500 font-medium">
-          © 2025 SkillPassport AI. All rights reserved.
+        <p className="text-[11px] text-fg-subtle font-medium">
+          © 2026 SkillPassport AI. All rights reserved.
         </p>
       </footer>
 

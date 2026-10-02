@@ -7,7 +7,7 @@ type Accent = 'blue' | 'purple' | 'emerald' | 'amber' | 'rose';
 export interface MetricCardProps {
   label: string;
   value: number;
-  Icon: React.FC<{ className?: string }>;
+  Icon?: React.FC<{ className?: string }>;
   accent?: Accent;
   duration?: number;
   footer?: React.ReactNode;
@@ -15,14 +15,12 @@ export interface MetricCardProps {
   className?: string;
 }
 
-const accentStyles: Record<Accent, string> = {
-  blue: 'bg-blue-600/15 border-blue-500/30 text-blue-500',
-  purple: 'bg-purple-600/15 border-purple-500/30 text-purple-500',
-  emerald: 'bg-emerald-600/15 border-emerald-500/30 text-emerald-500',
-  amber: 'bg-amber-600/15 border-amber-500/30 text-amber-500',
-  rose: 'bg-rose-600/15 border-rose-500/30 text-rose-500',
-};
-
+/**
+ * One number, one label, one optional delta.
+ * The old version gave every card its own rainbow tile — five colours in one
+ * row. Icons now render neutral; only genuinely semantic accents (up/down)
+ * keep a tint, so a metric row reads as a single instrument panel.
+ */
 export const MetricCard: React.FC<MetricCardProps> = ({
   label,
   value,
@@ -33,37 +31,47 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   action,
   className,
 }) => {
+  const semanticTint =
+    accent === 'emerald'
+      ? 'bg-success-soft text-success'
+      : accent === 'rose'
+        ? 'bg-danger-soft text-danger'
+        : 'bg-interactive text-fg-muted';
+
   return (
     <div
       className={cn(
-        'p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-slate-200 dark:border-[#161D2F]',
-        'space-y-2 hover:border-blue-500/40 transition',
-        className
+        'p-4 rounded-2xl bg-surface border border-hairline shadow-card',
+        'space-y-2 transition-colors duration-150 ease-out hover:border-strong',
+        className,
       )}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
+      <div className="flex items-center justify-between gap-2">
+        <span className="eyebrow leading-tight normal-case tracking-normal text-[11px] font-medium text-fg-muted">
           {label}
         </span>
-        <div
-          className={cn(
-            'w-7 h-7 rounded-lg border flex items-center justify-center shrink-0',
-            accentStyles[accent]
-          )}
-        >
-          <Icon className="w-3.5 h-3.5" />
-        </div>
+        {Icon && (
+          <div
+            className={cn(
+              'w-7 h-7 rounded-lg border border-hairline flex items-center justify-center shrink-0',
+              semanticTint,
+            )}
+          >
+            <Icon className="w-3.5 h-3.5" />
+          </div>
+        )}
       </div>
-      <div className="text-xl font-extrabold font-mono text-slate-900 dark:text-white">
+
+      <div className="text-xl font-semibold font-mono tabular text-fg tracking-tight">
         <AnimatedNumber value={value} duration={duration} />
       </div>
+
       {footer ? (
-        <div className="text-[10px] font-semibold text-emerald-500 flex items-center">
-          {footer}
-        </div>
+        <div className="text-2xs font-medium text-fg-muted flex items-center">{footer}</div>
       ) : (
         <div className="h-4" aria-hidden="true" />
       )}
+
       {action && <div>{action}</div>}
     </div>
   );

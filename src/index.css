@@ -2,113 +2,271 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ════════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   One token set, two themes. Components never hardcode a colour — they read
+   these variables, so light/dark are the same markup with different values.
+   Direction: restrained Linear/Vercel — neutral canvas, hairline borders,
+   a single accent.
+   ════════════════════════════════════════════════════════════════════════ */
+
 @layer base {
   :root {
-    /* ─── Page Canvas ─── */
+    color-scheme: light;
+
+    --font-sans: 'Figtree', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* ── Surfaces ── */
     --bg-canvas: #FAFAFA;
-    --bg-sidebar: #FFFFFF;
-    --bg-header: rgba(255,255,255,0.85);
-    --bg-card: #FFFFFF;
-    --bg-card-nested: #F4F4F5;
-    --bg-input: #F4F4F5;
+    --bg-surface: #FFFFFF;
+    --bg-raised: #FFFFFF;
+    --bg-inset: #F4F4F5;
     --bg-hover: #F4F4F5;
-    --bg-muted: #F4F4F5;
+    --bg-overlay: rgba(9, 9, 11, 0.42);
+    --bg-header: rgba(250, 250, 250, 0.82);
+    --bg-sidebar: #FFFFFF;
 
-    /* ─── Borders ─── */
-    --border-card: #E4E4E7;
-    --border-input: #D4D4D8;
-    --border-subtle: #E4E4E7;
+    /* Back-compat aliases used by existing components */
+    --bg-card: var(--bg-surface);
+    --bg-card-nested: var(--bg-raised);
+    --bg-input: var(--bg-inset);
+    --bg-muted: var(--bg-inset);
+
+    /* ── Hairlines ── */
+    --border-hairline: rgba(9, 9, 11, 0.08);
     --border-default: #E4E4E7;
-    --border-focus: #7C3AED;
+    --border-strong: #D4D4D8;
+    --border-focus: #5E6AD2;
+    --border-card: var(--border-hairline);
+    --border-subtle: var(--border-hairline);
+    --border-input: var(--border-strong);
 
-    /* ─── Text ─── */
-    --text-primary: #09090B;
+    /* ── Foreground ── */
+    --text-primary: #0A0A0A;
     --text-secondary: #52525B;
-    --text-muted: #A1A1AA;
+    --text-muted: #71717A;
     --text-inverse: #FFFFFF;
 
-    /* ─── Accents ─── */
-    --accent-purple: #7C3AED;
-    --accent-cyan: #06B6D4;
-    --accent-emerald: #10B981;
-    --accent-amber: #F59E0B;
-    --accent-red: #EF4444;
+    /* ── Single accent + semantics ── */
+    --accent: #5E6AD2;
+    --accent-hover: #4E59C0;
+    --accent-soft: rgba(94, 106, 210, 0.10);
+    --accent-fg: #FFFFFF;
+    --success: #15803D;
+    --warning: #B45309;
+    --danger: #DC2626;
+    --info: #2563EB;
+
+    /* Pre-mixed soft fills — Tailwind can't apply an alpha step to var(). */
+    --success-soft: rgba(21, 128, 61, 0.10);
+    --warning-soft: rgba(180, 83, 9, 0.10);
+    --danger-soft: rgba(220, 38, 38, 0.10);
+    --info-soft: rgba(37, 99, 235, 0.10);
+    --warning-border: rgba(180, 83, 9, 0.28);
+    --danger-border: rgba(220, 38, 38, 0.28);
+
+    /* ── Decorative detail ── */
+    --grid-line: rgba(9, 9, 11, 0.055);
+
+    /* ── Elevation ── */
+    --shadow-card: 0 1px 2px rgba(9, 9, 11, 0.04), 0 1px 1px rgba(9, 9, 11, 0.02);
+    --shadow-pop: 0 12px 32px -8px rgba(9, 9, 11, 0.18), 0 2px 6px -2px rgba(9, 9, 11, 0.06);
+    --shadow-lift: 0 8px 24px -10px rgba(9, 9, 11, 0.16), 0 1px 2px rgba(9, 9, 11, 0.04);
+
+    /* ── Motion ── */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast: 120ms;
+    --dur-base: 180ms;
+    --dur-slow: 240ms;
   }
 
   .dark {
-    /* ─── Page Canvas ─── */
-    --bg-canvas: #09090B;
-    --bg-sidebar: #18181B;
-    --bg-header: rgba(24,24,27,0.85);
-    --bg-card: #18181B;
-    --bg-card-nested: #27272A;
-    --bg-input: #27272A;
-    --bg-hover: #27272A;
-    --bg-muted: #27272A;
+    color-scheme: dark;
 
-    /* ─── Borders ─── */
-    --border-card: #27272A;
-    --border-input: #3F3F46;
-    --border-subtle: #27272A;
-    --border-default: #27272A;
-    --border-focus: #7C3AED;
+    /* ── Surfaces ── */
+    --bg-canvas: #0A0A0A;
+    --bg-surface: #111111;
+    --bg-raised: #171717;
+    --bg-inset: #1C1C1C;
+    --bg-hover: rgba(255, 255, 255, 0.06);
+    --bg-overlay: rgba(0, 0, 0, 0.66);
+    --bg-header: rgba(10, 10, 10, 0.82);
+    --bg-sidebar: #0A0A0A;
 
-    /* ─── Text ─── */
+    --bg-card: var(--bg-surface);
+    --bg-card-nested: var(--bg-raised);
+    --bg-input: var(--bg-inset);
+    --bg-muted: var(--bg-inset);
+
+    /* ── Hairlines ── */
+    --border-hairline: rgba(255, 255, 255, 0.09);
+    --border-default: #262626;
+    --border-strong: #333333;
+    --border-focus: #7C89E8;
+    --border-card: var(--border-hairline);
+    --border-subtle: var(--border-hairline);
+    --border-input: var(--border-strong);
+
+    /* ── Foreground ── */
     --text-primary: #FAFAFA;
     --text-secondary: #A1A1AA;
     --text-muted: #71717A;
-    --text-inverse: #09090B;
+    --text-inverse: #0A0A0A;
 
-    /* ─── Accents ─── */
-    --accent-purple: #8B5CF6;
-    --accent-cyan: #22D3EE;
-    --accent-emerald: #10B981;
-    --accent-amber: #F59E0B;
-    --accent-red: #EF4444;
+    /* ── Single accent + semantics ── */
+    --accent: #6B78E0;
+    --accent-hover: #7C89E8;
+    --accent-soft: rgba(107, 120, 224, 0.16);
+    --accent-fg: #FFFFFF;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #60A5FA;
+
+    --success-soft: rgba(34, 197, 94, 0.14);
+    --warning-soft: rgba(245, 158, 11, 0.14);
+    --danger-soft: rgba(239, 68, 68, 0.14);
+    --info-soft: rgba(96, 165, 250, 0.14);
+    --warning-border: rgba(245, 158, 11, 0.30);
+    --danger-border: rgba(239, 68, 68, 0.30);
+
+    --grid-line: rgba(255, 255, 255, 0.055);
+
+    /* ── Elevation ── */
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-pop: 0 16px 40px -12px rgba(0, 0, 0, 0.72), 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+    --shadow-lift: 0 12px 28px -12px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.4);
   }
 
   html {
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     background-color: var(--bg-canvas);
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
+
+  /* Restrained display tracking — tighter as size grows. */
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  /* Consistent, visible focus for keyboard users only. */
+  :focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* Themed scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-thumb:hover { background: var(--text-muted); background-clip: content-box; }
 }
 
-/* ─── Glassmorphic Card Surfaces ─── */
+/* ════════════════════════════════════════════════════════════════════════
+   COMPOSABLE SURFACES
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Default panel: surface + hairline + one shadow level. */
+@layer components {
+  .panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-hairline);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .panel-raised {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-hairline);
+    border-radius: 16px;
+    box-shadow: var(--shadow-pop);
+  }
+
+  /* Vercel-style blueprint grid — decorative detail behind hero/empty areas.
+     Depth has a job here: it marks "this is a canvas", not "this is a card". */
+  .blueprint-grid {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: center center;
+  }
+
+  .hairline-b { border-bottom: 1px solid var(--border-hairline); }
+  .hairline-t { border-top: 1px solid var(--border-hairline); }
+  .hairline-l { border-left: 1px solid var(--border-hairline); }
+
+  /* Uppercase micro-label used for section eyebrows and table headers. */
+  .eyebrow {
+    font-size: 10px;
+    line-height: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Data/proof strings should never reflow mid-number. */
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   GLASS — used only where layering encodes hierarchy (sticky header,
+   overlays). Never on content cards: blur without a job is noise.
+   ════════════════════════════════════════════════════════════════════════ */
 .glass-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--bg-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-card);
+  border: 1px solid var(--border-hairline);
   border-radius: 16px;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  box-shadow: var(--shadow-card);
 }
 
 .dark .glass-card {
-  background: rgba(11, 15, 25, 0.85);
-  border-color: var(--border-card);
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-pop);
 }
 
-/* ─── Skeleton Loading Shimmer ─── */
+/* ─── Skeleton loading shimmer ─── */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 .skeleton-box {
-  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
+  background: linear-gradient(90deg, var(--bg-inset) 25%, var(--bg-hover) 50%, var(--bg-inset) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite ease-in-out;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
-/* ─── Contribution Graph Cells ─── */
+/* ─── Contribution graph cells ─── */
 .heat-cell {
   width: 13px;
   height: 13px;
@@ -141,13 +299,8 @@
 .gl-lvl-3 { background-color: #F97316; }
 .lc-lvl-3 { background-color: #F59E0B; }
 
-/* ─── FIX: No global transition rule ─── */
-/* Elements are static by default. Use Tailwind transition-* utilities */
-/* or explicit .transition-all class to opt into transitions. This      */
-/* prevents the old rule from silently breaking opacity/transform       */
-/* animations managed by Framer Motion.                                 */
-
-/* Exclude transitions that would interfere with canvas/SVG rendering */
+/* Elements are static by default — opt into transitions explicitly so
+   global rules never break Framer Motion opacity/transform animations. */
 .no-transition,
 .no-transition *,
 canvas,
@@ -166,29 +319,23 @@ svg rect {
   display: none;
 }
 
-/* ─── Scroll Reveal Animations (keyframe-based) ─── */
+/* ─── Scroll reveal ─── */
 .scroll-hidden {
   opacity: 0;
   transform: translateY(32px);
 }
 
 .scroll-visible {
-  animation: scrollRevealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: scrollRevealUp 0.7s var(--ease-out) both;
   animation-delay: var(--reveal-delay, 0ms);
 }
 
 @keyframes scrollRevealUp {
-  from {
-    opacity: 0;
-    transform: translateY(32px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── Floating / Ambient Animations ─── */
+/* ─── Ambient motion ─── */
 @keyframes floatY {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -199,15 +346,71 @@ svg rect {
   50% { opacity: 1; }
 }
 
-.animate-float {
-  animation: floatY 4s ease-in-out infinite;
-}
-
-.animate-float-delay {
-  animation: floatY 5s ease-in-out 1s infinite;
-}
+.animate-float { animation: floatY 4s ease-in-out infinite; }
+.animate-float-delay { animation: floatY 5s ease-in-out 1s infinite; }
 
 /* ─── Safe area for mobile bottom bar ─── */
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   LEGACY TOKEN BRIDGE  —  DELETE WHEN THE LAST VIEW IS MIGRATED
+   Views written before the token system hardcode dark-only classes
+   (bg-zinc-950 + text-white, bg-black, border-zinc-800 …). This block maps
+   those onto the semantic tokens so ONE class list serves both themes.
+
+   It is intentionally unlayered: unlayered rules beat Tailwind's
+   @layer utilities, so no per-file edits are needed.
+   Migrate call sites to bg-surface / text-fg and shrink this block.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Surfaces */
+.bg-zinc-950,
+.bg-black { background-color: var(--bg-surface); }
+
+.bg-zinc-900,
+.bg-zinc-800 { background-color: var(--bg-inset); }
+
+.hover\:bg-zinc-900:hover,
+.hover\:bg-zinc-800:hover,
+.hover\:bg-black:hover { background-color: var(--bg-hover); }
+
+/* A white card means "raised surface" — in dark that's a dark surface. */
+.dark .bg-white { background-color: var(--bg-surface); }
+
+/* Hairlines */
+.border-zinc-800,
+.border-zinc-700,
+.border-zinc-900 { border-color: var(--border-hairline); }
+
+/* Text that sat on those dark surfaces flips with the theme.
+   Scoped to the legacy surfaces only, so white text on a brand-coloured
+   button (bg-blue-600 text-white) is deliberately left alone. */
+[class*="bg-zinc-9"] .text-white,
+[class*="bg-zinc-9"].text-white,
+[class*="bg-black"] .text-white,
+[class*="bg-black"].text-white,
+[class*="bg-zinc-9"] .text-black,
+[class*="bg-zinc-9"].text-black { color: var(--text-primary); }
+
+[class*="bg-zinc-9"] .text-zinc-300,
+[class*="bg-zinc-9"] .text-zinc-400,
+[class*="bg-zinc-9"] .text-zinc-500 { color: var(--text-secondary); }
+
+/* Dark theme: a white card and its dark text both invert. */
+.dark [class*="bg-white"] .text-black,
+.dark [class*="bg-white"] .text-slate-900,
+.dark [class*="bg-white"] .text-gray-900 { color: var(--text-primary); }
+
+/* ─── Motion is infrastructure, not decoration: respect the OS setting ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

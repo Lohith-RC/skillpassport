@@ -2,29 +2,51 @@ import React from 'react';
 import { cn } from '../../utils/cn';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'purple' | 'emerald' | 'blue' | 'amber' | 'neutral';
+  variant?:
+    | 'neutral'
+    | 'outline'
+    | 'accent'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    // Legacy aliases — mapped onto the restrained system
+    | 'purple'
+    | 'emerald'
+    | 'blue'
+    | 'amber';
 }
 
+/**
+ * Status/metadata chip. At most one accent chip should be active in a card,
+ * matching the "max 2 accent colours on screen" design rule. Data values use
+ * the mono face; everything else stays in the UI face.
+ */
 export const Badge: React.FC<BadgeProps> = ({
   className,
-  variant = 'purple',
+  variant = 'neutral',
   children,
   ...props
 }) => {
-  const variants = {
-    purple: 'bg-zinc-900 text-white border-zinc-700 font-mono',
-    emerald: 'bg-zinc-900 text-zinc-200 border-zinc-700 font-mono',
-    blue: 'bg-white text-black font-bold border-white font-mono',
-    amber: 'bg-zinc-800 text-white border-zinc-600 font-mono',
-    neutral: 'bg-zinc-900 text-zinc-300 border-zinc-800 font-mono',
+  const variants: Record<string, string> = {
+    neutral: 'bg-interactive text-fg-muted border-hairline',
+    outline: 'bg-transparent text-fg-muted border-line',
+    accent: 'bg-accent-soft text-accent border-transparent',
+    success: 'bg-success-soft text-success border-transparent',
+    warning: 'bg-warning-soft text-warning border-transparent',
+    danger: 'bg-danger-soft text-danger border-transparent',
+    // Legacy aliases
+    purple: 'bg-accent-soft text-accent border-transparent',
+    blue: 'bg-accent-soft text-accent border-transparent',
+    emerald: 'bg-success-soft text-success border-transparent',
+    amber: 'bg-warning-soft text-warning border-transparent',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border',
+        'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-2xs font-semibold border leading-4',
         variants[variant],
-        className
+        className,
       )}
       {...props}
     >
